@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" sourcelanguage="en">
 <context>
     <name></name>
     <message id="melctl-err-no-command">
@@ -98,7 +98,9 @@
         <translation type="unfinished"></translation>
     </message>
     <message id="melctl-help-description">
-        <source>Gikwimi is a online event guest management system. This command line client helps to manage several aspects of Gikwimi from the command line.</source>
+        <source>Meldari is a security reporting endpoint based on Cutelyst.
+This command line client helps to manage several aspects of Meldari from the command line.</source>
+        <oldsource>Meldari is a security reporting endpoint based on Cutelyst. This command line client helps to manage several aspects of Meldari from the command line.</oldsource>
         <extracomment>General description for gikwimictl</extracomment>
         <translation type="unfinished"></translation>
     </message>
@@ -117,6 +119,30 @@
     <message id="melctl-help-header-options">
         <source>Options:</source>
         <extracomment>CLI help header</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-database-summary">
+        <source>Manage database migrations</source>
+        <extracomment>CLI command summary</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-database-description">
+        <source>Run, roll back, reset and refresh database migrations. Be careful, these commands can easily lead to data loss! Make sure that you have made a backup of your database beforehand.</source>
+        <extracomment>CLI command description</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-database-migration-summary">
+        <source>Run database migrations</source>
+        <extracomment>CLI command summary</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-database-migration-description">
+        <source>Performs all database migrations that have not already be performed before. You should run this command after upgrading Meldari.</source>
+        <extracomment>CLI command description</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-status-reading-config">
+        <source>Reading configuration file</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

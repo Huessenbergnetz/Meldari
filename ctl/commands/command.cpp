@@ -129,7 +129,7 @@ void Command::setGlobalOptions(QCommandLineParser *parser)
 
 bool Command::checkShowHelp(QCommandLineParser *parser)
 {
-    if (parser->isSet(QStringLiteral("help"))) {
+    if (parser->isSet(QStringLiteral("help")) || parser->isSet(QStringLiteral("h"))) {
         showHelp();
         return true;
     } else {
@@ -202,6 +202,13 @@ CLI::RC Command::runSubCommand(const QString &command, QCommandLineParser *parse
         showHelp();
         return RC::InvalidOption;
     }
+}
+
+CLI::RC Command::showInvalidCommand(const QString &command) const
+{
+    QTextStream out(stdout, QIODeviceBase::WriteOnly);
+    out << qtTrId("melctl-invalid-command").arg(command) << '\n';
+    return CLI::RC::InvalidOption;
 }
 
 #include "moc_command.cpp"

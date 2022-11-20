@@ -36,6 +36,7 @@ protected:
     void setGlobalOptions(QCommandLineParser *parser);
     bool checkShowHelp(QCommandLineParser *parser);
     RC runSubCommand(const QString &command, QCommandLineParser *parser);
+    RC showInvalidCommand(const QString &command) const;
 
     QList<QCommandLineOption> m_cliOptions;
 

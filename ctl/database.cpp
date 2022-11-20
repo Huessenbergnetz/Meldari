@@ -70,6 +70,8 @@ CLI::RC Database::openDb(const QString &connectionName)
         return dbError(db);
     }
 
+    printDone();
+
     return RC::OK;
 }
 

@@ -5,5 +5,9 @@ target_sources(meldarictl
     PRIVATE
         command.cpp
         command.h
+        databasecommand.cpp
+        databasecommand.h
+        databasemigrationcommand.cpp
+        databasemigrationcommand.h
 )
 

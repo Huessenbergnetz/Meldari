@@ -6,6 +6,7 @@
 #include "controller.h"
 
 #include "commands/command.h"
+#include "commands/databasecommand.h"
 
 #include <QCommandLineParser>
 #include <QCoreApplication>
@@ -44,7 +45,7 @@ CLI::RC Controller::exec()
             QTextStream out(stdout, QIODeviceBase::WriteOnly);
             //: CLI error
             //% "\"%1\" is not a valid command. Use -h/--help to show a list of available commands."
-            out << qtTrId("melctl-invalid-command") << '\n';
+            out << qtTrId("melctl-invalid-command").arg(command) << '\n';
             return CLI::RC::InvalidOption;
         }
     }
@@ -70,6 +71,8 @@ void Controller::init()
                                               //: CLI option description
                                               //% "Be quiet and print less output."
                                               qtTrId("melctl-opt-global-quiet-desc")));
+
+    new DatabaseCommand(this);
 }
 
 void Controller::showHelp() const
@@ -85,7 +88,7 @@ void Controller::showHelp() const
     out << '\n';
 
     //: General description for gikwimictl
-    //% "Gikwimi is a online event guest management system. This command line client helps to manage several aspects of Gikwimi from the command line."
+    //% "Meldari is a security reporting endpoint based on Cutelyst.\nThis command line client helps to manage several aspects of Meldari from the command line."
     out << qtTrId("melctl-help-description") << '\n';
     out << '\n';
 

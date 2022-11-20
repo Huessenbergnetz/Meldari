@@ -26,6 +26,9 @@ QVariant Configuration::value(const QString &group, const QString &key, const QV
 
 CLI::RC Configuration::loadConfig(const QString &iniPath)
 {
+    //% "Reading configuration file"
+    printStatus(qtTrId("melctl-status-reading-config"));
+
     if (!iniPath.isEmpty()) {
         m_iniPath = iniPath;
     }
