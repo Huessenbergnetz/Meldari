@@ -21,7 +21,7 @@ public:
     QVariant value(const QString &group, const QString &key, const QVariant &defaultValue = QVariant()) const;
 
 protected:
-    int loadConfig(const QString &iniPath = QString());
+    CLI::RC loadConfig(const QString &iniPath = QString());
     void setIniPath(const QString &iniPath);
 
 private:

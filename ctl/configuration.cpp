@@ -24,7 +24,7 @@ QVariant Configuration::value(const QString &group, const QString &key, const QV
     return map.value(key, defaultValue);
 }
 
-int Configuration::loadConfig(const QString &iniPath)
+CLI::RC Configuration::loadConfig(const QString &iniPath)
 {
     if (!iniPath.isEmpty()) {
         m_iniPath = iniPath;
@@ -68,7 +68,7 @@ int Configuration::loadConfig(const QString &iniPath)
 
     m_loaded = true;
 
-    return 0;
+    return RC::OK;
 }
 
 void Configuration::setIniPath(const QString &iniPath)

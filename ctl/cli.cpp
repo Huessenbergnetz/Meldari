@@ -32,54 +32,48 @@ void CLI::printError(const QStringList &errors) const
     }
 }
 
-int CLI::error(const QString &error, int code) const
+CLI::RC CLI::error(const QString &error, CLI::RC code) const
 {
     printError(error);
     return code;
 }
 
-int CLI::error(const QString &error, RC code) const
-{
-    printError(error);
-    return static_cast<int>(code);
-}
-
-int CLI::inputError(const QString &error) const
+CLI::RC CLI::inputError(const QString &error) const
 {
     return this->error(error, RC::InputError);
 }
 
-int CLI::configError(const QString &error) const
+CLI::RC CLI::configError(const QString &error) const
 {
     return this->error(error, RC::ConfigError);
 }
 
-int CLI::fileError(const QString &error) const
+CLI::RC CLI::fileError(const QString &error) const
 {
     return this->error(error, RC::FileError);
 }
 
-int CLI::dbError(const QString &error) const
+CLI::RC CLI::dbError(const QString &error) const
 {
     return this->error(error, RC::DbError);
 }
 
-int CLI::dbError(const QSqlError &error) const
+CLI::RC CLI::dbError(const QSqlError &error) const
 {
     return dbError(error.text());
 }
 
-int CLI::dbError(const QSqlQuery &query) const
+CLI::RC CLI::dbError(const QSqlQuery &query) const
 {
     return dbError(query.lastError());
 }
 
-int CLI::dbError(const QSqlDatabase &db) const
+CLI::RC CLI::dbError(const QSqlDatabase &db) const
 {
     return dbError(db.lastError());
 }
 
-int CLI::internalError(const QString &error) const
+CLI::RC CLI::internalError(const QString &error) const
 {
     return this->error(error, RC::InternalError);
 }

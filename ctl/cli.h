@@ -37,25 +37,23 @@ protected:
 
     void printError(const QStringList &errors) const;
 
-    int error(const QString &error, int code) const;
+    RC error(const QString &error, RC code) const;
 
-    int error(const QString &error, RC code) const;
+    RC inputError(const QString &error) const;
 
-    int inputError(const QString &error) const;
+    RC configError(const QString &error) const;
 
-    int configError(const QString &error) const;
+    RC fileError(const QString &error) const;
 
-    int fileError(const QString &error) const;
+    RC dbError(const QString &error) const;
 
-    int dbError(const QString &error) const;
+    RC dbError(const QSqlError &error) const;
 
-    int dbError(const QSqlError &error) const;
+    RC dbError(const QSqlQuery &query) const;
 
-    int dbError(const QSqlQuery &query) const;
+    RC dbError(const QSqlDatabase &db) const;
 
-    int dbError(const QSqlDatabase &db) const;
-
-    int internalError(const QString &error) const;
+    RC internalError(const QString &error) const;
 
     void printWarning(const QString &warning) const;
 
