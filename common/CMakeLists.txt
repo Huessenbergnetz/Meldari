@@ -13,7 +13,7 @@ if (TARGET meldari)
         PRIVATE
             confignames.h.in
     )
-endif (TARGET meldarictl)
+endif (TARGET meldari)
 
 configure_file(confignames.h.in confignames.h)
 
@@ -31,4 +31,4 @@ if (TARGET meldari)
             ${CMAKE_CURRENT_BINARY_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}
     )
-endif (TARGET meldarictl)
+endif (TARGET meldari)

@@ -29,7 +29,7 @@ target_link_libraries(meldarictl
         FirfuoridaQt6::Core
 )
 
-GNUInstallDirs_get_absolute_install_dir(MELDARI_FULL_TRANSLATIONSDIR MELDARI_TRANSLATIONSDIR)
+GNUInstallDirs_get_absolute_install_dir(MELDARI_FULL_TRANSLATIONSDIR MELDARI_TRANSLATIONSDIR DATADIR)
 
 target_compile_definitions(meldarictl
     PRIVATE
