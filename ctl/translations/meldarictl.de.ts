@@ -145,5 +145,29 @@ This command line client helps to manage several aspects of Meldari from the com
         <source>Reading configuration file</source>
         <translation type="unfinished"></translation>
     </message>
+    <message id="melctl-opt-database-rollback-steps-desc">
+        <source>Number of migration steps to roll back. Default: %1.</source>
+        <extracomment>CLI option description, %1 will be replaced by the default value</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-opt-database-rollback-steps-value">
+        <source>steps</source>
+        <extracomment>CLI option value name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-error-invalid-rollback-steps-integer">
+        <source>Can not perform database migration rollback. “%1“ is not a valid integer value for steps.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-database-rollback-summary">
+        <source>Roll back database migrations</source>
+        <extracomment>CLI command summary</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-database-rollback-description">
+        <source>Rolls back the specified number of migration steps. Note that this will result in data loss. This command is for development purposes only.</source>
+        <extracomment>CLI command description</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

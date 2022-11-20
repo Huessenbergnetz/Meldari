@@ -9,5 +9,7 @@ target_sources(meldarictl
         databasecommand.h
         databasemigrationcommand.cpp
         databasemigrationcommand.h
+        databaserollbackcommand.cpp
+        databaserollbackcommand.h
 )
 
