@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-#include "returncodes.h"
+#include "cli.h"
 
 #include <QCoreApplication>
 #include <QCommandLineOption>
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         //: Hint given if meldarictl has been called without any option
         //% "No option given. Use -h/--help to show available options and usage information."
         qWarning("%s", qUtf8Printable(qtTrId("melctl-no-option-selected-hint")));
-        return RC::InvalidOption;
+        return static_cast<int>(CLI::RC::InvalidOption);
     }
 
     QCommandLineParser cliParser;
