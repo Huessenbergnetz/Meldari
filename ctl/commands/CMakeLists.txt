@@ -11,5 +11,7 @@ target_sources(meldarictl
         databasemigrationcommand.h
         databaserollbackcommand.cpp
         databaserollbackcommand.h
+        databaserefreshcommand.cpp
+        databaserefreshcommand.h
 )
 

@@ -169,5 +169,29 @@ This command line client helps to manage several aspects of Meldari from the com
         <extracomment>CLI command description</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message id="melctl-opt-database-refresh-steps-desc">
+        <source>Number of migration steps to refresh. If 0, all migrations will be refreshed. Default: %1.</source>
+        <extracomment>CLI option description, %1 will be replaced by the default value</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-opt-database-refresh-steps-value">
+        <source>steps</source>
+        <extracomment>CLI option value name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-error-invalid-refresh-steps-integer">
+        <source>Can not perform database migration refresh. “%1“ is not a valid integer value for steps.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-database-refresh-summary">
+        <source>Refresh database migrations</source>
+        <extracomment>CLI command summary</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-database-refresh-description">
+        <source>Refreshes the specified number of migration steps. A refresh will roll back the specified number of migrations and will rerun them afterwards. Note that this will result in data loss. This command is for development purposes only.</source>
+        <extracomment>CLI command description</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

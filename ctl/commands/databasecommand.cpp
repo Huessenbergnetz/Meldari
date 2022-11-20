@@ -6,6 +6,7 @@
 #include "databasecommand.h"
 #include "databasemigrationcommand.h"
 #include "databaserollbackcommand.h"
+#include "databaserefreshcommand.h"
 
 #include "../dbmigrations/m0001_create_users_table.h"
 
@@ -70,6 +71,7 @@ void DatabaseCommand::init()
 {
     new DatabaseMigrationCommand(this);
     new DatabaseRollbackCommand(this);
+    new DatabaseRefreshCommand(this);
 }
 
 #include "moc_databasecommand.cpp"
