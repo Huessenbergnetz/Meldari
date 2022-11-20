@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: (C) 2019 Matthias Fehring <https://www.huessenbergnetz.de>
+# SPDX-FileCopyrightText: (C) 2022 Matthias Fehring <https://www.huessenbergnetz.de>
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 cmake_minimum_required(VERSION 3.20)
@@ -47,15 +47,15 @@ set(MELDARI_CONF_DB_NAME_DEFVAL "meldaridb")
 set(MELDARI_CONF_DB_PORT "port")
 set(MELDARI_CONF_DB_PORT_DEFVAL 3306)
 
-set(MELDARI_CONF_GIK "meldari")
-set(MELDARI_CONF_GIK_TEMPLATE "template")
-set(MELDARI_CONF_GIK_TEMPLATE_DEFVAL "meldari")
-set(MELDARI_CONF_GIK_SITENAME "sitename")
-set(MELDARI_CONF_GIK_SITENAME_DEFVAL "Meldari")
-set(MELDARI_CONF_GIK_USEMEMCACHED "usememcached")
-set(MELDARI_CONF_GIK_USEMEMCACHED_DEFVAL false)
-set(MELDARI_CONF_GIK_USEMEMCACHEDSESSION "usememcachedsession")
-set(MELDARI_CONF_GIK_USEMEMCACHEDSESSION_DEFVAL false)
+set(MELDARI_CONF_MEL "meldari")
+set(MELDARI_CONF_MEL_TEMPLATE "template")
+set(MELDARI_CONF_MEL_TEMPLATE_DEFVAL "meldari")
+set(MELDARI_CONF_MEL_SITENAME "sitename")
+set(MELDARI_CONF_MEL_SITENAME_DEFVAL "Meldari")
+set(MELDARI_CONF_MEL_USEMEMCACHED "usememcached")
+set(MELDARI_CONF_MEL_USEMEMCACHED_DEFVAL false)
+set(MELDARI_CONF_MEL_USEMEMCACHEDSESSION "usememcachedsession")
+set(MELDARI_CONF_MEL_USEMEMCACHEDSESSION_DEFVAL false)
 
 set(MELDARI_CONF_MAIL "email")
 SET(MELDARI_CONF_MAIL_HOST "host")
@@ -71,3 +71,4 @@ SET(MELDARI_CONF_MAIL_ENC_DEFVAL "tls")
 
 add_subdirectory(app)
 add_subdirectory(ctl)
+add_subdirectory(templates)
