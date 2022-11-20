@@ -9,18 +9,18 @@
 #include "databasecommand.h"
 #include <QObject>
 
-class DatabaseRollbackCommand : public DatabaseCommand
+class DatabaseRollbackCommand final : public DatabaseCommand
 {
     Q_OBJECT
 public:
     explicit DatabaseRollbackCommand(QObject *parent = nullptr);
-    ~DatabaseRollbackCommand();
+    ~DatabaseRollbackCommand() final;
 
-    CLI::RC exec(QCommandLineParser *parser) override;
+    CLI::RC exec(QCommandLineParser *parser) final;
 
-    QString summary() const override;
+    QString summary() const final;
 
-    QString description() const override;
+    QString description() const final;
 
 private:
     void init();
