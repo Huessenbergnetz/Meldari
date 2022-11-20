@@ -10,6 +10,7 @@ target_sources(meldari
         logging.h
 )
 
+add_subdirectory(../common common)
 add_subdirectory(controllers)
 
 target_link_libraries(meldari

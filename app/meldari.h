@@ -22,6 +22,9 @@ public:
     bool init() final;
 
     bool postFork() final;
+
+private:
+    bool initDb() const;
 };
 
 #endif // MELDARI_MELDARI_H

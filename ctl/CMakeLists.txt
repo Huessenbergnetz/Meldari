@@ -9,6 +9,8 @@ target_sources(meldarictl
         returncodes.h
 )
 
+add_subdirectory(../common common)
+
 target_compile_features(meldarictl PRIVATE cxx_std_17)
 
 target_link_libraries(meldarictl
