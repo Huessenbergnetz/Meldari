@@ -4,9 +4,9 @@
  */
 
 #include "cli.h"
+#include "controller.h"
 
 #include <QCoreApplication>
-#include <QCommandLineParser>
 #include <QLocale>
 #include <QTranslator>
 
@@ -32,10 +32,12 @@ int main(int argc, char *argv[])
 
     if (argc < 2) {
         //: Hint given if meldarictl has been called without any option
-        //% "No option given. Use -h/--help to show available options and usage information."
-        qWarning("%s", qUtf8Printable(qtTrId("melctl-no-option-selected-hint")));
+        //% "No command given. Use -h/--help to show available options and usage information."
+        qWarning("%s", qUtf8Printable(qtTrId("melctl-err-no-command")));
         return static_cast<int>(CLI::RC::InvalidOption);
     }
 
-    return 0;
+    auto c = new Controller(&app);
+
+    return static_cast<int>(c->exec());
 }

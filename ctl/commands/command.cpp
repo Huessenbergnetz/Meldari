@@ -4,6 +4,7 @@
  */
 
 #include "command.h"
+#include <controller.h>
 
 #include <QCoreApplication>
 #include <QTextStream>
@@ -32,7 +33,25 @@ void Command::showHelp() const
 
 void Command::showGlobalOptions(QTextStream *out) const
 {
+    Controller *c = nullptr;
+    auto p = parent();
+    while (p) {
+        if (p->objectName() == QLatin1String("controller")) {
+            c = qobject_cast<Controller*>(p);
+            break;
+        } else {
+            p = p->parent();
+        }
+    }
 
+    const QList<QCommandLineOption> options = c ? c->globalOptions() : QList<QCommandLineOption>();
+
+    if (!options.empty()) {
+        //% "Global options:"
+        *out << qtTrId("melctl-help-header-global-options") << '\n';
+        showOptions(out, options);
+        *out << '\n';
+    }
 }
 
 void Command::showUsage(QTextStream *out) const
@@ -59,12 +78,12 @@ void Command::showUsage(QTextStream *out) const
 
     if (!findChildren<Command*>(QString(), Qt::FindDirectChildrenOnly).empty()) {
         //% "<command>"
-        *out << ' ' << qtTrId("gikctl-help-usage-command");
+        *out << ' ' << qtTrId("melctl-help-usage-command");
     }
 
     if (!m_cliOptions.empty()) {
         //% "[options]"
-        *out << ' ' << qtTrId("gikctl-help-usage-options");
+        *out << ' ' << qtTrId("melctl-help-usage-options");
     }
 
     *out << '\n';
@@ -77,7 +96,7 @@ void Command::showSubCommands(QTextStream *out) const
     if (!coms.empty()) {
         // CLI help header
         //% "Commands:"
-        *out << qtTrId("gikctl-help-header-commands") << '\n';
+        *out << qtTrId("melctl-help-header-commands") << '\n';
 
         const QList<Command*> coms = findChildren<Command *>(QString(), Qt::FindDirectChildrenOnly);
         int maxCommandNameLength = 0;
@@ -96,7 +115,7 @@ void Command::showOptions(QTextStream *out) const
     if (!m_cliOptions.empty()) {
         //: CLI help header
         //% "Options:"
-        *out << qtTrId("gikctl-help-header-options") << '\n';
+        *out << qtTrId("melctl-help-header-options") << '\n';
         showOptions(out, m_cliOptions);
         *out << '\n';
     }

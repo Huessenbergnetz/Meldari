@@ -12,6 +12,8 @@ target_sources(meldarictl
         configuration.h
         database.cpp
         database.h
+        controller.cpp
+        controller.h
 )
 
 add_subdirectory(../common common)
@@ -39,6 +41,7 @@ target_compile_definitions(meldarictl
         QT_USE_QSTRINGBUILDER
         MELDARI_VERSION="${PROJECT_VERSION}"
         MELDARI_TRANSLATIONSDIR="${MELDARI_FULL_TRANSLATIONSDIR}"
+        MELDARI_CONFFILE="${CMAKE_INSTALL_FULL_SYSCONFDIR}/meldari.ini"
         $<$<NOT:$<CONFIG:Debug>>:QT_NO_DEBUG_OUTPUT>
 )
 
