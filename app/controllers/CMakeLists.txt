@@ -5,4 +5,6 @@ target_sources(meldari
     PRIVATE
         root.h
         root.cpp
+        controlcenter.h
+        controlcenter.cpp
 )

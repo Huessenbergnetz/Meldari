@@ -7,6 +7,7 @@
 #include "logging.h"
 
 #include "controllers/root.h"
+#include "controllers/controlcenter.h"
 
 #include <QCoreApplication>
 
@@ -26,6 +27,7 @@ bool Meldari::init()
 {
     qCDebug(MEL_CORE) << "Registering controllers";
     new Root(this);
+    new ControlCenter(this);
 
     return true;
 }
