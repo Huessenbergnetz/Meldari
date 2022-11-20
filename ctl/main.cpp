@@ -6,7 +6,6 @@
 #include "cli.h"
 
 #include <QCoreApplication>
-#include <QCommandLineOption>
 #include <QCommandLineParser>
 #include <QLocale>
 #include <QTranslator>
@@ -38,12 +37,5 @@ int main(int argc, char *argv[])
         return static_cast<int>(CLI::RC::InvalidOption);
     }
 
-    QCommandLineParser cliParser;
-
-    cliParser.addHelpOption();
-    cliParser.addVersionOption();
-
-    cliParser.process(app);
-
-    return app.exec();
+    return 0;
 }
