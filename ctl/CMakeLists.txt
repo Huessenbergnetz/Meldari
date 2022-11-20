@@ -10,6 +10,7 @@ target_sources(meldarictl
 )
 
 add_subdirectory(../common common)
+add_subdirectory(dbmigrations)
 
 target_compile_features(meldarictl PRIVATE cxx_std_17)
 
