@@ -62,7 +62,7 @@ CLI::RC Database::openDb(const QString &connectionName)
         printFailed();
         //: Error message, %1 will be the invalid DB type
         //% "Can not open database connection for not supported database type “%1”."
-        return configError(qtTrId("gikctl-error-config-invalid-dbtype").arg(dbType));
+        return configError(qtTrId("melctl-error-config-invalid-dbtype").arg(dbType));
     }
 
     if (Q_UNLIKELY(!db.open())) {
