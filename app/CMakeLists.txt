@@ -49,7 +49,6 @@ target_compile_definitions(meldari
         MELDARI_VERSION="${PROJECT_VERSION}"
         MELDARI_TRANSLATIONSDIR="${MELDARI_FULL_TRANSLATIONSDIR}"
         MELDARI_TEMPLATESDIR="${MELDARI_FULL_TEMPLATESDIR}"
-        $<$<NOT:$<CONFIG:Debug>>:QT_NO_DEBUG_OUTPUT>
 )
 
 target_compile_options(meldari
