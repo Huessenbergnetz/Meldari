@@ -21,13 +21,10 @@ DatabaseCommand::DatabaseCommand(QObject *parent)
 
 DatabaseCommand::~DatabaseCommand() = default;
 
-void DatabaseCommand::init()
-{
-    new DatabaseMigrationCommand(this);
-}
-
 CLI::RC DatabaseCommand::exec(QCommandLineParser *parser)
 {
+    init();
+
     parser->addPositionalArgument(QStringLiteral("subcommand"), QString());
     parser->parse(QCoreApplication::arguments());
 
@@ -43,7 +40,6 @@ CLI::RC DatabaseCommand::exec(QCommandLineParser *parser)
     auto com = findChild<Command*>(command, Qt::FindDirectChildrenOnly);
 
     if (com) {
-        com->init();
         return com->exec(parser);
     } else {
         if (checkShowHelp(parser)) {
@@ -77,6 +73,11 @@ void DatabaseCommand::initMigrations()
 {
     m_migrator = std::make_unique<Firfuorida::Migrator>(dbConName(), QStringLiteral("migrations"));
     new M0001_Create_Users_Table(m_migrator.get());
+}
+
+void DatabaseCommand::init()
+{
+    new DatabaseMigrationCommand(this);
 }
 
 #include "moc_databasecommand.cpp"

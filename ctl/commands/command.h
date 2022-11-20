@@ -19,8 +19,6 @@ public:
     explicit Command(QObject *parent = nullptr);
     ~Command() override = default;
 
-    virtual void init() = 0;
-
     virtual RC exec(QCommandLineParser *parser) = 0;
 
     virtual QString summary() const = 0;

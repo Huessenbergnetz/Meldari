@@ -196,7 +196,6 @@ CLI::RC Command::runSubCommand(const QString &command, QCommandLineParser *parse
     auto com = findChild<Command *>(command, Qt::FindDirectChildrenOnly);
 
     if (com) {
-        com->init();
         return com->exec(parser);
     } else {
         showHelp();

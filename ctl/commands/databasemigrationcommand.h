@@ -16,8 +16,6 @@ public:
     explicit DatabaseMigrationCommand(QObject *parent = nullptr);
     ~DatabaseMigrationCommand() final = default;
 
-    void init() final;
-
     CLI::RC exec(QCommandLineParser *parser) final;
 
     QString summary() const final;

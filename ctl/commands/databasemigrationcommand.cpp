@@ -16,11 +16,6 @@ DatabaseMigrationCommand::DatabaseMigrationCommand(QObject *parent)
     setObjectName(QStringLiteral("migrate"));
 }
 
-void DatabaseMigrationCommand::init()
-{
-
-}
-
 CLI::RC DatabaseMigrationCommand::exec(QCommandLineParser *parser)
 {
     CLI::RC rc = RC::OK;
@@ -60,3 +55,5 @@ QString DatabaseMigrationCommand::description() const
     //% "Performs all database migrations that have not already be performed before. You should run this command after upgrading Meldari."
     return qtTrId("melctl-command-database-migration-description");
 }
+
+#include "moc_databasemigrationcommand.cpp"

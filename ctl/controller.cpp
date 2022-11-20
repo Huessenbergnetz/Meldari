@@ -35,7 +35,6 @@ CLI::RC Controller::exec()
     auto com = findChild<Command *>(command, Qt::FindDirectChildrenOnly);
 
     if (com) {
-        com->init();
         return com->exec(&parser);
     } else {
         if (parser.isSet(QStringLiteral("h")) || parser.isSet(QStringLiteral("help"))) {

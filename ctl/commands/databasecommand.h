@@ -21,8 +21,6 @@ public:
     explicit DatabaseCommand(QObject *parent = nullptr);
     ~DatabaseCommand() override;
 
-    void init() override;
-
     CLI::RC exec(QCommandLineParser *parser) override;
 
     QString summary() const override;
@@ -33,6 +31,9 @@ protected:
     QString dbConName() const;
     void initMigrations();
     std::unique_ptr<Firfuorida::Migrator> m_migrator;
+
+private:
+    void init();
 };
 
 #endif // MELDARICTL_DATABASECOMMAND_H
