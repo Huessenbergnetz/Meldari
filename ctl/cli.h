@@ -1,0 +1,104 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2019 Matthias Fehring <https://www.huessenbergnetz.de>
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+#ifndef MELDARICTL_CLI_H
+#define MELDARICTL_CLI_H
+
+#include <QObject>
+#include <QString>
+#include <QStringList>
+#include <limits>
+class QSqlError;
+class QSqlQuery;
+class QSqlDatabase;
+
+class CLI : public QObject
+{
+    Q_OBJECT
+public:
+    explicit CLI(QObject *parent = nullptr);
+
+    ~CLI() override = default;
+
+    enum class RC : int {
+        OK = 0,
+        InvalidOption = 1,
+        InputError = 2,
+        ConfigError = 3,
+        FileError = 4,
+        DbError = 5,
+        InternalError =6
+    };
+
+protected:
+    void printError(const QString &error) const;
+
+    void printError(const QStringList &errors) const;
+
+    int error(const QString &error, int code) const;
+
+    int error(const QString &error, RC code) const;
+
+    int inputError(const QString &error) const;
+
+    int configError(const QString &error) const;
+
+    int fileError(const QString &error) const;
+
+    int dbError(const QString &error) const;
+
+    int dbError(const QSqlError &error) const;
+
+    int dbError(const QSqlQuery &query) const;
+
+    int dbError(const QSqlDatabase &db) const;
+
+    int internalError(const QString &error) const;
+
+    void printWarning(const QString &warning) const;
+
+    void printStatus(const QString &status) const;
+
+    void printDone() const;
+
+    void printDone(const QString &done) const;
+
+    void printFailed() const;
+
+    void printFailed(const QString &failed) const;
+
+    void printMessage(const QByteArray &message) const;
+
+    void printMessage(const QString &message) const;
+
+    void printSuccess(const QString &message) const;
+
+    void printDesc(const QString &description) const;
+
+    void printDesc(const QStringList &description) const;
+
+    QString readString(const QString &name, const QString &defaultValue = QString(), const QStringList &acceptableInput = QStringList()) const;
+
+    int readInt(const QString &name, int min = std::numeric_limits<int>::min(), int max = std::numeric_limits<int>::max()) const;
+
+    int readIntWithDef(const QString &name, int defaultValue, int min = std::numeric_limits<int>::min(), int max = std::numeric_limits<int>::max()) const;
+
+    bool readBool(const QString &name, bool deaultValue = false) const;
+
+    int readPort(const QString &name, int defaultValue) const;
+
+    void setQuiet(bool quiet);
+
+private:
+    bool m_quiet = false;
+
+    void printInputline(const QString &name, const QString &defaultValue = QString()) const;
+
+    QString readInputline() const;
+
+    Q_DISABLE_COPY(CLI)
+};
+
+#endif // MELDARICTL_CLI_H

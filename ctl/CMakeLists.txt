@@ -6,7 +6,8 @@ add_executable(meldarictl)
 target_sources(meldarictl
     PRIVATE
         main.cpp
-        returncodes.h
+        cli.cpp
+        cli.h
 )
 
 add_subdirectory(../common common)
