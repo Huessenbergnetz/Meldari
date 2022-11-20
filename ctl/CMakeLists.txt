@@ -10,6 +10,8 @@ target_sources(meldarictl
         cli.h
         configuration.cpp
         configuration.h
+        database.cpp
+        database.h
 )
 
 add_subdirectory(../common common)
