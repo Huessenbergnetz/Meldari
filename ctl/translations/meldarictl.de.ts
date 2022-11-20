@@ -193,5 +193,15 @@ This command line client helps to manage several aspects of Meldari from the com
         <extracomment>CLI command description</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message id="melctl-command-database-reset-summary">
+        <source>Reset database migrations</source>
+        <extracomment>CLI command summary</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-database-reset-description">
+        <source>Resets all database migrations. A reset will roll back and reapply all migrations. Note that this will result in data loss. This command is for development purposes only.</source>
+        <extracomment>CLI command description</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -13,5 +13,7 @@ target_sources(meldarictl
         databaserollbackcommand.h
         databaserefreshcommand.cpp
         databaserefreshcommand.h
+        databaseresetcommand.cpp
+        databaseresetcommand.h
 )
 
