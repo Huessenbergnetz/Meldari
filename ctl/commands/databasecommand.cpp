@@ -37,17 +37,7 @@ CLI::RC DatabaseCommand::exec(QCommandLineParser *parser)
 
     const QString command = args.empty() ? QLatin1String("") : args.takeFirst().toLower();
 
-    auto com = findChild<Command*>(command, Qt::FindDirectChildrenOnly);
-
-    if (com) {
-        return com->exec(parser);
-    } else {
-        if (checkShowHelp(parser)) {
-            return CLI::RC::OK;
-        } else {
-            return showInvalidCommand(command);
-        }
-    }
+    return runSubCommand(command, parser);
 }
 
 QString DatabaseCommand::summary() const

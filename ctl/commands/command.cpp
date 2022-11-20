@@ -198,8 +198,11 @@ CLI::RC Command::runSubCommand(const QString &command, QCommandLineParser *parse
     if (com) {
         return com->exec(parser);
     } else {
-        showHelp();
-        return RC::InvalidOption;
+        if (checkShowHelp(parser)) {
+            return CLI::RC::OK;
+        } else {
+            return showInvalidCommand(command);
+        }
     }
 }
 
