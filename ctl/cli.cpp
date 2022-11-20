@@ -101,7 +101,7 @@ void CLI::printStatus(const QString &status) const
 void CLI::printDone() const
 {
     //% "Done"
-    printDone(qtTrId("meldarictl-msg-done"));
+    printDone(qtTrId("melctl-msg-done"));
 }
 
 void CLI::printDone(const QString &done) const
@@ -114,7 +114,7 @@ void CLI::printDone(const QString &done) const
 void CLI::printFailed() const
 {
     //% "Failed"
-    printFailed(qtTrId("meldarictl-msg-failed"));
+    printFailed(qtTrId("melctl-msg-failed"));
 }
 
 void CLI::printFailed(const QString &failed) const
@@ -277,19 +277,19 @@ bool CLI::readBool(const QString &name, bool defaultValue) const
     static const QStringList possibleValues({
                                                 //: short for yes, answer for a boolean question
                                                 //% "Y"
-                                                qtTrId("meldarictl-cli-read-bool-short-yes"),
+                                                qtTrId("melctl-cli-read-bool-short-yes"),
                                                 //: short for no, answer for a boolean question
                                                 //% "N"
-                                                qtTrId("meldarictl-cli-read-bool-short-no"),
+                                                qtTrId("melctl-cli-read-bool-short-no"),
                                                 //: answer for a boolean question
                                                 //% "Yes"
-                                                qtTrId("meldarictl-cli-read-bool-long-yes"),
+                                                qtTrId("melctl-cli-read-bool-long-yes"),
                                                 //: answer for a boolean question
                                                 //% "No"
-                                                qtTrId("meldarictl-cli-read-bool-long-no")
+                                                qtTrId("melctl-cli-read-bool-long-no")
                                             });
     QString line;
-    const QString defAnswer = defaultValue ? qtTrId("meldarictl-cli-read-bool-long-yes") : qtTrId("meldarictl-cli-read-bool-long-no");
+    const QString defAnswer = defaultValue ? qtTrId("melctl-cli-read-bool-long-yes") : qtTrId("melctl-cli-read-bool-long-no");
     while (!possibleValues.contains(line.trimmed(), Qt::CaseInsensitive)) {
         printInputline(name, defAnswer);
         QTextStream stream(stdin);
@@ -299,7 +299,7 @@ bool CLI::readBool(const QString &name, bool defaultValue) const
         }
     }
 
-    val = line.compare(qtTrId("meldarictl-cli-read-bool-short-yes"), Qt::CaseInsensitive) == 0 || line.compare(qtTrId("meldarictl-cli-read-bool-long-yes"), Qt::CaseInsensitive) == 0;
+    val = line.compare(qtTrId("melctl-cli-read-bool-short-yes"), Qt::CaseInsensitive) == 0 || line.compare(qtTrId("melctl-cli-read-bool-long-yes"), Qt::CaseInsensitive) == 0;
 
     return val;
 }

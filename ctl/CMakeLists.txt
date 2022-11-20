@@ -8,6 +8,8 @@ target_sources(meldarictl
         main.cpp
         cli.cpp
         cli.h
+        configuration.cpp
+        configuration.h
 )
 
 add_subdirectory(../common common)

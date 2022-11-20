@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     if (argc < 2) {
         //: Hint given if meldarictl has been called without any option
         //% "No option given. Use -h/--help to show available options and usage information."
-        qWarning("%s", qUtf8Printable(qtTrId("MELDARICTL_NO_OPTION_SELECTED_HINT")));
+        qWarning("%s", qUtf8Printable(qtTrId("melctl-no-option-selected-hint")));
         return RC::InvalidOption;
     }
 
