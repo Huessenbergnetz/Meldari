@@ -79,6 +79,9 @@ bool Meldari::init()
         statPlug->setIncludePaths({MeldariConfig::tmplPath(u"static")});
     }
 
+    qCDebug(MEL_CORE) << "Registering session plugin";
+    auto sess = new Session(this);
+
     return true;
 }
 
