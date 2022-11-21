@@ -10,6 +10,7 @@
 #include "databaseresetcommand.h"
 
 #include "../dbmigrations/m0001_create_users_table.h"
+#include "../dbmigrations/m0002_create_options_table.h"
 
 #include <Firfuorida/Migrator>
 
@@ -66,6 +67,7 @@ void DatabaseCommand::initMigrations()
 {
     m_migrator = std::make_unique<Firfuorida::Migrator>(dbConName(), QStringLiteral("migrations"));
     new M0001_Create_Users_Table(m_migrator.get());
+    new M0002_Create_Options_Table(m_migrator.get());
 }
 
 void DatabaseCommand::init()

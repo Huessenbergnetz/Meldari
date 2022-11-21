@@ -5,4 +5,6 @@ target_sources(meldarictl
     PRIVATE
         m0001_create_users_table.cpp
         m0001_create_users_table.h
+        m0002_create_options_table.cpp
+        m0002_create_options_table.h
 )
