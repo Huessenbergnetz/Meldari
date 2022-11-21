@@ -28,6 +28,9 @@ public:
     static QString tmplPath(const QStringList &pathParts);
 
     static StaticPlugin staticPlugin();
+
+    static bool useMemcached();
+    static bool useMemcachedSession();
 };
 
 #endif // MELDARICONFIG_H

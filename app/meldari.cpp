@@ -82,6 +82,16 @@ bool Meldari::init()
     qCDebug(MEL_CORE) << "Registering session plugin";
     auto sess = new Session(this);
 
+    if (MeldariConfig::useMemcached()) {
+        auto memc = new Memcached(this);
+        memc->setDefaultConfig({
+                                   {QStringLiteral("binary_protocol"), true}
+                               });
+        if (MeldariConfig::useMemcachedSession()) {
+            sess->setStorage(new MemcachedSessionStore(this, this));
+        }
+    }
+
     return true;
 }
 

@@ -24,6 +24,8 @@ struct ConfigValues {
     QString tmpl = QStringLiteral(MELDARI_CONF_MEL_TEMPLATE_DEFVAL);
     QString tmplDir = QStringLiteral(MELDARI_TEMPLATESDIR);
     MeldariConfig::StaticPlugin staticPlugin = MeldariConfig::StaticSimple;
+    bool useMemcached = MELDARI_CONF_MEL_USEMEMCACHED_DEFVAL;
+    bool useMemcachedSession = MELDARI_CONF_MEL_USEMEMCACHEDSESSION_DEFVAL;
 
     bool loaded = false;
 };
@@ -58,6 +60,9 @@ void MeldariConfig::load(const QVariantMap &meldari, const QVariantMap &email)
         qCWarning(MEL_CONF) << "Invalid value for" << MELDARI_CONF_MEL_STATICPLUGIN << "in section" << MELDARI_CONF_MEL << ": using default value " << MELDARI_CONF_MEL_STATICPLUGIN_DEFVAL;
     }
 
+    cfg->useMemcached = meldari.value(QStringLiteral(MELDARI_CONF_MEL_USEMEMCACHED), MELDARI_CONF_MEL_USEMEMCACHED_DEFVAL).toBool();
+    cfg->useMemcachedSession = meldari.value(QStringLiteral(MELDARI_CONF_MEL_USEMEMCACHEDSESSION), MELDARI_CONF_MEL_USEMEMCACHEDSESSION_DEFVAL).toBool();
+
     cfg->loaded = true;
 }
 
@@ -87,4 +92,16 @@ MeldariConfig::StaticPlugin MeldariConfig::staticPlugin()
 {
     QReadLocker locker(&cfg->lock);
     return cfg->staticPlugin;
+}
+
+bool MeldariConfig::useMemcached()
+{
+    QReadLocker locker(&cfg->lock);
+    return cfg->useMemcached;
+}
+
+bool MeldariConfig::useMemcachedSession()
+{
+    QReadLocker locker(&cfg->lock);
+    return cfg->useMemcachedSession;
 }
