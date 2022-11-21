@@ -13,7 +13,20 @@
 #include "controllers/controlcenter.h"
 
 #include <Cutelyst/Engine>
+#include <Cutelyst/Plugins/StaticSimple/StaticSimple>
+#include <Cutelyst/Plugins/View/Cutelee/cuteleeview.h>
+#include <Cutelyst/Plugins/Session/Session>
+#include <Cutelyst/Plugins/Authentication/authentication.h>
+#include <Cutelyst/Plugins/Authentication/credentialpassword.h>
+#include <Cutelyst/Plugins/Authentication/authenticationrealm.h>
 #include <Cutelyst/Plugins/Utils/Sql>
+#include <Cutelyst/Plugins/StatusMessage>
+#include <Cutelyst/Plugins/Memcached/Memcached>
+#include <Cutelyst/Plugins/MemcachedSessionStore/MemcachedSessionStore>
+#include <Cutelyst/Plugins/CSRFProtection/CSRFProtection>
+#include <Cutelyst/Plugins/Utils/LangSelect>
+
+#include <cutelee/engine.h>
 
 #include <QCoreApplication>
 #include <QMutexLocker>
@@ -38,6 +51,18 @@ bool Meldari::init()
 {
     MeldariConfig::load(engine()->config(QStringLiteral(MELDARI_CONF_MEL)),
                         engine()->config(QStringLiteral(MELDARI_CONF_MAIL)));
+
+    qCDebug(MEL_CORE) << "Registering view";
+    auto view = new CuteleeView(this);
+    view->setWrapper(QStringLiteral("wrapper.html"));
+#if defined(QT_DEBUG)
+    view->setCache(false);
+#else
+    view->setCache(true);
+#endif
+    view->setIncludePaths({MeldariConfig::tmplPath(u"site")});
+    view->engine()->addDefaultLibrary(QStringLiteral("cutelee_i18ntags"));
+    qCDebug(MEL_CORE) << "Template include paths:" << view->includePaths();
 
     qCDebug(MEL_CORE) << "Registering controllers";
     new Root(this);
