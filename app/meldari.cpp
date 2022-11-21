@@ -5,6 +5,7 @@
 
 #include "meldari.h"
 #include "logging.h"
+#include "meldariconfig.h"
 
 #include "common/confignames.h"
 
@@ -35,6 +36,9 @@ Meldari::Meldari(QObject *parent) : Application(parent)
 
 bool Meldari::init()
 {
+    MeldariConfig::load(engine()->config(QStringLiteral(MELDARI_CONF_MEL)),
+                        engine()->config(QStringLiteral(MELDARI_CONF_MAIL)));
+
     qCDebug(MEL_CORE) << "Registering controllers";
     new Root(this);
     new ControlCenter(this);
