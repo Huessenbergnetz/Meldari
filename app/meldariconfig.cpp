@@ -13,9 +13,9 @@
 #include <QWriteLocker>
 
 #if defined(QT_DEBUG)
-Q_LOGGING_CATEGORY(GIK_CONFIG, "meldari.config")
+Q_LOGGING_CATEGORY(MEL_CONF, "meldari.config")
 #else
-Q_LOGGING_CATEGORY(GIK_CONFIG, "meldari.config", QtInfoMsg)
+Q_LOGGING_CATEGORY(MEL_CONF, "meldari.config", QtInfoMsg)
 #endif
 
 struct ConfigValues {
@@ -36,6 +36,8 @@ void MeldariConfig::load(const QVariantMap &meldari, const QVariantMap &email)
     if (cfg->loaded) {
         return;
     }
+
+    qCDebug(MEL_CONF) << "Loading configuration";
 
     cfg->tmpl = meldari.value(QStringLiteral(MELDARI_CONF_MEL_TEMPLATE), QStringLiteral(MELDARI_CONF_MEL_TEMPLATE_DEFVAL)).toString();
     if (cfg->tmpl.startsWith(QLatin1Char('/'))) {
