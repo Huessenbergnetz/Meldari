@@ -10,6 +10,8 @@ target_sources(meldari
         logging.h
         meldariconfig.cpp
         meldariconfig.h
+        userauthstoresql.cpp
+        userauthstoresql.h
 )
 
 add_subdirectory(../common common)

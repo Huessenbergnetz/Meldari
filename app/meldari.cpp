@@ -6,6 +6,7 @@
 #include "meldari.h"
 #include "logging.h"
 #include "meldariconfig.h"
+#include "userauthstoresql.h"
 
 #include "common/confignames.h"
 
@@ -79,18 +80,27 @@ bool Meldari::init()
         statPlug->setIncludePaths({MeldariConfig::tmplPath(u"static")});
     }
 
-    qCDebug(MEL_CORE) << "Registering session plugin";
+    qCDebug(MEL_CORE) << "Registering Session plugin";
     auto sess = new Session(this);
 
     if (MeldariConfig::useMemcached()) {
+        qCDebug(MEL_CORE) << "Registering Memcached plugin";
         auto memc = new Memcached(this);
         memc->setDefaultConfig({
                                    {QStringLiteral("binary_protocol"), true}
                                });
         if (MeldariConfig::useMemcachedSession()) {
+            qCDebug(MEL_CORE) << "Using MemcachedSessionStore";
             sess->setStorage(new MemcachedSessionStore(this, this));
         }
     }
+
+    qCDebug(MEL_CORE) << "Registering Authentication plugin";
+    auto authn = new Authentication(this);
+    auto userCreds = new CredentialPassword;
+    userCreds->setPasswordType(CredentialPassword::Hashed);
+    auto userStore = new UserAuthStoreSql;
+    authn->addRealm(userStore, userCreds, QStringLiteral("users"));
 
     return true;
 }
