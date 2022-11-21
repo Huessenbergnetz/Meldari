@@ -13,6 +13,12 @@
 class MeldariConfig
 {
 public:
+    enum StaticPlugin : int {
+        StaticNone = 0,
+        StaticSimple,
+        StaticCompressed
+    };
+
     static void load(const QVariantMap &meldari, const QVariantMap &email);
     static bool loaded();
 
@@ -20,6 +26,8 @@ public:
     static QString tmplPath();
     static QString tmplPath(QStringView path);
     static QString tmplPath(const QStringList &pathParts);
+
+    static StaticPlugin staticPlugin();
 };
 
 #endif // MELDARICONFIG_H

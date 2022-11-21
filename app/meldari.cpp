@@ -14,6 +14,7 @@
 
 #include <Cutelyst/Engine>
 #include <Cutelyst/Plugins/StaticSimple/StaticSimple>
+#include <Cutelyst/Plugins/StaticCompressed/StaticCompressed>
 #include <Cutelyst/Plugins/View/Cutelee/cuteleeview.h>
 #include <Cutelyst/Plugins/Session/Session>
 #include <Cutelyst/Plugins/Authentication/authentication.h>
@@ -67,6 +68,16 @@ bool Meldari::init()
     qCDebug(MEL_CORE) << "Registering controllers";
     new Root(this);
     new ControlCenter(this);
+
+    if (MeldariConfig::staticPlugin() == MeldariConfig::StaticSimple) {
+        qCDebug(MEL_CORE) << "Registering StaticSimple plugin";
+        auto statPlug = new StaticSimple(this);
+        statPlug->setIncludePaths({MeldariConfig::tmplPath(u"static")});
+    } else if (MeldariConfig::staticPlugin() == MeldariConfig::StaticCompressed) {
+        qCDebug(MEL_CORE) << "Registering StaticCompressed plugin";
+        auto statPlug = new StaticCompressed(this);
+        statPlug->setIncludePaths({MeldariConfig::tmplPath(u"static")});
+    }
 
     return true;
 }
