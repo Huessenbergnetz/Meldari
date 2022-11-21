@@ -7,10 +7,18 @@
 #include "logging.h"
 #include "confignames.h"
 
+#include <Cutelyst/Plugins/Memcached/Memcached>
+#include <Cutelyst/Plugins/Utils/Sql>
+
 #include <QGlobalStatic>
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>
+#include <QSqlQuery>
+#include <QSqlError>
+
+#define MEMC_CONFIG_GROUP_KEY "options"
+#define MEMC_CONFIG_STORAGE_DURATION 7200
 
 #if defined(QT_DEBUG)
 Q_LOGGING_CATEGORY(MEL_CONF, "meldari.config")
@@ -104,4 +112,62 @@ bool MeldariConfig::useMemcachedSession()
 {
     QReadLocker locker(&cfg->lock);
     return cfg->useMemcachedSession;
+}
+
+template< typename T >
+T MeldariConfig::getDbOption(const QString &option, const T &defVal)
+{
+    T retVal = defVal;
+
+    if (cfg->useMemcached) {
+        Cutelyst::Memcached::MemcachedReturnType rt;
+        T val = Cutelyst::Memcached::getByKey<T>(QStringLiteral(MEMC_CONFIG_GROUP_KEY), option, nullptr, &rt);
+        if (rt == Cutelyst::Memcached::Success) {
+            return val;
+        }
+    }
+
+    QSqlQuery q = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT option_value FROM options WHERE option_name = :option_name"));
+    q.bindValue(QStringLiteral(":option_name"), option);
+
+    if (Q_LIKELY(q.exec())) {
+        if (Q_LIKELY(q.next())) {
+            retVal = q.value(0).value<T>();
+        } else {
+            qCWarning(MEL_CONF) << "Can not find option" << option << "in the database";
+        }
+    } else {
+        qCCritical(MEL_CONF) << "Failed to query option" << option << "from database:" << q.lastError().text();
+    }
+
+    if (cfg->useMemcached) {
+        Cutelyst::Memcached::setByKey<T>(QStringLiteral(MEMC_CONFIG_GROUP_KEY), option, retVal, MEMC_CONFIG_STORAGE_DURATION);
+    }
+
+    return retVal;
+}
+
+template< typename T >
+bool MeldariConfig::setDbOption(const QString &option, const T &value)
+{
+    bool rv = false;
+
+    QSqlQuery q = CPreparedSqlQueryThread(QStringLiteral("INSERT INTO options (option_name, option_value) "
+                                                         "VALUES (:option_name, :option_value) "
+                                                         "ON DUPLICATE KEY UPDATE "
+                                                         "option_value = :option_value"));
+    q.bindValue(QStringLiteral(":optin_name"), option);
+    q.bindValue(QStringLiteral(":optin_value"), QVariant::fromValue<T>(value));
+
+    rv = q.exec();
+
+    if (Q_UNLIKELY(!rv)) {
+        qCCritical(MEL_CONF) << "Failed to save value" << value << "for option" << option << "in database:" << q.lastError().text();
+    }
+
+    if (rv && cfg->useMemcached) {
+        Cutelyst::Memcached::setByKey<T>(QStringLiteral(MEMC_CONFIG_GROUP_KEY), option, value, MEMC_CONFIG_STORAGE_DURATION);
+    }
+
+    return rv;
 }

@@ -31,6 +31,13 @@ public:
 
     static bool useMemcached();
     static bool useMemcachedSession();
+
+private:
+    template< typename T >
+    static T getDbOption(const QString &option, const T &defVal);
+
+    template< typename T >
+    static bool setDbOption(const QString &option, const T &value);
 };
 
 #endif // MELDARICONFIG_H
