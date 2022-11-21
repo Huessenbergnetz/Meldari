@@ -18,7 +18,7 @@ public:
 
     static QString tmpl();
     static QString tmplPath();
-    static QString tmplPath(const QString &path);
+    static QString tmplPath(QStringView path);
     static QString tmplPath(const QStringList &pathParts);
 };
 

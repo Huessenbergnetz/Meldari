@@ -61,7 +61,7 @@ QString MeldariConfig::tmplPath()
     return cfg->tmplDir + QLatin1Char('/') + cfg->tmpl;
 }
 
-QString MeldariConfig::tmplPath(const QString &path)
+QString MeldariConfig::tmplPath(QStringView path)
 {
     return tmplPath() + QLatin1Char('/') + path;
 }
