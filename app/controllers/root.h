@@ -30,6 +30,9 @@ private:
 
     C_ATTR(Auto, :Private)
     bool Auto(Context *c);
+
+    C_ATTR(csrfDenied, :Private)
+    void csrfDenied(Context *c);
 };
 
 #endif // MELDARI_ROOT_H

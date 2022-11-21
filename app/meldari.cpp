@@ -95,6 +95,10 @@ bool Meldari::init()
         }
     }
 
+    qCDebug(MEL_CORE) << "Registering CSRFProtection plugin";
+    auto csrf = new CSRFProtection(this);
+    csrf->setDefaultDetachTo(QStringLiteral("/csrfDenied"));
+
     qCDebug(MEL_CORE) << "Registering Authentication plugin";
     auto authn = new Authentication(this);
     auto userCreds = new CredentialPassword;

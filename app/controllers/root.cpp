@@ -30,4 +30,10 @@ bool Root::Auto(Context *c)
     return true;
 }
 
+void Root::csrfDenied(Context *c)
+{
+    c->res()->setBody(u"CSRF check failed!");
+    c->res()->setContentType(QStringLiteral("text/plain; charset=utf-8"));
+}
+
 #include "moc_root.cpp"
