@@ -27,6 +27,8 @@ public:
     static QString tmplPath(QStringView path);
     static QString tmplPath(const QStringList &pathParts);
 
+    static QString siteName();
+
     static StaticPlugin staticPlugin();
 
     static bool useMemcached();

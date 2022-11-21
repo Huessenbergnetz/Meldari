@@ -4,6 +4,7 @@
  */
 
 #include "root.h"
+#include "../meldariconfig.h"
 
 Root::Root(QObject *parent) : Controller(parent)
 {
@@ -25,6 +26,7 @@ void Root::pageNotFound(Context *c)
 
 bool Root::Auto(Context *c)
 {
+    c->setStash(QStringLiteral("site_name"), MeldariConfig::siteName());
     return true;
 }
 

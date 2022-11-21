@@ -31,6 +31,7 @@ struct ConfigValues {
 
     QString tmpl = QStringLiteral(MELDARI_CONF_MEL_TEMPLATE_DEFVAL);
     QString tmplDir = QStringLiteral(MELDARI_TEMPLATESDIR);
+    QString siteName = QStringLiteral(MELDARI_CONF_MEL_SITENAME_DEFVAL);
     MeldariConfig::StaticPlugin staticPlugin = MeldariConfig::StaticSimple;
     bool useMemcached = MELDARI_CONF_MEL_USEMEMCACHED_DEFVAL;
     bool useMemcachedSession = MELDARI_CONF_MEL_USEMEMCACHEDSESSION_DEFVAL;
@@ -56,6 +57,8 @@ void MeldariConfig::load(const QVariantMap &meldari, const QVariantMap &email)
         cfg->tmpl = fullPathParts.takeLast();
         cfg->tmplDir = QLatin1Char('/') + fullPathParts.join(QLatin1Char('/'));
     }
+
+    cfg->siteName = meldari.value(QStringLiteral(MELDARI_CONF_MEL_SITENAME), QStringLiteral(MELDARI_CONF_MEL_SITENAME_DEFVAL)).toString();
 
     const QString _statPlug = meldari.value(QStringLiteral(MELDARI_CONF_MEL_STATICPLUGIN), QStringLiteral(MELDARI_CONF_MEL_STATICPLUGIN_DEFVAL)).toString();
     if (_statPlug.compare(u"none") == 0) {
@@ -94,6 +97,12 @@ QString MeldariConfig::tmplPath(QStringView path)
 QString MeldariConfig::tmplPath(const QStringList &pathParts)
 {
     return tmplPath(pathParts.join(QLatin1Char('/')));
+}
+
+QString MeldariConfig::siteName()
+{
+    QReadLocker locker(&cfg->lock);
+    return cfg->siteName;
 }
 
 MeldariConfig::StaticPlugin MeldariConfig::staticPlugin()
