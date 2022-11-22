@@ -32,6 +32,12 @@ set(MELDARI_APPDIR ${CMAKE_INSTALL_DATADIR}/meldari CACHE PATH "Directory to ins
 set(MELDARI_TEMPLATESDIR ${MELDARI_APPDIR}/templates CACHE PATH "Directory to install Meldari template files into")
 set(MELDARI_TRANSLATIONSDIR ${MELDARI_APPDIR}/translations CACHE PATH "Directory to install Meldari translation files into")
 
+option(BUILD_TESTS "Build the tests" OFF)
+if (BUILD_TESTS)
+    find_package(Qt6 6.2.0 COMPONENTS Test REQUIRED)
+    enable_testing()
+endif (BUILD_TESTS)
+
 # Set configuration key names and default values
 
 set(MELDARI_CONF_DB "database")
@@ -75,3 +81,6 @@ add_subdirectory(common)
 add_subdirectory(app)
 add_subdirectory(ctl)
 add_subdirectory(templates)
+if (BUILD_TESTS)
+    add_subdirectory(tests)
+endif (BUILD_TESTS)
