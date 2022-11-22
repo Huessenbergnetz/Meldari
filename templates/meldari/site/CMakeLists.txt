@@ -11,6 +11,8 @@ target_sources(meldaritemplate
         ${site_FILES}
 )
 
+add_subdirectory(cc)
+
 install(FILES ${site_FILES}
         DESTINATION ${MELDARI_TEMPLATESDIR}/meldari/site
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
