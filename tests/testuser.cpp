@@ -26,6 +26,7 @@ private slots:
     void testCopy();
     void testMove();
     void testComparison();
+    void testDatastream();
 
     void cleanupTestCase() {}
 };
@@ -117,6 +118,23 @@ void UserTest::testComparison()
 
     QVERIFY(u1 != u2);
     QVERIFY(u1 == u3);
+}
+
+void UserTest::testDatastream()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+    User u1(1, User::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+
+    QByteArray outBa;
+    QDataStream out(&outBa, QIODeviceBase::WriteOnly);
+    out << u1;
+
+    const QByteArray inBa = outBa;
+    QDataStream in(inBa);
+    User u2;
+    in >> u2;
+
+    QCOMPARE(u1, u2);
 }
 
 QTEST_MAIN(UserTest)
