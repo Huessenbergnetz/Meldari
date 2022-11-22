@@ -4,6 +4,7 @@
 set(site_FILES
     base.html
     wrapper.html
+    index.html
 )
 
 target_sources(meldaritemplate
