@@ -6,6 +6,8 @@
 #include "userauthstoresql.h"
 #include "logging.h"
 
+#include <Cutelyst/Context>
+#include <Cutelyst/Request>
 #include <Cutelyst/Plugins/Utils/Sql>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -46,7 +48,7 @@ AuthenticationUser UserAuthStoreSql::findUser(Context *c, const ParamsMultiMap &
             user.insert(QStringLiteral("locked_at"), q.value(7));
             user.insert(QStringLiteral("locked_by"), q.value(8));
         } else {
-            qCWarning(MEL_AUTHN) << "Login error: username" << username << "not found";
+            qCWarning(MEL_AUTHN, "Login failed: username %s not found. IP: %s", qUtf8Printable(username), qUtf8Printable(c->req()->addressString()));
         }
     } else {
         qCCritical(MEL_AUTHN) << "Failed to execute database query to get user" << username << "from the database:" << q.lastError().text();
