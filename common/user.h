@@ -25,6 +25,7 @@ class User
     Q_PROPERTY(QDateTime lockedAt READ lockedAt CONSTANT)
     Q_PROPERTY(User::dbid_t lockedBy READ lockedBy CONSTANT)
     Q_PROPERTY(QDateTime lastSeen READ lastSeen CONSTANT)
+    Q_PROPERTY(QVariantMap settings READ settings CONSTANT)
 public:
     using dbid_t = quint32;
 
@@ -63,6 +64,8 @@ public:
     dbid_t lockedBy() const;
 
     QDateTime lastSeen() const;
+
+    QVariantMap settings() const;
 
     static User::Type typeStringToEnum(const QString &str);
 

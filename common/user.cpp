@@ -18,6 +18,7 @@ public:
     QDateTime validUntil;
     QDateTime lockedAt;
     QDateTime lastSeen;
+    QVariantMap settings;
     User::dbid_t lockedBy;
     User::dbid_t id = 0;
     User::Type type = User::Invalid;
@@ -95,6 +96,11 @@ User::dbid_t User::lockedBy() const
 QDateTime User::lastSeen() const
 {
     return data ? data->lastSeen : QDateTime();
+}
+
+QVariantMap User::settings() const
+{
+    return data ? data->settings : QVariantMap();
 }
 
 User::Type User::typeStringToEnum(const QString &str)
