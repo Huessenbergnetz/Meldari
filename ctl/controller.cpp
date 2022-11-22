@@ -7,6 +7,7 @@
 
 #include "commands/command.h"
 #include "commands/databasecommand.h"
+#include "commands/usercommand.h"
 
 #include <QCommandLineParser>
 #include <QCoreApplication>
@@ -72,6 +73,7 @@ void Controller::init()
                                               qtTrId("melctl-opt-global-quiet-desc")));
 
     new DatabaseCommand(this);
+    new UserCommand(this);
 }
 
 void Controller::showHelp() const

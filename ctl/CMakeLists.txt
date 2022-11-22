@@ -27,6 +27,8 @@ target_link_libraries(meldarictl
         Qt6::Core
         Qt6::Sql
         FirfuoridaQt6::Core
+        Cutelyst::Authentication
+        Cutelyst::Utils::Validator
 )
 
 GNUInstallDirs_get_absolute_install_dir(MELDARI_FULL_TRANSLATIONSDIR MELDARI_TRANSLATIONSDIR DATADIR)

@@ -15,5 +15,9 @@ target_sources(meldarictl
         databaserefreshcommand.h
         databaseresetcommand.cpp
         databaseresetcommand.h
+        usercommand.cpp
+        usercommand.h
+        useraddcommand.cpp
+        useraddcommand.h
 )
 

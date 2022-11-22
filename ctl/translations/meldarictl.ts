@@ -203,5 +203,98 @@ This command line client helps to manage several aspects of Meldari from the com
         <extracomment>CLI command description</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message id="melctl-command-user-summary">
+        <source>Manage users</source>
+        <extracomment>CLI command summary</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-user-description">
+        <source>Add, edit, delete and list users.</source>
+        <extracomment>CLI command description</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-opt-user-add-username-desc">
+        <source>The user name for the user to create.</source>
+        <extracomment>CLI option description</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-opt-user-add-username-value">
+        <source>name</source>
+        <extracomment>CLI option value name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-opt-user-add-email-desc">
+        <source>The email address of the user to create.</source>
+        <extracomment>CLI option description</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-opt-user-add-email-value">
+        <source>email</source>
+        <extracomment>CLI option value name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-opt-user-add-type-desc">
+        <source>The type of the new user. Available types: %1. Default value: %2.</source>
+        <extracomment>CLI option description, %1 will be replaced by a list of supported types, %2 by the default value</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-opt-user-add-type-value">
+        <source>type</source>
+        <extracomment>CLI option value name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-opt-user-add-password-desc">
+        <source>The password for the new user. If empty, a random password will be generated that will be displayed after the user has been created successfully.</source>
+        <extracomment>CLI option description</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-opt-user-add-password-value">
+        <source>password</source>
+        <extracomment>CLI option value name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-status-add-user">
+        <source>Adding new user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-cli-user-add-err-empty-name">
+        <source>Can not add a user without a valid username</source>
+        <extracomment>CLI error message</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-cli-user-add-err-invalid-email">
+        <source>Can not add a user without a valid email address</source>
+        <extracomment>CLI error message</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-cli-user-add-err-failed-pwenc">
+        <source>Failed to encrypt password</source>
+        <extracomment>CLI error message</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-cli-user-add-err-username-in-use">
+        <source>The username “%1“ is already in use</source>
+        <extracomment>CLI error message, %1 will be replaced by the username</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-cli-user-add-err-email-in-use">
+        <source>The email address “%1” is already in use by “%2“</source>
+        <extracomment>CLI error message, %1 will be replaced by the email address, %2 by the username</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-cli-status-generated-password">
+        <source>Generated password for user “%1“: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-user-add-summary">
+        <source>Add a new user</source>
+        <extracomment>CLI command summary</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message id="melctl-command-user-add-description">
+        <source>Add a new user with the given option parameters.</source>
+        <extracomment>CLI command description</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
