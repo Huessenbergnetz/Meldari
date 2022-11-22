@@ -6,9 +6,11 @@
 #ifndef MELDARICOMMON_USER_H
 #define MELDARICOMMON_USER_H
 
+#include <QObject>
 #include <QSharedDataPointer>
 #include <QString>
 #include <QDateTime>
+#include <QJsonObject>
 
 class UserData;
 
@@ -22,9 +24,9 @@ class User
     Q_PROPERTY(QDateTime created READ created CONSTANT)
     Q_PROPERTY(QDateTime updated READ updated CONSTANT)
     Q_PROPERTY(QDateTime validUntil READ validUntil CONSTANT)
+    Q_PROPERTY(QDateTime lastSeen READ lastSeen CONSTANT)
     Q_PROPERTY(QDateTime lockedAt READ lockedAt CONSTANT)
     Q_PROPERTY(User::dbid_t lockedBy READ lockedBy CONSTANT)
-    Q_PROPERTY(QDateTime lastSeen READ lastSeen CONSTANT)
     Q_PROPERTY(QVariantMap settings READ settings CONSTANT)
     Q_PROPERTY(bool isAdmin READ isAdmin CONSTANT)
 public:
@@ -40,6 +42,7 @@ public:
     Q_ENUM(Type)
 
     User();
+    User(User::dbid_t id, User::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, User::dbid_t lockedBy, const QVariantMap &settings);
     User(const User &other);
     User(User &&other) noexcept;
     User &operator=(const User &other);
@@ -60,11 +63,11 @@ public:
 
     QDateTime validUntil() const;
 
+    QDateTime lastSeen() const;
+
     QDateTime lockedAt() const;
 
     dbid_t lockedBy() const;
-
-    QDateTime lastSeen() const;
 
     QVariantMap settings() const;
 
@@ -74,6 +77,8 @@ public:
 
     bool isNull() const;
 
+    QJsonObject toJson() const;
+
     static User::Type typeStringToEnum(const QString &str);
 
     static QString typeEnumToString(User::Type type);
@@ -82,6 +87,18 @@ public:
 
 private:
     QSharedDataPointer<UserData> data;
+
+    friend QDataStream &operator<<(QDataStream &stream, const User &user);
+    friend QDataStream &operator>>(QDataStream &stream, User &user);
 };
+
+Q_DECLARE_METATYPE(User)
+Q_DECLARE_TYPEINFO(User, Q_MOVABLE_TYPE);
+
+QDebug operator<<(QDebug dbg, const User &user);
+
+QDataStream &operator<<(QDataStream &stream, const User &user);
+
+QDataStream &operator>>(QDataStream &stream, User &user);
 
 #endif // MELDARICOMMON_USER_H
