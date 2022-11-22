@@ -108,6 +108,16 @@ bool User::isAdmin() const
     return data && data->type >= User::Administrator;
 }
 
+bool User::isValid() const
+{
+    return data && data->id > 0 && data->type != Invalid;
+}
+
+bool User::isNull() const
+{
+    return data ? false : true;
+}
+
 User::Type User::typeStringToEnum(const QString &str)
 {
     if (str.compare(u"disabled", Qt::CaseInsensitive) == 0) {

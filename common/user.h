@@ -70,6 +70,10 @@ public:
 
     bool isAdmin() const;
 
+    bool isValid() const;
+
+    bool isNull() const;
+
     static User::Type typeStringToEnum(const QString &str);
 
     static QString typeEnumToString(User::Type type);
