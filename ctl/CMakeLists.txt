@@ -16,7 +16,6 @@ target_sources(meldarictl
         controller.h
 )
 
-add_subdirectory(../common common)
 add_subdirectory(dbmigrations)
 add_subdirectory(commands)
 
@@ -24,6 +23,7 @@ target_compile_features(meldarictl PRIVATE cxx_std_17)
 
 target_link_libraries(meldarictl
     PRIVATE
+        meldaricommon
         Qt6::Core
         Qt6::Sql
         FirfuoridaQt6::Core

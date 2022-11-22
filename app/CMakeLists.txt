@@ -14,11 +14,11 @@ target_sources(meldari
         userauthstoresql.h
 )
 
-add_subdirectory(../common common)
 add_subdirectory(controllers)
 
 target_link_libraries(meldari
     PRIVATE
+        meldaricommon
         Qt6::Core
         Qt6::Network
         Qt6::Sql

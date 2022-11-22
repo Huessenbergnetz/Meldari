@@ -71,6 +71,7 @@ SET(MELDARI_CONF_MAIL_PASS "password")
 SET(MELDARI_CONF_MAIL_ENC "encryption")
 SET(MELDARI_CONF_MAIL_ENC_DEFVAL "tls")
 
+add_subdirectory(common)
 add_subdirectory(app)
 add_subdirectory(ctl)
 add_subdirectory(templates)

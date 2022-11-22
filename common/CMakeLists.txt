@@ -1,34 +1,49 @@
 # SPDX-FileCopyrightText: (C) 2022 Matthias Fehring <https://www.huessenbergnetz.de>
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-if (TARGET meldarictl)
-    target_sources(meldarictl
-        PRIVATE
-            confignames.h.in
-    )
-endif (TARGET meldarictl)
+add_library(meldaricommon SHARED)
 
-if (TARGET meldari)
-    target_sources(meldari
-        PRIVATE
-            confignames.h.in
-    )
-endif (TARGET meldari)
+target_sources(meldaricommon
+    PRIVATE
+        confignames.h.in
+        user.cpp
+        user.h
+)
 
 configure_file(confignames.h.in confignames.h)
 
-if (TARGET meldarictl)
-    target_include_directories(meldarictl
-        PRIVATE
-            ${CMAKE_CURRENT_BINARY_DIR}
-            ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-endif (TARGET meldarictl)
+target_compile_features(meldaricommon PRIVATE cxx_std_17)
 
-if (TARGET meldari)
-    target_include_directories(meldari
-        PRIVATE
-            ${CMAKE_CURRENT_BINARY_DIR}
-            ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-endif (TARGET meldari)
+target_include_directories(meldaricommon
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+target_link_libraries(meldaricommon
+    PRIVATE
+        Qt6::Core
+)
+
+target_compile_definitions(meldaricommon
+    PRIVATE
+        QT_NO_CAST_TO_ASCII
+        QT_NO_CAST_FROM_ASCII
+        QT_STRICT_ITERATORS
+        QT_NO_URL_CAST_FROM_STRING
+        QT_NO_CAST_FROM_BYTEARRAY
+        QT_USE_QSTRINGBUILDER
+)
+
+target_compile_options(meldaricommon
+    PRIVATE
+        -Wall
+        -Wcast-align
+        -Wno-uninitialized
+        -Wempty-body
+        -Wformat-security
+        -Wformat
+        -Winit-self
+)
+
+install(TARGETS meldaricommon DESTINATION ${CMAKE_INSTALL_LIBDIR})
