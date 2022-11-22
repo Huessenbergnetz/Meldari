@@ -26,6 +26,7 @@ class User
     Q_PROPERTY(User::dbid_t lockedBy READ lockedBy CONSTANT)
     Q_PROPERTY(QDateTime lastSeen READ lastSeen CONSTANT)
     Q_PROPERTY(QVariantMap settings READ settings CONSTANT)
+    Q_PROPERTY(bool isAdmin READ isAdmin CONSTANT)
 public:
     using dbid_t = quint32;
 
@@ -66,6 +67,8 @@ public:
     QDateTime lastSeen() const;
 
     QVariantMap settings() const;
+
+    bool isAdmin() const;
 
     static User::Type typeStringToEnum(const QString &str);
 

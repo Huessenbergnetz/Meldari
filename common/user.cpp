@@ -103,6 +103,11 @@ QVariantMap User::settings() const
     return data ? data->settings : QVariantMap();
 }
 
+bool User::isAdmin() const
+{
+    return data && data->type >= User::Administrator;
+}
+
 User::Type User::typeStringToEnum(const QString &str)
 {
     if (str.compare(u"disabled", Qt::CaseInsensitive) == 0) {
