@@ -7,6 +7,8 @@
 #include "confignames.h"
 
 #include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 
 #define DBCONNAME "dbmigrations"
 
@@ -71,6 +73,15 @@ CLI::RC Database::openDb(const QString &connectionName)
     }
 
     printDone();
+
+    if (dbType == u"QMYSQL") {
+        QSqlQuery q(db);
+        if (Q_UNLIKELY(!q.exec(QStringLiteral("SET time_zone = '+00:00'")))) {
+            //: CLI warning message
+            //% "Failed to set database connection time zone to UTC: %1'
+            printWarning(qtTrId("melctl-warn-db-set-con-tz").arg(q.lastError().text()));
+        }
+    }
 
     return RC::OK;
 }

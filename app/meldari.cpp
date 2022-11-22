@@ -33,6 +33,7 @@
 #include <QCoreApplication>
 #include <QMutexLocker>
 #include <QSqlDatabase>
+#include <QSqlQuery>
 #include <QSqlError>
 
 #if defined(QT_DEBUG)
@@ -168,6 +169,13 @@ bool Meldari::initDb() const
     if (Q_UNLIKELY(!db.open())) {
         qCCritical(MEL_CORE) << "Can not establish database connection:" << db.lastError().text();
         return false;
+    }
+
+    if (dbtype == u"QMYSQL") {
+        QSqlQuery q(db);
+        if (Q_UNLIKELY(!q.exec(QStringLiteral("SET time_zone = '+00:00'")))) {
+            qCWarning(MEL_CORE) << "Failed to set database connection time zone to UTC:" << q.lastError().text();
+        }
     }
 
     return true;
