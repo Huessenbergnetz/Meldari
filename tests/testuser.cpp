@@ -23,7 +23,9 @@ private slots:
 
     void testDefaultConstructor();
     void testConstructorWithArgs();
+    void testCopy();
     void testMove();
+    void testComparison();
 
     void cleanupTestCase() {}
 };
@@ -56,6 +58,31 @@ void UserTest::testConstructorWithArgs()
     QCOMPARE(user.settings(), settings);
 }
 
+void UserTest::testCopy()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+
+    // test copy constructor
+    {
+        User user1(1, User::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+        User user2(user1);
+
+        QCOMPARE(user1.id(), user2.id());
+        QCOMPARE(user1.type(), user2.type());
+        QCOMPARE(user1.email(), user2.email());
+    }
+
+    // test copy assignment
+    {
+        User user1(1, User::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+        User user2 = user1;
+
+        QCOMPARE(user1.id(), user2.id());
+        QCOMPARE(user1.type(), user2.type());
+        QCOMPARE(user1.email(), user2.email());
+    }
+}
+
 void UserTest::testMove()
 {
     const QDateTime now = QDateTime::currentDateTimeUtc();
@@ -79,6 +106,17 @@ void UserTest::testMove()
         QCOMPARE(u2.username(), QStringLiteral("user1"));
         QCOMPARE(u2.email(), QStringLiteral("user1@example.net"));
     }
+}
+
+void UserTest::testComparison()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+    User u1(1, User::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+    User u2(2, User::Registered, QStringLiteral("user2"), QStringLiteral("user2@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+    User u3 = u1;
+
+    QVERIFY(u1 != u2);
+    QVERIFY(u1 == u3);
 }
 
 QTEST_MAIN(UserTest)

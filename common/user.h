@@ -79,6 +79,11 @@ public:
 
     QJsonObject toJson() const;
 
+    bool operator==(const User &other) const noexcept;
+
+    bool operator!=(const User &other) const noexcept
+    { return !(*this == other); }
+
     static User::Type typeStringToEnum(const QString &str);
 
     static QString typeEnumToString(User::Type type);

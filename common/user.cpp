@@ -158,6 +158,59 @@ QJsonObject User::toJson() const
     return o;
 }
 
+bool User::operator==(const User &other) const noexcept
+{
+    if (data == other.data) {
+        return true;
+    }
+
+    if (data->id != other.data->id) {
+        return false;
+    }
+
+    if (data->type != other.data->type) {
+        return false;
+    }
+
+    if (data->username != other.data->username) {
+        return false;
+    }
+
+    if (data->email != other.data->email) {
+        return false;
+    }
+
+    if (data->created != other.data->created) {
+        return false;
+    }
+
+    if (data->updated != other.data->updated) {
+        return false;
+    }
+
+    if (data->validUntil != other.data->validUntil) {
+        return false;
+    }
+
+    if (data->lastSeen != other.data->lastSeen) {
+        return false;
+    }
+
+    if (data->lockedAt != other.data->lockedAt) {
+        return false;
+    }
+
+    if (data->lockedBy != other.data->lockedBy) {
+        return false;
+    }
+
+    if (data->settings != other.data->settings) {
+        return false;
+    }
+
+    return true;
+}
+
 User::Type User::typeStringToEnum(const QString &str)
 {
     if (str.compare(u"disabled", Qt::CaseInsensitive) == 0) {
