@@ -18,8 +18,6 @@ ControlCenter::ControlCenter(QObject *parent)
 
 void ControlCenter::index(Context *c)
 {
-    c->res()->setBody(u"Control Center");
-    c->res()->setContentType(QStringLiteral("text/plain; charset=utf-8"));
     c->stash({
                  {QStringLiteral("site_title"), c->translate("ControlCenter", "Control Center")}
              });
