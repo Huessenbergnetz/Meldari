@@ -25,6 +25,7 @@ class MenuItem
     Q_PROPERTY(std::vector<MenuItem> children READ children CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QString title READ title CONSTANT)
+    Q_PROPERTY(QString icon READ icon CONSTANT)
     Q_PROPERTY(QUrl url READ url CONSTANT)
     Q_PROPERTY(bool isActive READ isActive CONSTANT)
     Q_PROPERTY(bool hasChildren READ hasChildren CONSTANT)
@@ -43,6 +44,8 @@ public:
     QString name() const;
 
     QString title() const;
+
+    QString icon() const;
 
     QUrl url() const;
 

@@ -4,6 +4,7 @@
  */
 
 #include "menuitem.h"
+#include "meldariconfig.h"
 
 #include <Cutelyst/Context>
 
@@ -13,6 +14,7 @@ public:
     std::vector<MenuItem> children;
     QString name;
     QString title;
+    QString icon;
     QUrl url;
     bool isActive = false;
     bool isExpanded = false;
@@ -28,6 +30,7 @@ MenuItem::MenuItem(Cutelyst::Context *c, const QString &name, const QString &tit
 {
     data->name = name;
     data->title = title;
+    data->icon = MeldariConfig::tmplIcon(name);
     auto _action = c->getAction(action, ns);
     Q_ASSERT_X(_action, "create new MenuItem", "can not find action");
     data->url = c->uriFor(_action, captures, args, queryValues);
@@ -66,6 +69,11 @@ QString MenuItem::name() const
 QString MenuItem::title() const
 {
     return data ? data->title : QString();
+}
+
+QString MenuItem::icon() const
+{
+    return data ? data->icon : QString();
 }
 
 QUrl MenuItem::url() const
