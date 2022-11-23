@@ -51,4 +51,7 @@ private:
     QSharedDataPointer<MenuItemData> data;
 };
 
+Q_DECLARE_METATYPE(MenuItem)
+Q_DECLARE_TYPEINFO(MenuItem, Q_MOVABLE_TYPE);
+
 #endif // MELDARI_MENUITEM_H
