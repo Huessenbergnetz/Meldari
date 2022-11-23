@@ -22,6 +22,13 @@ namespace Cutelyst {
 class MenuItem
 {
     Q_GADGET
+    Q_PROPERTY(std::vector<MenuItem> children READ children CONSTANT)
+    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(QString title READ title CONSTANT)
+    Q_PROPERTY(QUrl url READ url CONSTANT)
+    Q_PROPERTY(bool isActive READ isActive CONSTANT)
+    Q_PROPERTY(bool hasChildren READ hasChildren CONSTANT)
+    Q_PROPERTY(bool isExpanded READ isExpanded CONSTANT)
 public:
     MenuItem();
     MenuItem(Cutelyst::Context *c, const QString &name, const QString &title, const QString &action, const QString &ns = QString(), const QStringList &captures = QStringList(), const QStringList &args = QStringList(), const Cutelyst::ParamsMultiMap &queryValues = Cutelyst::ParamsMultiMap());
