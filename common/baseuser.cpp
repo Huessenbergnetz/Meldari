@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-#include "user.h"
+#include "baseuser.h"
 
 #include <QMetaObject>
 #include <QMetaEnum>
@@ -20,17 +20,17 @@ public:
     QDateTime lockedAt;
     QDateTime lastSeen;
     QVariantMap settings;
-    User::dbid_t lockedBy;
-    User::dbid_t id = 0;
-    User::Type type = User::Invalid;
+    BaseUser::dbid_t lockedBy;
+    BaseUser::dbid_t id = 0;
+    BaseUser::Type type = BaseUser::Invalid;
 };
 
-User::User()
+BaseUser::BaseUser()
 {
 
 }
 
-User::User(dbid_t id, Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, dbid_t lockedBy, const QVariantMap &settings)
+BaseUser::BaseUser(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedBy, const QVariantMap &settings)
     : data(new UserData)
 {
     data->id = id;
@@ -46,96 +46,96 @@ User::User(dbid_t id, Type type, const QString &username, const QString &email, 
     data->settings = settings;
 }
 
-User::User(const User &other)
+BaseUser::BaseUser(const BaseUser &other)
     : data{other.data}
 {
 
 }
 
-User::User(User &&other) noexcept = default;
+BaseUser::BaseUser(BaseUser &&other) noexcept = default;
 
-User &User::operator=(const User &other)
+BaseUser &BaseUser::operator=(const BaseUser &other)
 {
     if (this != &other)
         data.operator=(other.data);
     return *this;
 }
 
-User &User::operator=(User &&other) noexcept = default;
+BaseUser &BaseUser::operator=(BaseUser &&other) noexcept = default;
 
-User::~User() = default;
+BaseUser::~BaseUser() = default;
 
-User::dbid_t User::id() const
+BaseUser::dbid_t BaseUser::id() const
 {
     return data ? data->id : 0;
 }
 
-User::Type User::type() const
+BaseUser::Type BaseUser::type() const
 {
-    return data ? data->type : User::Invalid;
+    return data ? data->type : BaseUser::Invalid;
 }
 
-QString User::username() const
+QString BaseUser::username() const
 {
     return data ? data->username : QString();
 }
 
-QString User::email() const
+QString BaseUser::email() const
 {
     return data ? data->email : QString();
 }
 
-QDateTime User::created() const
+QDateTime BaseUser::created() const
 {
     return data ? data->created : QDateTime();
 }
 
-QDateTime User::updated() const
+QDateTime BaseUser::updated() const
 {
     return data ? data->updated : QDateTime();
 }
 
-QDateTime User::validUntil() const
+QDateTime BaseUser::validUntil() const
 {
     return data ? data->validUntil : QDateTime();
 }
 
-QDateTime User::lastSeen() const
+QDateTime BaseUser::lastSeen() const
 {
     return data ? data->lastSeen : QDateTime();
 }
 
-QDateTime User::lockedAt() const
+QDateTime BaseUser::lockedAt() const
 {
     return data ? data->lockedAt : QDateTime();
 }
 
-User::dbid_t User::lockedBy() const
+BaseUser::dbid_t BaseUser::lockedBy() const
 {
     return data ? data->lockedBy : 0;
 }
 
-QVariantMap User::settings() const
+QVariantMap BaseUser::settings() const
 {
     return data ? data->settings : QVariantMap();
 }
 
-bool User::isAdmin() const
+bool BaseUser::isAdmin() const
 {
-    return data && data->type >= User::Administrator;
+    return data && data->type >= BaseUser::Administrator;
 }
 
-bool User::isValid() const
+bool BaseUser::isValid() const
 {
-    return data && data->id > 0 && data->type != Invalid;
+    return data && data->id > 0 && data->type != BaseUser::Invalid;
 }
 
-bool User::isNull() const
+bool BaseUser::isNull() const
 {
     return data ? false : true;
 }
 
-QJsonObject User::toJson() const
+QJsonObject BaseUser::toJson() const
 {
     QJsonObject o;
 
@@ -158,7 +158,7 @@ QJsonObject User::toJson() const
     return o;
 }
 
-bool User::operator==(const User &other) const noexcept
+bool BaseUser::operator==(const BaseUser &other) const noexcept
 {
     if (data == other.data) {
         return true;
@@ -211,27 +211,27 @@ bool User::operator==(const User &other) const noexcept
     return true;
 }
 
-User::Type User::typeStringToEnum(const QString &str)
+BaseUser::Type BaseUser::typeStringToEnum(const QString &str)
 {
     if (str.compare(u"disabled", Qt::CaseInsensitive) == 0) {
-        return User::Disabled;
+        return BaseUser::Disabled;
     } else if (str.compare(u"registered", Qt::CaseInsensitive) == 0) {
-        return User::Registered;
+        return BaseUser::Registered;
     } else if (str.compare(u"administrator", Qt::CaseInsensitive) == 0) {
-        return User::Administrator;
+        return BaseUser::Administrator;
     } else if (str.compare(u"superuser", Qt::CaseInsensitive) == 0) {
-        return User::SuperUser;
+        return BaseUser::SuperUser;
     } else {
-        return User::Invalid;
+        return BaseUser::Invalid;
     }
 }
 
-QString User::typeEnumToString(User::Type type)
+QString BaseUser::typeEnumToString(BaseUser::Type type)
 {
     QString str;
 
-    if (type != User::Invalid) {
-        const QMetaObject mo = User::staticMetaObject;
+    if (type != BaseUser::Invalid) {
+        const QMetaObject mo = BaseUser::staticMetaObject;
         const QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Type"));
 
         str = QString::fromLatin1(me.valueToKey(static_cast<int>(type)));
@@ -240,11 +240,11 @@ QString User::typeEnumToString(User::Type type)
     return str;
 }
 
-QStringList User::supportedTypes()
+QStringList BaseUser::supportedTypes()
 {
     QStringList lst;
 
-    const QMetaObject mo = User::staticMetaObject;
+    const QMetaObject mo = BaseUser::staticMetaObject;
     const QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Type"));
 
     lst.reserve(me.keyCount() - 1);
@@ -256,7 +256,7 @@ QStringList User::supportedTypes()
     return lst;
 }
 
-QDebug operator<<(QDebug dbg, const User &user)
+QDebug operator<<(QDebug dbg, const BaseUser &user)
 {
     QDebugStateSaver saver(dbg);
     Q_UNUSED(saver)
@@ -273,7 +273,7 @@ QDebug operator<<(QDebug dbg, const User &user)
     return dbg.maybeSpace();
 }
 
-QDataStream &operator<<(QDataStream &stream, const User &user)
+QDataStream &operator<<(QDataStream &stream, const BaseUser &user)
 {
     stream << user.data->id
            << static_cast<qint32>(user.data->type)
@@ -290,7 +290,7 @@ QDataStream &operator<<(QDataStream &stream, const User &user)
     return stream;
 }
 
-QDataStream &operator>>(QDataStream &stream, User &user)
+QDataStream &operator>>(QDataStream &stream, BaseUser &user)
 {
     if (user.data == nullptr) {
         user.data = new UserData;
@@ -299,7 +299,7 @@ QDataStream &operator>>(QDataStream &stream, User &user)
     stream >> user.data->id;
     qint32 typeInt = -1;
     stream >> typeInt;
-    user.data->type = static_cast<User::Type>(typeInt);
+    user.data->type = static_cast<BaseUser::Type>(typeInt);
     stream >> user.data->username;
     stream >> user.data->email;
     stream >> user.data->created;
@@ -313,4 +313,4 @@ QDataStream &operator>>(QDataStream &stream, User &user)
     return stream;
 }
 
-#include "moc_user.cpp"
+#include "moc_baseuser.cpp"

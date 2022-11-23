@@ -8,4 +8,4 @@ function (meldari_test_common _testname)
     target_link_libraries(${_testname}_exec Qt6::Core Qt6::Test meldaricommon)
 endfunction (meldari_test_common _testname)
 
-meldari_test_common(testuser)
+meldari_test_common(testbaseuser)

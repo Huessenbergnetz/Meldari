@@ -3,20 +3,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-#include "user.h"
+#include "baseuser.h"
 
 #include <QTest>
 #include <QDataStream>
 
-class UserTest : public QObject
+class BaseUserTest : public QObject
 {
     Q_OBJECT
 public:
-    UserTest(QObject *parent = nullptr) : QObject{parent} {
+    BaseUserTest(QObject *parent = nullptr) : QObject{parent} {
 
     }
 
-    ~UserTest() final = default;
+    ~BaseUserTest() final = default;
 
 private slots:
     void initTestCase() {}
@@ -31,23 +31,23 @@ private slots:
     void cleanupTestCase() {}
 };
 
-void UserTest::testDefaultConstructor()
+void BaseUserTest::testDefaultConstructor()
 {
-    User user;
+    BaseUser user;
     QVERIFY(user.isNull());
     QVERIFY(!user.isValid());
 }
 
-void UserTest::testConstructorWithArgs()
+void BaseUserTest::testConstructorWithArgs()
 {
     const QDateTime now = QDateTime::currentDateTimeUtc();
     const QVariantMap settings = QVariantMap({
                                                  {QStringLiteral("option"), QStringLiteral("value")}
                                              });
-    User user(1, User::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, settings);
+    BaseUser user(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, settings);
 
     QCOMPARE(user.id(), 1);
-    QCOMPARE(user.type(), User::Registered);
+    QCOMPARE(user.type(), BaseUser::Registered);
     QCOMPARE(user.username(), QStringLiteral("user"));
     QCOMPARE(user.email(), QStringLiteral("user@example.net"));
     QCOMPARE(user.created(), now);
@@ -59,14 +59,14 @@ void UserTest::testConstructorWithArgs()
     QCOMPARE(user.settings(), settings);
 }
 
-void UserTest::testCopy()
+void BaseUserTest::testCopy()
 {
     const QDateTime now = QDateTime::currentDateTimeUtc();
 
     // test copy constructor
     {
-        User user1(1, User::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
-        User user2(user1);
+        BaseUser user1(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+        BaseUser user2(user1);
 
         QCOMPARE(user1.id(), user2.id());
         QCOMPARE(user1.type(), user2.type());
@@ -75,8 +75,8 @@ void UserTest::testCopy()
 
     // test copy assignment
     {
-        User user1(1, User::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
-        User user2 = user1;
+        BaseUser user1(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+        BaseUser user2 = user1;
 
         QCOMPARE(user1.id(), user2.id());
         QCOMPARE(user1.type(), user2.type());
@@ -84,14 +84,14 @@ void UserTest::testCopy()
     }
 }
 
-void UserTest::testMove()
+void BaseUserTest::testMove()
 {
     const QDateTime now = QDateTime::currentDateTimeUtc();
 
     // test move constructor
     {
-        User user1(1, User::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
-        User user2(std::move(user1));
+        BaseUser user1(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+        BaseUser user2(std::move(user1));
         QCOMPARE(user2.id(), 1);
         QCOMPARE(user2.username(), QStringLiteral("user"));
         QCOMPARE(user2.email(), QStringLiteral("user@example.net"));
@@ -100,8 +100,8 @@ void UserTest::testMove()
 
     // test move assignment
     {
-        User u1(1, User::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
-        User u2(2, User::Registered, QStringLiteral("user2"), QStringLiteral("user2@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+        BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+        BaseUser u2(2, BaseUser::Registered, QStringLiteral("user2"), QStringLiteral("user2@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
         u2 = std::move(u1);
         QCOMPARE(u2.id(), 1);
         QCOMPARE(u2.username(), QStringLiteral("user1"));
@@ -109,21 +109,21 @@ void UserTest::testMove()
     }
 }
 
-void UserTest::testComparison()
+void BaseUserTest::testComparison()
 {
     const QDateTime now = QDateTime::currentDateTimeUtc();
-    User u1(1, User::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
-    User u2(2, User::Registered, QStringLiteral("user2"), QStringLiteral("user2@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
-    User u3 = u1;
+    BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+    BaseUser u2(2, BaseUser::Registered, QStringLiteral("user2"), QStringLiteral("user2@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+    BaseUser u3 = u1;
 
     QVERIFY(u1 != u2);
     QVERIFY(u1 == u3);
 }
 
-void UserTest::testDatastream()
+void BaseUserTest::testDatastream()
 {
     const QDateTime now = QDateTime::currentDateTimeUtc();
-    User u1(1, User::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+    BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
 
     QByteArray outBa;
     QDataStream out(&outBa, QIODeviceBase::WriteOnly);
@@ -131,12 +131,12 @@ void UserTest::testDatastream()
 
     const QByteArray inBa = outBa;
     QDataStream in(inBa);
-    User u2;
+    BaseUser u2;
     in >> u2;
 
     QCOMPARE(u1, u2);
 }
 
-QTEST_MAIN(UserTest)
+QTEST_MAIN(BaseUserTest)
 
-#include "testuser.moc"
+#include "testbaseuser.moc"

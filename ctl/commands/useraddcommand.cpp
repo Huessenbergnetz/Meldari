@@ -5,7 +5,7 @@
 
 #include "useraddcommand.h"
 
-#include "user.h"
+#include <baseuser.h>
 
 #include <Cutelyst/Plugins/Utils/validatoremail.h>
 #include <Cutelyst/Plugins/Authentication/credentialpassword.h>
@@ -49,11 +49,11 @@ void UserAddCommand::init()
                                            //% "email"
                                            qtTrId("melctl-opt-user-add-email-value")));
 
-    const QString userTypeDefVal = User::typeEnumToString(User::Registered);
+    const QString userTypeDefVal = BaseUser::typeEnumToString(BaseUser::Registered);
     m_cliOptions.append(QCommandLineOption(QStringList({QStringLiteral("t"), QStringLiteral("type")}),
                                            //: CLI option description, %1 will be replaced by a list of supported types, %2 by the default value
                                            //% "The type of the new user. Available types: %1. Default value: %2."
-                                           qtTrId("melctl-opt-user-add-type-desc").arg(locale.createSeparatedList(User::supportedTypes()), userTypeDefVal),
+                                           qtTrId("melctl-opt-user-add-type-desc").arg(locale.createSeparatedList(BaseUser::supportedTypes()), userTypeDefVal),
                                            //: CLI option value name
                                            //% "type"
                                            qtTrId("melctl-opt-user-add-type-value"),
@@ -92,10 +92,10 @@ CLI::RC UserAddCommand::exec(QCommandLineParser *parser)
     //% "Adding new user"
     printStatus(qtTrId("melctl-status-add-user"));
 
-    const QString username  = parser->value(QStringLiteral("username")).trimmed();
-    const QString email     = parser->value(QStringLiteral("email")).trimmed();
-    const User::Type type   = User::typeStringToEnum(parser->value(QStringLiteral("type")).trimmed());
-    const QString password  = parser->value(QStringLiteral("password")).trimmed();
+    const QString username      = parser->value(QStringLiteral("username")).trimmed();
+    const QString email         = parser->value(QStringLiteral("email")).trimmed();
+    const BaseUser::Type type   = BaseUser::typeStringToEnum(parser->value(QStringLiteral("type")).trimmed());
+    const QString password      = parser->value(QStringLiteral("password")).trimmed();
 
     if (username.isEmpty()) {
         printFailed();

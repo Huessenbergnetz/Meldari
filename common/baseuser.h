@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-#ifndef MELDARICOMMON_USER_H
-#define MELDARICOMMON_USER_H
+#ifndef MELDARICOMMON_BASEUSER_H
+#define MELDARICOMMON_BASEUSER_H
 
 #include <QObject>
 #include <QSharedDataPointer>
@@ -14,11 +14,11 @@
 
 class UserData;
 
-class User
+class BaseUser
 {
     Q_GADGET
-    Q_PROPERTY(User::dbid_t id READ id CONSTANT)
-    Q_PROPERTY(User::Type type READ type CONSTANT)
+    Q_PROPERTY(BaseUser::dbid_t id READ id CONSTANT)
+    Q_PROPERTY(BaseUser::Type type READ type CONSTANT)
     Q_PROPERTY(QString username READ username CONSTANT)
     Q_PROPERTY(QString email READ email CONSTANT)
     Q_PROPERTY(QDateTime created READ created CONSTANT)
@@ -26,7 +26,7 @@ class User
     Q_PROPERTY(QDateTime validUntil READ validUntil CONSTANT)
     Q_PROPERTY(QDateTime lastSeen READ lastSeen CONSTANT)
     Q_PROPERTY(QDateTime lockedAt READ lockedAt CONSTANT)
-    Q_PROPERTY(User::dbid_t lockedBy READ lockedBy CONSTANT)
+    Q_PROPERTY(BaseUser::dbid_t lockedBy READ lockedBy CONSTANT)
     Q_PROPERTY(QVariantMap settings READ settings CONSTANT)
     Q_PROPERTY(bool isAdmin READ isAdmin CONSTANT)
 public:
@@ -41,17 +41,17 @@ public:
     };
     Q_ENUM(Type)
 
-    User();
-    User(User::dbid_t id, User::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, User::dbid_t lockedBy, const QVariantMap &settings);
-    User(const User &other);
-    User(User &&other) noexcept;
-    User &operator=(const User &other);
-    User &operator=(User &&other) noexcept;
-    ~User();
+    BaseUser();
+    BaseUser(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedBy, const QVariantMap &settings);
+    BaseUser(const BaseUser &other);
+    BaseUser(BaseUser &&other) noexcept;
+    BaseUser &operator=(const BaseUser &other);
+    BaseUser &operator=(BaseUser &&other) noexcept;
+    ~BaseUser();
 
     dbid_t id() const;
 
-    User::Type type() const;
+    Type type() const;
 
     QString username() const;
 
@@ -79,31 +79,31 @@ public:
 
     QJsonObject toJson() const;
 
-    bool operator==(const User &other) const noexcept;
+    bool operator==(const BaseUser &other) const noexcept;
 
-    bool operator!=(const User &other) const noexcept
+    bool operator!=(const BaseUser &other) const noexcept
     { return !(*this == other); }
 
-    static User::Type typeStringToEnum(const QString &str);
+    static Type typeStringToEnum(const QString &str);
 
-    static QString typeEnumToString(User::Type type);
+    static QString typeEnumToString(Type type);
 
     static QStringList supportedTypes();
 
 private:
     QSharedDataPointer<UserData> data;
 
-    friend QDataStream &operator<<(QDataStream &stream, const User &user);
-    friend QDataStream &operator>>(QDataStream &stream, User &user);
+    friend QDataStream &operator<<(QDataStream &stream, const BaseUser &user);
+    friend QDataStream &operator>>(QDataStream &stream, BaseUser &user);
 };
 
-Q_DECLARE_METATYPE(User)
-Q_DECLARE_TYPEINFO(User, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(BaseUser)
+Q_DECLARE_TYPEINFO(BaseUser, Q_MOVABLE_TYPE);
 
-QDebug operator<<(QDebug dbg, const User &user);
+QDebug operator<<(QDebug dbg, const BaseUser &user);
 
-QDataStream &operator<<(QDataStream &stream, const User &user);
+QDataStream &operator<<(QDataStream &stream, const BaseUser &user);
 
-QDataStream &operator>>(QDataStream &stream, User &user);
+QDataStream &operator>>(QDataStream &stream, BaseUser &user);
 
-#endif // MELDARICOMMON_USER_H
+#endif // MELDARICOMMON_BASEUSER_H

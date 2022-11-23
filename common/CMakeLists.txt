@@ -6,8 +6,8 @@ add_library(meldaricommon SHARED)
 target_sources(meldaricommon
     PRIVATE
         confignames.h.in
-        user.cpp
-        user.h
+        baseuser.cpp
+        baseuser.h
 )
 
 configure_file(confignames.h.in confignames.h)
