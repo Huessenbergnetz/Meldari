@@ -29,6 +29,7 @@ target_link_libraries(meldari
         Cutelyst::StatusMessage
         Cutelyst::View::Cutelee
         Cutelyst::StaticSimple
+        Cutelyst::StaticCompressed
         Cutelyst::Utils::Validator
         Cutelyst::Utils::Sql
         Cutelyst::Utils::Pagination
