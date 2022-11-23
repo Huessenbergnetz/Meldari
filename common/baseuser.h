@@ -90,9 +90,10 @@ public:
 
     static QStringList supportedTypes();
 
-private:
+protected:
     QSharedDataPointer<UserData> data;
 
+private:
     friend QDataStream &operator<<(QDataStream &stream, const BaseUser &user);
     friend QDataStream &operator>>(QDataStream &stream, BaseUser &user);
 };
