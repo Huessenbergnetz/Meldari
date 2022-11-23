@@ -16,6 +16,11 @@
 #include <QWriteLocker>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QHash>
+#include <QJsonObject>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonParseError>
 
 #define MEMC_CONFIG_GROUP_KEY "options"
 #define MEMC_CONFIG_STORAGE_DURATION 7200
@@ -29,6 +34,7 @@ Q_LOGGING_CATEGORY(MEL_CONF, "meldari.config", QtInfoMsg)
 struct ConfigValues {
     mutable QReadWriteLock lock{QReadWriteLock::Recursive};
 
+    QHash<QString,QString> tmplIcons;
     QString tmpl = QStringLiteral(MELDARI_CONF_MEL_TEMPLATE_DEFVAL);
     QString tmplDir = QStringLiteral(MELDARI_TEMPLATESDIR);
     QString siteName = QStringLiteral(MELDARI_CONF_MEL_SITENAME_DEFVAL);
@@ -74,6 +80,36 @@ void MeldariConfig::load(const QVariantMap &meldari, const QVariantMap &email)
     cfg->useMemcached = meldari.value(QStringLiteral(MELDARI_CONF_MEL_USEMEMCACHED), MELDARI_CONF_MEL_USEMEMCACHED_DEFVAL).toBool();
     cfg->useMemcachedSession = meldari.value(QStringLiteral(MELDARI_CONF_MEL_USEMEMCACHEDSESSION), MELDARI_CONF_MEL_USEMEMCACHEDSESSION_DEFVAL).toBool();
 
+
+    // Start load template meta data
+    qCDebug(MEL_CONF) << "Reading template meta data";
+    QFile tmplMetaData(cfg->tmplDir + QLatin1Char('/') + cfg->tmpl + QLatin1String("/metadata.json"));
+    if (Q_LIKELY(tmplMetaData.exists())) {
+        qCDebug(MEL_CONF) << "Found template meta data file at" << tmplMetaData.fileName();
+        if (Q_LIKELY(tmplMetaData.open(QIODeviceBase::ReadOnly|QIODeviceBase::Text))) {
+            QJsonParseError jpe;
+            const QJsonDocument json = QJsonDocument::fromJson(tmplMetaData.readAll(), &jpe);
+            if (Q_LIKELY(jpe.error == QJsonParseError::NoError)) {
+                const QJsonObject mdo = json.object();
+                if (Q_LIKELY(!mdo.empty())) {
+                    const QJsonObject icons = mdo.value(u"icons").toObject();
+                    cfg->tmplIcons.reserve(icons.size());
+                    for (auto i = icons.constBegin(); i != icons.constEnd(); ++i) {
+                        cfg->tmplIcons.insert(i.key(), i.value().toString());
+                    }
+                } else {
+                    qCWarning(MEL_CONF) << "Template meta data file is empty";
+                }
+            } else {
+                qCWarning(MEL_CONF) << "Failed to parse template meta data JSON file:" << jpe.errorString();
+            }
+        } else {
+            qCWarning(MEL_CONF) << "Failed to open template meta data file:" << tmplMetaData.errorString();
+        }
+    } else {
+        qCWarning(MEL_CONF) << "Can not find template meta data file at" << tmplMetaData.fileName();
+    }
+
     cfg->loaded = true;
 }
 
@@ -97,6 +133,12 @@ QString MeldariConfig::tmplPath(QStringView path)
 QString MeldariConfig::tmplPath(const QStringList &pathParts)
 {
     return tmplPath(pathParts.join(QLatin1Char('/')));
+}
+
+QString MeldariConfig::tmplIcon(const QString &name)
+{
+    QReadLocker locker(&cfg->lock);
+    return cfg->tmplIcons.value(name);
 }
 
 QString MeldariConfig::siteName()

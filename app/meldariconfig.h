@@ -26,6 +26,7 @@ public:
     static QString tmplPath();
     static QString tmplPath(QStringView path);
     static QString tmplPath(const QStringList &pathParts);
+    static QString tmplIcon(const QString &name);
 
     static QString siteName();
 
