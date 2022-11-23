@@ -4,11 +4,14 @@
  */
 
 #include "controlcenter.h"
-#include "../logging.h"
+#include "logging.h"
+#include "objects/menuitem.h"
 
 #include <Cutelyst/Plugins/Authentication/authentication.h>
 #include <Cutelyst/Plugins/Authentication/authenticationuser.h>
 #include <Cutelyst/Plugins/Session/Session>
+
+#include <vector>
 
 ControlCenter::ControlCenter(QObject *parent)
     : Controller{parent}
@@ -88,6 +91,20 @@ bool ControlCenter::Auto(Context *c)
     }
 
     return true;
+}
+
+void ControlCenter::End(Context *c)
+{
+    buildMainMenu(c);
+}
+
+void ControlCenter::buildMainMenu(Context *c)
+{
+    std::vector<MenuItem> mainMenu;
+
+    mainMenu.emplace_back(c, QStringLiteral("cc_dashboard"), c->translate("ControlCenter", "Dashboard"), QStringLiteral("index"), QStringLiteral("cc"));
+
+    c->setStash(QStringLiteral("main_menu"), QVariant::fromValue<std::vector<MenuItem>>(mainMenu));
 }
 
 #include "moc_controlcenter.cpp"

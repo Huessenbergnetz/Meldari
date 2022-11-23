@@ -4,6 +4,7 @@
  */
 
 #include "root.h"
+#include "logging.h"
 #include "../meldariconfig.h"
 
 Root::Root(QObject *parent) : Controller(parent)
@@ -28,6 +29,11 @@ bool Root::Auto(Context *c)
 {
     c->setStash(QStringLiteral("site_name"), MeldariConfig::siteName());
     return true;
+}
+
+void Root::End(Context *c)
+{
+    Q_UNUSED(c)
 }
 
 void Root::csrfDenied(Context *c)

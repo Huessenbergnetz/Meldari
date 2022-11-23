@@ -26,7 +26,7 @@ public:
 
 private:
     C_ATTR(End, :ActionClass("RenderView"))
-    void End(Context *c) { Q_UNUSED(c) }
+    void End(Context *c);
 
     C_ATTR(Auto, :Private)
     bool Auto(Context *c);

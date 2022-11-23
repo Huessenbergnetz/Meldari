@@ -30,6 +30,11 @@ public:
 private:
     C_ATTR(Auto, :Private)
     bool Auto(Context *c);
+
+    C_ATTR(End, :ActionClass("RenderView"))
+    void End(Context *c);
+
+    void buildMainMenu(Context *c);
 };
 
 #endif // CONTROLCENTER_H
