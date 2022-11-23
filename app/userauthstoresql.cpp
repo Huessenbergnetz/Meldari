@@ -32,7 +32,7 @@ AuthenticationUser UserAuthStoreSql::findUser(Context *c, const ParamsMultiMap &
 
     const QString username = userinfo.value(QStringLiteral("username"));
 
-    QSqlQuery q = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT id, type, password, email, created_at, updated_at, valid_until, locked_at, locked_by FROM users WHERE username = :username"));
+    QSqlQuery q = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT id, type, password, email, created_at, updated_at, valid_until, last_seen, locked_at, locked_by FROM users WHERE username = :username"));
     q.bindValue(QStringLiteral(":username"), username);
 
     if (Q_LIKELY(q.exec())) {
@@ -45,8 +45,9 @@ AuthenticationUser UserAuthStoreSql::findUser(Context *c, const ParamsMultiMap &
             user.insert(QStringLiteral("created_at"), q.value(4));
             user.insert(QStringLiteral("updated_at"), q.value(5));
             user.insert(QStringLiteral("valid_until"), q.value(6));
-            user.insert(QStringLiteral("locked_at"), q.value(7));
-            user.insert(QStringLiteral("locked_by"), q.value(8));
+            user.insert(QStringLiteral("last_seen"), q.value(7));
+            user.insert(QStringLiteral("locked_at"), q.value(8));
+            user.insert(QStringLiteral("locked_by"), q.value(9));
         } else {
             qCWarning(MEL_AUTHN, "Login failed: username %s not found. IP: %s", qUtf8Printable(username), qUtf8Printable(c->req()->addressString()));
         }
