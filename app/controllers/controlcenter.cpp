@@ -6,6 +6,7 @@
 #include "controlcenter.h"
 #include "logging.h"
 #include "objects/menuitem.h"
+#include "objects/user.h"
 
 #include <Cutelyst/Plugins/Authentication/authentication.h>
 #include <Cutelyst/Plugins/Authentication/authenticationuser.h>
@@ -96,15 +97,29 @@ bool ControlCenter::Auto(Context *c)
 void ControlCenter::End(Context *c)
 {
     buildMainMenu(c);
+    buildUserMenu(c);
 }
 
 void ControlCenter::buildMainMenu(Context *c)
 {
     std::vector<MenuItem> mainMenu;
 
-    mainMenu.emplace_back(c, QStringLiteral("cc_dashboard"), c->translate("ControlCenter", "Dashboard"), QStringLiteral("index"), QStringLiteral("cc"));
+    mainMenu.emplace_back(c, QStringLiteral("dashboard"), c->translate("ControlCenter", "Dashboard"), QStringLiteral("index"), QStringLiteral("cc"));
+
+    if (User::fromStash(c).isAdmin()) {
+
+    }
 
     c->setStash(QStringLiteral("main_menu"), QVariant::fromValue<std::vector<MenuItem>>(mainMenu));
+}
+
+void ControlCenter::buildUserMenu(Context *c)
+{
+    std::vector<MenuItem> userMenu;
+
+    userMenu.emplace_back(c, QStringLiteral("logout"), c->translate("ControlCenter", "Logout"), QStringLiteral("logout"), QStringLiteral("cc"));
+
+    c->setStash(QStringLiteral("user_menu"), QVariant::fromValue<std::vector<MenuItem>>(userMenu));
 }
 
 #include "moc_controlcenter.cpp"

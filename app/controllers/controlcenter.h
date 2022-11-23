@@ -35,6 +35,7 @@ private:
     void End(Context *c);
 
     void buildMainMenu(Context *c);
+    void buildUserMenu(Context *c);
 };
 
 #endif // CONTROLCENTER_H
