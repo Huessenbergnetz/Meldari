@@ -34,7 +34,7 @@
             "authorUrl": "https://github.com/orgs/twbs/people",
             "license": "MIT License",
             "licenseUrl": "https://github.com/twbs/icons/blob/v1.10.2/LICENSE.md"
-        },
+        }
     ],
     "icons": {
         "dashboard": "<i class=\"bi bi-speedometer2 me-2\"></i>",
