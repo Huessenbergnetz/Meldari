@@ -8,7 +8,7 @@
 
 #include "baseuser.h"
 
-class UserData : public QSharedData
+class BaseUserData : public QSharedData
 {
 public:
     QString username;

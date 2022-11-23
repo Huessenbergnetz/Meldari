@@ -12,7 +12,7 @@
 #include <QDateTime>
 #include <QJsonObject>
 
-class UserData;
+class BaseUserData;
 
 class BaseUser
 {
@@ -91,7 +91,7 @@ public:
     static QStringList supportedTypes();
 
 protected:
-    QSharedDataPointer<UserData> data;
+    QSharedDataPointer<BaseUserData> data;
 
 private:
     friend QDataStream &operator<<(QDataStream &stream, const BaseUser &user);

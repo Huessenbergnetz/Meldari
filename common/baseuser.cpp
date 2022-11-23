@@ -9,7 +9,7 @@
 #include <QMetaEnum>
 #include <QDebug>
 
-QJsonObject UserData::toJson() const
+QJsonObject BaseUserData::toJson() const
 {
     QJsonObject o;
 
@@ -34,7 +34,7 @@ BaseUser::BaseUser()
 }
 
 BaseUser::BaseUser(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedBy, const QVariantMap &settings)
-    : data(new UserData)
+    : data(new BaseUserData)
 {
     data->id = id;
     data->type = type;
@@ -282,7 +282,7 @@ QDataStream &operator<<(QDataStream &stream, const BaseUser &user)
 QDataStream &operator>>(QDataStream &stream, BaseUser &user)
 {
     if (user.data == nullptr) {
-        user.data = new UserData;
+        user.data = new BaseUserData;
     }
 
     stream >> user.data->id;
