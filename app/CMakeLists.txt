@@ -15,6 +15,7 @@ target_sources(meldari
 )
 
 add_subdirectory(controllers)
+add_subdirectory(objects)
 
 target_link_libraries(meldari
     PRIVATE
