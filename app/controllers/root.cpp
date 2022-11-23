@@ -5,7 +5,10 @@
 
 #include "root.h"
 #include "logging.h"
-#include "../meldariconfig.h"
+#include "meldariconfig.h"
+#include "objects/user.h"
+
+#include <Cutelyst/Plugins/Authentication/authentication.h>
 
 Root::Root(QObject *parent) : Controller(parent)
 {
@@ -27,6 +30,13 @@ void Root::pageNotFound(Context *c)
 
 bool Root::Auto(Context *c)
 {
+    const AuthenticationUser authUser = Authentication::user(c);
+
+    if (!authUser.isNull()) {
+        User user(authUser);
+        user.toStash(c);
+    }
+
     c->setStash(QStringLiteral("site_name"), MeldariConfig::siteName());
     return true;
 }
