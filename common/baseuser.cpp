@@ -23,7 +23,28 @@ public:
     BaseUser::dbid_t lockedBy;
     BaseUser::dbid_t id = 0;
     BaseUser::Type type = BaseUser::Invalid;
+
+    QJsonObject toJson() const;
 };
+
+QJsonObject UserData::toJson() const
+{
+    QJsonObject o;
+
+    o.insert(u"id", static_cast<qint64>(id));
+    o.insert(u"type", static_cast<int>(type));
+    o.insert(u"username", username);
+    o.insert(u"email", email);
+    o.insert(u"created", created.toString(Qt::ISODate));
+    o.insert(u"updated", updated.toString(Qt::ISODate));
+    o.insert(u"validUntil", validUntil.toString(Qt::ISODate));
+    o.insert(u"lastSeen", lastSeen.toString(Qt::ISODate));
+    o.insert(u"lockedAt", lockedAt.toString(Qt::ISODate));
+    o.insert(u"lockedBy", static_cast<qint64>(lockedBy));
+    o.insert(u"settings", QJsonObject::fromVariantMap(settings));
+
+    return o;
+}
 
 BaseUser::BaseUser()
 {
@@ -137,25 +158,11 @@ bool BaseUser::isNull() const
 
 QJsonObject BaseUser::toJson() const
 {
-    QJsonObject o;
-
     if (isNull() || !isValid()) {
-        return o;
+        return QJsonObject();
     }
 
-    o.insert(u"id", static_cast<qint64>(data->id));
-    o.insert(u"type", static_cast<int>(data->type));
-    o.insert(u"username", data->username);
-    o.insert(u"email", data->email);
-    o.insert(u"created", data->created.toString(Qt::ISODate));
-    o.insert(u"updated", data->updated.toString(Qt::ISODate));
-    o.insert(u"validUntil", data->validUntil.toString(Qt::ISODate));
-    o.insert(u"lastSeen", data->lastSeen.toString(Qt::ISODate));
-    o.insert(u"lockedAt", data->lockedAt.toString(Qt::ISODate));
-    o.insert(u"lockedBy", static_cast<qint64>(data->lockedBy));
-    o.insert(u"settings", QJsonObject::fromVariantMap(data->settings));
-
-    return o;
+    return data->toJson();
 }
 
 bool BaseUser::operator==(const BaseUser &other) const noexcept
