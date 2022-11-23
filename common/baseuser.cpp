@@ -3,29 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-#include "baseuser.h"
+#include "baseuser_p.h"
 
 #include <QMetaObject>
 #include <QMetaEnum>
 #include <QDebug>
-
-class UserData : public QSharedData
-{
-public:
-    QString username;
-    QString email;
-    QDateTime created;
-    QDateTime updated;
-    QDateTime validUntil;
-    QDateTime lockedAt;
-    QDateTime lastSeen;
-    QVariantMap settings;
-    BaseUser::dbid_t lockedBy;
-    BaseUser::dbid_t id = 0;
-    BaseUser::Type type = BaseUser::Invalid;
-
-    QJsonObject toJson() const;
-};
 
 QJsonObject UserData::toJson() const
 {

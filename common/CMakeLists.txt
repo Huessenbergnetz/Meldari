@@ -8,6 +8,7 @@ target_sources(meldaricommon
         confignames.h.in
         baseuser.cpp
         baseuser.h
+        baseuser_p.h
 )
 
 configure_file(confignames.h.in confignames.h)
