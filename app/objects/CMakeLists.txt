@@ -5,4 +5,6 @@ target_sources(meldari
     PRIVATE
         menuitem.cpp
         menuitem.h
+        user.cpp
+        user.h
 )
