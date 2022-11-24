@@ -66,4 +66,7 @@ private:
     QSharedDataPointer<ErrorData> data;
 };
 
+Q_DECLARE_METATYPE(Error)
+Q_DECLARE_TYPEINFO(Error, Q_MOVABLE_TYPE);
+
 #endif // MELDARI_ERROR_H
