@@ -99,17 +99,31 @@ void UserTest::testComparison()
     User u1(1, User::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
     User u2(2, User::Registered, QStringLiteral("user2"), QStringLiteral("user2@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
     User u3(1, User::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
-    User u4(u2);
+    User u4;
+    User u5(0, User::Invalid, QString(), QString(), QDateTime(), QDateTime(), QDateTime(), QDateTime(), QDateTime(), 0, QString(), QVariantMap());
+    User u6 = u1;
 
     QVERIFY(u1 != u2);
     QVERIFY(u1 == u3);
-    QVERIFY(u2 == u4);
+    QVERIFY(u1 != u4);
+    QVERIFY(u1 != u5);
+    QVERIFY(u1 == u6);
+
+    QVERIFY(u4 == u5);
 }
 
 void UserTest::testDatastream()
 {
     const QDateTime now = QDateTime::currentDateTimeUtc();
-    User u1(1, User::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
+    const QDateTime created = now.addDays(-1);
+    const QDateTime updated = now;
+    const QDateTime validUntil = now.addMonths(12);
+    const QDateTime lastSeen = now.addSecs(-600);
+    const QDateTime lockedAt = now;
+    const QVariantMap settings = {
+        {QStringLiteral("option"), QStringLiteral("value")}
+    };
+    User u1(1, User::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), created, updated, validUntil, lastSeen, lockedAt, 2, QStringLiteral("user2"), settings);
 
     QByteArray outBa;
     QDataStream out(&outBa, QIODeviceBase::WriteOnly);
@@ -121,6 +135,17 @@ void UserTest::testDatastream()
     in >> u2;
 
     QCOMPARE(u1, u2);
+    QCOMPARE(u2.id(), 1);
+    QCOMPARE(u2.username(), QStringLiteral("user1"));
+    QCOMPARE(u2.email(), QStringLiteral("user1@example.net"));
+    QCOMPARE(u2.created(), created);
+    QCOMPARE(u2.updated(), updated);
+    QCOMPARE(u2.validUntil(), validUntil);
+    QCOMPARE(u2.lastSeen(), lastSeen);
+    QCOMPARE(u2.lockedAt(), lockedAt);
+    QCOMPARE(u2.lockedById(), 2);
+    QCOMPARE(u2.lockedByName(), QStringLiteral("user2"));
+    QCOMPARE(u2.settings(), settings);
 }
 
 QTEST_MAIN(UserTest)

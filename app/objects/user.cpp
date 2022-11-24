@@ -77,47 +77,47 @@ bool User::operator==(const User &other) const noexcept
         return true;
     }
 
-    if (data->id != other.data->id) {
+    if (id() != other.id()) {
         return false;
     }
 
-    if (data->type != other.data->type) {
+    if (type() != other.type()) {
         return false;
     }
 
-    if (data->username != other.data->username) {
+    if (username() != other.username()) {
         return false;
     }
 
-    if (data->email != other.data->email) {
+    if (email() != other.email()) {
         return false;
     }
 
-    if (data->created != other.data->created) {
+    if (created() != other.created()) {
         return false;
     }
 
-    if (data->updated != other.data->updated) {
+    if (updated() != other.updated()) {
         return false;
     }
 
-    if (data->validUntil != other.data->validUntil) {
+    if (validUntil() != other.validUntil()) {
         return false;
     }
 
-    if (data->lastSeen != other.data->lastSeen) {
+    if (lastSeen() != other.lastSeen()) {
         return false;
     }
 
-    if (data->lockedAt != other.data->lockedAt) {
+    if (lockedAt() != other.lockedAt()) {
         return false;
     }
 
-    if (data->lockedById != other.data->lockedById) {
+    if (lockedById() != other.lockedById()) {
         return false;
     }
 
-    if (data->settings != other.data->settings) {
+    if (settings() != other.settings()) {
         return false;
     }
 
