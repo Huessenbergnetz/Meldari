@@ -95,11 +95,13 @@ void SimpleUserTest::testComparison()
     SimpleUser u3(1, QStringLiteral("user"));
     SimpleUser u4;
     SimpleUser u5(0, QString());
+    SimpleUser u6 = u1;
 
     QVERIFY(u1 != u2);
     QVERIFY(u1 == u3);
     QVERIFY(u1 != u4);
     QVERIFY(u1 != u5);
+    QVERIFY(u1 == u6);
 
     QVERIFY(u4 == u5);
 }
