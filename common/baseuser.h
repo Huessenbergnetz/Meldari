@@ -26,7 +26,8 @@ class BaseUser
     Q_PROPERTY(QDateTime validUntil READ validUntil CONSTANT)
     Q_PROPERTY(QDateTime lastSeen READ lastSeen CONSTANT)
     Q_PROPERTY(QDateTime lockedAt READ lockedAt CONSTANT)
-    Q_PROPERTY(BaseUser::dbid_t lockedBy READ lockedBy CONSTANT)
+    Q_PROPERTY(BaseUser::dbid_t lockedById READ lockedById CONSTANT)
+    Q_PROPERTY(QString lockedByName READ lockedByName CONSTANT)
     Q_PROPERTY(QVariantMap settings READ settings CONSTANT)
     Q_PROPERTY(bool isAdmin READ isAdmin CONSTANT)
 public:
@@ -42,7 +43,7 @@ public:
     Q_ENUM(Type)
 
     BaseUser();
-    BaseUser(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedBy, const QVariantMap &settings);
+    BaseUser(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedById, const QString &lockedByName, const QVariantMap &settings);
     BaseUser(const BaseUser &other);
     BaseUser(BaseUser &&other) noexcept;
     BaseUser &operator=(const BaseUser &other);
@@ -67,7 +68,9 @@ public:
 
     QDateTime lockedAt() const;
 
-    dbid_t lockedBy() const;
+    dbid_t lockedById() const;
+
+    QString lockedByName() const;
 
     QVariantMap settings() const;
 

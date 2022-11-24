@@ -22,7 +22,8 @@ QJsonObject BaseUserData::toJson() const
     o.insert(u"validUntil", validUntil.isNull() ? QJsonValue() : validUntil.toMSecsSinceEpoch());
     o.insert(u"lastSeen", lastSeen.isNull() ? QJsonValue() : lastSeen.toMSecsSinceEpoch());
     o.insert(u"lockedAt", lockedAt.isNull() ? QJsonValue() : lockedAt.toMSecsSinceEpoch());
-    o.insert(u"lockedBy", static_cast<qint64>(lockedBy));
+    o.insert(u"lockedById", static_cast<qint64>(lockedById));
+    o.insert(u"lockedByName", lockedByName);
     o.insert(u"settings", QJsonObject::fromVariantMap(settings));
 
     return o;
@@ -33,7 +34,7 @@ BaseUser::BaseUser()
 
 }
 
-BaseUser::BaseUser(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedBy, const QVariantMap &settings)
+BaseUser::BaseUser(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedById, const QString &lockedByName, const QVariantMap &settings)
     : data(new BaseUserData)
 {
     data->id = id;
@@ -56,7 +57,8 @@ BaseUser::BaseUser(BaseUser::dbid_t id, BaseUser::Type type, const QString &user
     if (data->lockedAt.isValid()) {
         data->lockedAt.setTimeSpec(Qt::UTC);
     }
-    data->lockedBy = lockedBy;
+    data->lockedById = lockedById;
+    data->lockedByName = lockedByName;
     data->settings = settings;
 }
 
@@ -124,9 +126,14 @@ QDateTime BaseUser::lockedAt() const
     return data ? data->lockedAt : QDateTime();
 }
 
-BaseUser::dbid_t BaseUser::lockedBy() const
+BaseUser::dbid_t BaseUser::lockedById() const
 {
-    return data ? data->lockedBy : 0;
+    return data ? data->lockedById : 0;
+}
+
+QString BaseUser::lockedByName() const
+{
+    return data ? data->lockedByName : QString();
 }
 
 QVariantMap BaseUser::settings() const
@@ -200,7 +207,7 @@ bool BaseUser::operator==(const BaseUser &other) const noexcept
         return false;
     }
 
-    if (data->lockedBy != other.data->lockedBy) {
+    if (data->lockedById != other.data->lockedById) {
         return false;
     }
 
@@ -284,7 +291,8 @@ QDataStream &operator<<(QDataStream &stream, const BaseUser &user)
            << user.data->validUntil
            << user.data->lastSeen
            << user.data->lockedAt
-           << user.data->lockedBy
+           << user.data->lockedById
+           << user.data->lockedByName
            << user.data->settings;
 
     return stream;
@@ -307,7 +315,8 @@ QDataStream &operator>>(QDataStream &stream, BaseUser &user)
     stream >> user.data->validUntil;
     stream >> user.data->lastSeen;
     stream >> user.data->lockedAt;
-    stream >> user.data->lockedBy;
+    stream >> user.data->lockedById;
+    stream >> user.data->lockedByName;
     stream >> user.data->settings;
 
     return stream;

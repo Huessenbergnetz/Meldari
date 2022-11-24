@@ -44,7 +44,7 @@ void BaseUserTest::testConstructorWithArgs()
     const QVariantMap settings = QVariantMap({
                                                  {QStringLiteral("option"), QStringLiteral("value")}
                                              });
-    BaseUser user(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, settings);
+    BaseUser user(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), settings);
 
     QCOMPARE(user.id(), 1);
     QCOMPARE(user.type(), BaseUser::Registered);
@@ -55,7 +55,7 @@ void BaseUserTest::testConstructorWithArgs()
     QCOMPARE(user.validUntil(), QDateTime());
     QCOMPARE(user.lastSeen(), now);
     QCOMPARE(user.lockedAt(), QDateTime());
-    QCOMPARE(user.lockedBy(), 0);
+    QCOMPARE(user.lockedById(), 0);
     QCOMPARE(user.settings(), settings);
 }
 
@@ -65,7 +65,7 @@ void BaseUserTest::testCopy()
 
     // test copy constructor
     {
-        BaseUser user1(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+        BaseUser user1(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
         BaseUser user2(user1);
 
         QCOMPARE(user1.id(), user2.id());
@@ -75,7 +75,7 @@ void BaseUserTest::testCopy()
 
     // test copy assignment
     {
-        BaseUser user1(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+        BaseUser user1(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
         BaseUser user2 = user1;
 
         QCOMPARE(user1.id(), user2.id());
@@ -90,7 +90,7 @@ void BaseUserTest::testMove()
 
     // test move constructor
     {
-        BaseUser user1(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+        BaseUser user1(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
         BaseUser user2(std::move(user1));
         QCOMPARE(user2.id(), 1);
         QCOMPARE(user2.username(), QStringLiteral("user"));
@@ -100,8 +100,8 @@ void BaseUserTest::testMove()
 
     // test move assignment
     {
-        BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
-        BaseUser u2(2, BaseUser::Registered, QStringLiteral("user2"), QStringLiteral("user2@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+        BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
+        BaseUser u2(2, BaseUser::Registered, QStringLiteral("user2"), QStringLiteral("user2@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
         u2 = std::move(u1);
         QCOMPARE(u2.id(), 1);
         QCOMPARE(u2.username(), QStringLiteral("user1"));
@@ -112,8 +112,8 @@ void BaseUserTest::testMove()
 void BaseUserTest::testComparison()
 {
     const QDateTime now = QDateTime::currentDateTimeUtc();
-    BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
-    BaseUser u2(2, BaseUser::Registered, QStringLiteral("user2"), QStringLiteral("user2@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+    BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
+    BaseUser u2(2, BaseUser::Registered, QStringLiteral("user2"), QStringLiteral("user2@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
     BaseUser u3 = u1;
 
     QVERIFY(u1 != u2);
@@ -123,7 +123,7 @@ void BaseUserTest::testComparison()
 void BaseUserTest::testDatastream()
 {
     const QDateTime now = QDateTime::currentDateTimeUtc();
-    BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QVariantMap());
+    BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
 
     QByteArray outBa;
     QDataStream out(&outBa, QIODeviceBase::WriteOnly);
