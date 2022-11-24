@@ -160,7 +160,7 @@ std::vector<User> User::list(Cutelyst::Context *c, Error &e)
         }
     } else {
         e = std::move(Error(q, c->translate("User", "Failed to query list of users from the database.")));
-        qCCritical(MEL_CORE) << "Failed to query user list of users from the database:" << q.lastError().text();
+        qCCritical(MEL_CORE) << "Failed to query list of users from the database:" << q.lastError().text();
     }
 
     return users;
