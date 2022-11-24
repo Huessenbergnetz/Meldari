@@ -136,11 +136,18 @@ User User::fromStash(Cutelyst::Context *c)
     return c->stash(QStringLiteral(USER_STASH_KEY)).value<User>();
 }
 
-std::vector<User> User::list(Cutelyst::Context *c, Error &e)
+std::vector<User> User::list(Cutelyst::Context *c, Error &e, User::Type minType)
 {
     std::vector<User> users;
 
-    QSqlQuery q = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT u1.id, u1.type, u1.username, u1.email, u1.created_at, u1.updated_at, u1.valid_until, u1.last_seen, u1.locked_at, u2.id AS locked_by_id, u2.username AS locked_by_username FROM users u1 LEFT JOIN users u2 ON u2.id = u1.locked_by"));
+    QSqlQuery q;
+
+    if (minType == User::Invalid) {
+        q = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT u1.id, u1.type, u1.username, u1.email, u1.created_at, u1.updated_at, u1.valid_until, u1.last_seen, u1.locked_at, u2.id AS locked_by_id, u2.username AS locked_by_username FROM users u1 LEFT JOIN users u2 ON u2.id = u1.locked_by"));
+    } else {
+        q = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT u1.id, u1.type, u1.username, u1.email, u1.created_at, u1.updated_at, u1.valid_until, u1.last_seen, u1.locked_at, u2.id AS locked_by_id, u2.username AS locked_by_username FROM users u1 LEFT JOIN users u2 ON u2.id = u1.locked_by WHERE u1.type >= :minType"));
+        q.bindValue(QStringLiteral(":minType"), static_cast<int>(minType));
+    }
 
     if (Q_LIKELY(q.exec())) {
         if (q.size() > 0) {
@@ -167,7 +174,7 @@ std::vector<User> User::list(Cutelyst::Context *c, Error &e)
     return users;
 }
 
-QJsonArray User::listJson(Cutelyst::Context *c, Error &e)
+QJsonArray User::listJson(Cutelyst::Context *c, Error &e, User::Type minType)
 {
     QJsonArray json;
 

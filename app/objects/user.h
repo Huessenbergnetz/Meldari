@@ -41,9 +41,9 @@ public:
 
     static User fromStash(Cutelyst::Context *c);
 
-    static std::vector<User> list(Cutelyst::Context *c, Error &e);
+    static std::vector<User> list(Cutelyst::Context *c, Error &e, Type minType = User::Invalid);
 
-    static QJsonArray listJson(Cutelyst::Context *c, Error &e);
+    static QJsonArray listJson(Cutelyst::Context *c, Error &e, Type minType = User::Invalid);
 
 private:
     friend QDataStream &operator<<(QDataStream &stream, const User &user);
