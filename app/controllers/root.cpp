@@ -52,4 +52,9 @@ void Root::csrfDenied(Context *c)
     c->res()->setContentType(QStringLiteral("text/plain; charset=utf-8"));
 }
 
+void Root::error(Context *c)
+{
+
+}
+
 #include "moc_root.cpp"

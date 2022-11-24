@@ -77,6 +77,11 @@ void ControlCenter::logout(Context *c)
     c->res()->redirect(c->uriFor(QStringLiteral("/")));
 }
 
+void ControlCenter::error(Context *c)
+{
+
+}
+
 bool ControlCenter::Auto(Context *c)
 {
     c->res()->setHeader(QStringLiteral("X-Robots-Tag"), QStringLiteral("none"));

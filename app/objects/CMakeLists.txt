@@ -7,4 +7,6 @@ target_sources(meldari
         menuitem.h
         user.cpp
         user.h
+        error.cpp
+        error.h
 )

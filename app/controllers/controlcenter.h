@@ -28,6 +28,9 @@ public:
     void logout(Context *c);
 
 private:
+    C_ATTR(error, :Private)
+    void error(Context *c);
+
     C_ATTR(Auto, :Private)
     bool Auto(Context *c);
 
