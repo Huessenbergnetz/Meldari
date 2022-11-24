@@ -19,7 +19,11 @@ ControlCenterUsers::ControlCenterUsers(QObject *parent) : Controller{parent}
 
 void ControlCenterUsers::index(Context *c)
 {
+    const QJsonDocument typesTranslated(User::typesTranslated(c));
+    const QString typesTranslatedJson = QString::fromUtf8(typesTranslated.toJson(QJsonDocument::Compact));
+
     c->stash({
+                 {QStringLiteral("user_types_translated"), typesTranslatedJson},
                  {QStringLiteral("template"), QStringLiteral("users/index.html")}
              });
 }
