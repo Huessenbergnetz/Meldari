@@ -25,7 +25,7 @@ public:
     void pageNotFound(Context *c);
 
 private:
-    C_ATTR(End, :ActionClass("RenderView"))
+    C_ATTR(End, :ActionClass("RenderView") :View("public"))
     void End(Context *c);
 
     C_ATTR(Auto, :Private)

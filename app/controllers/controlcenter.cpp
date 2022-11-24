@@ -24,7 +24,7 @@ void ControlCenter::index(Context *c)
 {
     c->stash({
                  {QStringLiteral("site_title"), c->translate("ControlCenter", "Control Center")},
-                 {QStringLiteral("template"), QStringLiteral("cc/index.html")}
+                 {QStringLiteral("template"), QStringLiteral("index.html")}
              });
 }
 

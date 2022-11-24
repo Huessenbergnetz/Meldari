@@ -55,17 +55,29 @@ bool Meldari::init()
     MeldariConfig::load(engine()->config(QStringLiteral(MELDARI_CONF_MEL)),
                         engine()->config(QStringLiteral(MELDARI_CONF_MAIL)));
 
-    qCDebug(MEL_CORE) << "Registering view";
-    auto view = new CuteleeView(this);
-    view->setWrapper(QStringLiteral("wrapper.html"));
 #if defined(QT_DEBUG)
-    view->setCache(false);
+    const bool viewCache = false;
 #else
-    view->setCache(true);
+    const bool viewCache = true;
 #endif
-    view->setIncludePaths({MeldariConfig::tmplPath(u"site")});
-    view->engine()->addDefaultLibrary(QStringLiteral("cutelee_i18ntags"));
-    qCDebug(MEL_CORE) << "Template include paths:" << view->includePaths();
+    qCDebug(MEL_CORE) << "View cache enabled:" << viewCache;
+
+    qCDebug(MEL_CORE) << "Registering view: cc";
+    auto ccView = new CuteleeView(this, QStringLiteral("cc"));
+    ccView->setCache(viewCache);
+    ccView->setWrapper(QStringLiteral("wrapper.html"));
+    ccView->setIncludePaths({MeldariConfig::tmplPath(u"site/cc")});
+    ccView->engine()->addDefaultLibrary(QStringLiteral("cutelee_i18ntags"));
+    qCDebug(MEL_CORE) << "Template include paths for view cc:" << ccView->includePaths();
+
+    qCDebug(MEL_CORE) << "Registering view: public";
+    auto publicView = new CuteleeView(this, QStringLiteral("public"));
+    publicView->setCache(viewCache);
+    publicView->setWrapper(QStringLiteral("wrapper.html"));
+    publicView->setIncludePaths({MeldariConfig::tmplPath(u"site/public")});
+    publicView->engine()->addDefaultLibrary(QStringLiteral("cutelee_i18ntags"));
+    qCDebug(MEL_CORE) << "Template include paths for view public:" << publicView->includePaths();
+
 
     qCDebug(MEL_CORE) << "Registering controllers";
     new Root(this);

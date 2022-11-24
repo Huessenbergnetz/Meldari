@@ -34,7 +34,7 @@ private:
     C_ATTR(Auto, :Private)
     bool Auto(Context *c);
 
-    C_ATTR(End, :ActionClass("RenderView"))
+    C_ATTR(End, :ActionClass("RenderView") :View("cc"))
     void End(Context *c);
 
     void buildMainMenu(Context *c);
