@@ -123,6 +123,7 @@ void ControlCenter::buildUserMenu(Context *c)
 {
     std::vector<MenuItem> userMenu;
 
+    userMenu.emplace_back(c, QStringLiteral("userMenuSettings"), c->translate("ControlCenter", "Settings"), QStringLiteral("index"), QStringLiteral("cc/usersettings"));
     userMenu.emplace_back(c, QStringLiteral("userMenuLogout"), c->translate("ControlCenter", "Logout"), QStringLiteral("logout"), QStringLiteral("cc"));
 
     c->setStash(QStringLiteral("user_menu"), QVariant::fromValue<std::vector<MenuItem>>(userMenu));
