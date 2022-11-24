@@ -22,14 +22,14 @@ User::User() : BaseUser()
 
 }
 
-User::User(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedBy)
-    : BaseUser(id, type, username, email, created, updated, validUntil, lastSeen, lockedAt, lockedBy, {})
+User::User(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedById, const QString &lockedByName)
+    : BaseUser(id, type, username, email, created, updated, validUntil, lastSeen, lockedAt, lockedById, lockedByName, {})
 {
 
 }
 
-User::User(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedBy, const QVariantMap &settings)
-    : BaseUser(id, type, username, email, created, updated, validUntil, lastSeen, lockedAt, lockedBy, settings)
+User::User(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedById, const QString &lockedByName, const QVariantMap &settings)
+    : BaseUser(id, type, username, email, created, updated, validUntil, lastSeen, lockedAt, lockedById, lockedByName, settings)
 {
 
 }
@@ -57,7 +57,7 @@ User::User(const Cutelyst::AuthenticationUser &user) : BaseUser()
     if (data->lockedAt.isValid()) {
         data->lockedAt.setTimeSpec(Qt::UTC);
     }
-    data->lockedBy = user.value(QStringLiteral("locked_by")).toUInt();
+    data->lockedById = user.value(QStringLiteral("locked_by")).toUInt();
     data->settings = user.value(QStringLiteral("settings")).toMap();
 }
 
@@ -113,7 +113,7 @@ bool User::operator==(const User &other) const noexcept
         return false;
     }
 
-    if (data->lockedBy != other.data->lockedBy) {
+    if (data->lockedById != other.data->lockedById) {
         return false;
     }
 
@@ -156,7 +156,8 @@ std::vector<User> User::list(Cutelyst::Context *c, Error &e)
                                q.value(6).toDateTime(),
                                q.value(7).toDateTime(),
                                q.value(8).toDateTime(),
-                               q.value(9).toUInt());
+                               q.value(9).toUInt(),
+                               q.value(10).toString());
         }
     } else {
         e = std::move(Error(q, c->translate("User", "Failed to query list of users from the database.")));
@@ -211,7 +212,8 @@ QDataStream &operator<<(QDataStream &stream, const User &user)
            << user.data->validUntil
            << user.data->lastSeen
            << user.data->lockedAt
-           << user.data->lockedBy
+           << user.data->lockedById
+           << user.data->lockedByName
            << user.data->settings;
 
     return stream;
@@ -234,7 +236,8 @@ QDataStream &operator>>(QDataStream &stream, User &user)
     stream >> user.data->validUntil;
     stream >> user.data->lastSeen;
     stream >> user.data->lockedAt;
-    stream >> user.data->lockedBy;
+    stream >> user.data->lockedById;
+    stream >> user.data->lockedByName;
     stream >> user.data->settings;
 
     return stream;
