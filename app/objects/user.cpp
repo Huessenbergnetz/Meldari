@@ -4,14 +4,26 @@
  */
 
 #include "user.h"
+#include "logging.h"
+#include "error.h"
 #include <baseuser_p.h>
 
 #include <Cutelyst/Context>
 #include <Cutelyst/Plugins/Authentication/authenticationuser.h>
+#include <Cutelyst/Plugins/Utils/Sql>
+
+#include <QSqlQuery>
+#include <QSqlError>
 
 #define USER_STASH_KEY "user"
 
 User::User() : BaseUser()
+{
+
+}
+
+User::User(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedBy)
+    : BaseUser(id, type, username, email, created, updated, validUntil, lastSeen, lockedAt, lockedBy, {})
 {
 
 }
@@ -122,6 +134,36 @@ User User::fromStash(Cutelyst::Context *c)
 {
     Q_ASSERT(c);
     return c->stash(QStringLiteral(USER_STASH_KEY)).value<User>();
+}
+
+std::vector<User> User::list(Cutelyst::Context *c, Error &e)
+{
+    std::vector<User> users;
+
+    QSqlQuery q = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT u1.id, u1.type, u1.username, u1.email, u1.created_at, u1.updated_at, u1.valid_until, u1.last_seen, u1.locked_at, u2.id AS locked_by_id, u2.username AS locked_by_username FROM users u1 LEFT JOIN users u2 ON u2.id = u1.locked_by"));
+
+    if (Q_LIKELY(q.exec())) {
+        if (q.size() > 0) {
+            users.reserve(q.size());
+        }
+        while (q.next()) {
+            users.emplace_back(q.value(0).toUInt(),
+                               static_cast<User::Type>(q.value(1).toInt()),
+                               q.value(2).toString(),
+                               q.value(3).toString(),
+                               q.value(4).toDateTime(),
+                               q.value(5).toDateTime(),
+                               q.value(6).toDateTime(),
+                               q.value(7).toDateTime(),
+                               q.value(8).toDateTime(),
+                               q.value(9).toUInt());
+        }
+    } else {
+        e = std::move(Error(q, c->translate("User", "Failed to query list of users from the database.")));
+        qCCritical(MEL_CORE) << "Failed to query user list of users from the database:" << q.lastError().text();
+    }
+
+    return users;
 }
 
 QDebug operator<<(QDebug dbg, const User &user)

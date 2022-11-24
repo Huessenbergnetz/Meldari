@@ -8,17 +8,21 @@
 
 #include <baseuser.h>
 #include <QObject>
+#include <vector>
 
 namespace Cutelyst {
 class Context;
 class AuthenticationUser;
 }
 
+class Error;
+
 class User : public BaseUser
 {
     Q_GADGET
 public:
     User();
+    User(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedBy);
     User(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedBy, const QVariantMap &settings);
     User(const Cutelyst::AuthenticationUser &user);
     User(const User &other);
@@ -35,6 +39,8 @@ public:
     void toStash(Cutelyst::Context *c);
 
     static User fromStash(Cutelyst::Context *c);
+
+    static std::vector<User> list(Cutelyst::Context *c, Error &e);
 
 private:
     friend QDataStream &operator<<(QDataStream &stream, const User &user);
