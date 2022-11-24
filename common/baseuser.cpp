@@ -17,11 +17,11 @@ QJsonObject BaseUserData::toJson() const
     o.insert(u"type", static_cast<int>(type));
     o.insert(u"username", username);
     o.insert(u"email", email);
-    o.insert(u"created", created.toString(Qt::ISODate));
-    o.insert(u"updated", updated.toString(Qt::ISODate));
-    o.insert(u"validUntil", validUntil.toString(Qt::ISODate));
-    o.insert(u"lastSeen", lastSeen.toString(Qt::ISODate));
-    o.insert(u"lockedAt", lockedAt.toString(Qt::ISODate));
+    o.insert(u"created", created.toMSecsSinceEpoch());
+    o.insert(u"updated", updated.toMSecsSinceEpoch());
+    o.insert(u"validUntil", validUntil.isNull() ? QJsonValue() : validUntil.toMSecsSinceEpoch());
+    o.insert(u"lastSeen", lastSeen.isNull() ? QJsonValue() : lastSeen.toMSecsSinceEpoch());
+    o.insert(u"lockedAt", lockedAt.isNull() ? QJsonValue() : lockedAt.toMSecsSinceEpoch());
     o.insert(u"lockedBy", static_cast<qint64>(lockedBy));
     o.insert(u"settings", QJsonObject::fromVariantMap(settings));
 
