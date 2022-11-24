@@ -9,6 +9,7 @@
 #include <baseuser.h>
 #include <QObject>
 #include <QJsonArray>
+#include <QJsonObject>
 #include <vector>
 
 namespace Cutelyst {
@@ -44,6 +45,10 @@ public:
     static std::vector<User> list(Cutelyst::Context *c, Error &e, Type minType = User::Invalid);
 
     static QJsonArray listJson(Cutelyst::Context *c, Error &e, Type minType = User::Invalid);
+
+    static QString typeTranslated(Cutelyst::Context *c, Type type);
+
+    static QJsonObject typesTranslated(Cutelyst::Context *c);
 
 private:
     friend QDataStream &operator<<(QDataStream &stream, const User &user);

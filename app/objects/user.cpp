@@ -14,6 +14,8 @@
 
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QMetaObject>
+#include <QMetaEnum>
 
 #define USER_STASH_KEY "user"
 
@@ -189,6 +191,45 @@ QJsonArray User::listJson(Cutelyst::Context *c, Error &e, User::Type minType)
     }
 
     return json;
+}
+
+QString User::typeTranslated(Cutelyst::Context *c, Type type)
+{
+    Q_ASSERT(c);
+
+    switch (type) {
+    case Invalid:
+        //: user type
+        return c->translate("User", "Invalid");
+    case Disabled:
+        //: user type
+        return c->translate("User", "Disabled");
+    case Registered:
+        //: user type
+        return c->translate("User", "Registered");
+    case Administrator:
+        //: user type
+        return c->translate("User", "Administrator");
+    case SuperUser:
+        //: user type
+        return c->translate("User", "Super User");
+    }
+
+    return QString();
+}
+
+QJsonObject User::typesTranslated(Cutelyst::Context *c)
+{
+    QJsonObject o;
+
+    const QMetaObject mo = User::staticMetaObject;
+    const QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Type"));
+
+    for (int i = 0; i < me.keyCount(); ++i) {
+        o.insert(QString::number(me.value(i)), User::typeTranslated(c, static_cast<User::Type>(me.value(i))));
+    }
+
+    return o;
 }
 
 QDebug operator<<(QDebug dbg, const User &user)
