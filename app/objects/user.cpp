@@ -166,6 +166,23 @@ std::vector<User> User::list(Cutelyst::Context *c, Error &e)
     return users;
 }
 
+QJsonArray User::listJson(Cutelyst::Context *c, Error &e)
+{
+    QJsonArray json;
+
+    const std::vector<User> users = User::list(c, e);
+
+    if (e.type() != Error::NoError) {
+        return json;
+    }
+
+    for (const User &user : users) {
+        json.append(user.toJson());
+    }
+
+    return json;
+}
+
 QDebug operator<<(QDebug dbg, const User &user)
 {
     QDebugStateSaver saver(dbg);

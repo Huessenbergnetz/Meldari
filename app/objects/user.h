@@ -8,6 +8,7 @@
 
 #include <baseuser.h>
 #include <QObject>
+#include <QJsonArray>
 #include <vector>
 
 namespace Cutelyst {
@@ -41,6 +42,8 @@ public:
     static User fromStash(Cutelyst::Context *c);
 
     static std::vector<User> list(Cutelyst::Context *c, Error &e);
+
+    static QJsonArray listJson(Cutelyst::Context *c, Error &e);
 
 private:
     friend QDataStream &operator<<(QDataStream &stream, const User &user);
