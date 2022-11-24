@@ -11,6 +11,10 @@
 #include <Cutelyst/Plugins/Authentication/authentication.h>
 #include <Cutelyst/Plugins/Authentication/authenticationuser.h>
 #include <Cutelyst/Plugins/Session/Session>
+#include <Cutelyst/Plugins/Utils/Sql>
+
+#include <QSqlQuery>
+#include <QSqlError>
 
 #include <vector>
 
@@ -40,6 +44,15 @@ void ControlCenter::login(Context *c)
         if (!username.isEmpty() && !password.isEmpty()) {
             if (Authentication::authenticate(c, params, QStringLiteral("users"))) {
                 qCInfo(MEL_AUTHN, "User %s successfully logged in", qUtf8Printable(username));
+
+                QSqlQuery q = CPreparedSqlQueryThread(QStringLiteral("UPDATE users SET last_seen = :last_seen WHERE username = :username"));
+                q.bindValue(QStringLiteral(":last_seen"), QDateTime::currentDateTimeUtc());
+                q.bindValue(QStringLiteral(":username"), username);
+
+                if (Q_UNLIKELY(!q.exec())) {
+                    qCWarning(MEL_AUTHN) << "Failed to update last_seen column for user" << username << "in the database:" << q.lastError().text();
+                }
+
                 const QString redirectToQueryParam = params.value(QStringLiteral("redirect_to"));
                 const QUrl redirectToUrl = redirectToQueryParam.isEmpty() ? c->uriFor(QStringLiteral("/cc")) : QUrl::fromEncoded(redirectToQueryParam.toLatin1());
                 c->res()->redirect(redirectToUrl);
