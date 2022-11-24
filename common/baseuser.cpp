@@ -41,10 +41,21 @@ BaseUser::BaseUser(BaseUser::dbid_t id, BaseUser::Type type, const QString &user
     data->username = username;
     data->email = email;
     data->created = created;
+    data->created.setTimeSpec(Qt::UTC);
     data->updated = updated;
+    data->updated.setTimeSpec(Qt::UTC);
     data->validUntil = validUntil;
+    if (data->validUntil.isValid()) {
+        data->validUntil.setTimeSpec(Qt::UTC);
+    }
     data->lastSeen = lastSeen;
+    if (data->lastSeen.isValid()) {
+        data->lastSeen.setTimeSpec(Qt::UTC);
+    }
     data->lockedAt = lockedAt;
+    if (data->lockedAt.isValid()) {
+        data->lockedAt.setTimeSpec(Qt::UTC);
+    }
     data->lockedBy = lockedBy;
     data->settings = settings;
 }
