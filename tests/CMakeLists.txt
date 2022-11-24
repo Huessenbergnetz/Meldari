@@ -19,7 +19,8 @@ function (meldari_test_app _testname)
             ${CMAKE_SOURCE_DIR}/app
             ${CMAKE_BINARY_DIR}/app
     )
-    target_link_libraries(${_testname}_exec Qt6::Core Qt6::Test meldaricommon meldari)
+    target_link_libraries(${_testname}_exec Qt6::Core Qt6::Sql Qt6::Test Cutelyst::Core meldaricommon meldari)
 endfunction (meldari_test_app _testname)
 
 meldari_test_app(testuser)
+meldari_test_app(testerrorobject)
