@@ -110,10 +110,10 @@ void ControlCenter::buildMainMenu(Context *c)
 {
     std::vector<MenuItem> mainMenu;
 
-    mainMenu.emplace_back(c, QStringLiteral("dashboard"), c->translate("ControlCenter", "Dashboard"), QStringLiteral("index"), QStringLiteral("cc"));
+    mainMenu.emplace_back(c, QStringLiteral("mainMenuDashboard"), c->translate("ControlCenter", "Dashboard"), QStringLiteral("index"), QStringLiteral("cc"));
 
     if (User::fromStash(c).isAdmin()) {
-        mainMenu.emplace_back(c, QStringLiteral("users"), c->translate("ControlCenter", "Users"), QStringLiteral("index"), QStringLiteral("cc/users"));
+        mainMenu.emplace_back(c, QStringLiteral("mainMenuUsers"), c->translate("ControlCenter", "Users"), QStringLiteral("index"), QStringLiteral("cc/users"));
     }
 
     c->setStash(QStringLiteral("main_menu"), QVariant::fromValue<std::vector<MenuItem>>(mainMenu));
@@ -123,7 +123,7 @@ void ControlCenter::buildUserMenu(Context *c)
 {
     std::vector<MenuItem> userMenu;
 
-    userMenu.emplace_back(c, QStringLiteral("logout"), c->translate("ControlCenter", "Logout"), QStringLiteral("logout"), QStringLiteral("cc"));
+    userMenu.emplace_back(c, QStringLiteral("userMenuLogout"), c->translate("ControlCenter", "Logout"), QStringLiteral("logout"), QStringLiteral("cc"));
 
     c->setStash(QStringLiteral("user_menu"), QVariant::fromValue<std::vector<MenuItem>>(userMenu));
 }

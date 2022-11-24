@@ -37,8 +37,8 @@
         }
     ],
     "icons": {
-        "dashboard": "<i class=\"bi bi-speedometer2 me-2\"></i>",
-        "logout": "<i class=\"bi bi-box-arrow-right me-2\"></i>",
-        "users": "<i class=\"bi bi-people me-2\"></i>"
+        "mainMenuDashboard": "<i class=\"bi bi-speedometer2 me-2\"></i>",
+        "mainMenuUsers": "<i class=\"bi bi-people me-2\"></i>",
+        "userMenuLogout": "<i class=\"bi bi-box-arrow-right me-2\"></i>"
     }
 }
