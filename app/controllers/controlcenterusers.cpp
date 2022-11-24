@@ -6,6 +6,7 @@
 #include "controlcenterusers.h"
 #include "objects/user.h"
 #include "objects/error.h"
+#include "objects/simpleuser.h"
 
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -25,8 +26,12 @@ void ControlCenterUsers::index(Context *c)
 
 void ControlCenterUsers::list(Context *c)
 {
+    auto params = c->req()->queryParams();
+
+    User::Type minType = User::typeStringToEnum(params.value(QStringLiteral("minType")));
+
     Error e;
-    const QJsonArray users = User::listJson(c, e);
+    const QJsonArray users = params.value(QStringLiteral("details")) == u"full" ? User::listJson(c, e, minType) : SimpleUser::listJson(c, e, minType);
     if (e.type() != Error::NoError) {
         e.toStash(c, true);
         return;
@@ -39,7 +44,7 @@ bool ControlCenterUsers::Auto(Context *c)
 {
     const User currentUser = User::fromStash(c);
     if (!currentUser.isAdmin()) {
-        Error::toStash(c, Error::AuthorizationError, c->translate("ControlCenterUsers", "You do not have the necessary permissions."), true);
+        Error::toStash(c, Error::AuthorizationError, c->translate("ControlCenterUsers", "You do not have the required permissions."), true);
         return false;
     }
 
