@@ -12,6 +12,7 @@
 
 #include "controllers/root.h"
 #include "controllers/controlcenter.h"
+#include "controllers/controlcenterusers.h"
 
 #include <Cutelyst/Engine>
 #include <Cutelyst/Plugins/StaticSimple/StaticSimple>
@@ -82,6 +83,7 @@ bool Meldari::init()
     qCDebug(MEL_CORE) << "Registering controllers";
     new Root(this);
     new ControlCenter(this);
+    new ControlCenterUsers(this);
 
     if (MeldariConfig::staticPlugin() == MeldariConfig::StaticSimple) {
         qCDebug(MEL_CORE) << "Registering StaticSimple plugin";

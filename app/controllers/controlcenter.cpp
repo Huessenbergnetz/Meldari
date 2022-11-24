@@ -113,7 +113,7 @@ void ControlCenter::buildMainMenu(Context *c)
     mainMenu.emplace_back(c, QStringLiteral("dashboard"), c->translate("ControlCenter", "Dashboard"), QStringLiteral("index"), QStringLiteral("cc"));
 
     if (User::fromStash(c).isAdmin()) {
-
+        mainMenu.emplace_back(c, QStringLiteral("users"), c->translate("ControlCenter", "Users"), QStringLiteral("index"), QStringLiteral("cc/users"));
     }
 
     c->setStash(QStringLiteral("main_menu"), QVariant::fromValue<std::vector<MenuItem>>(mainMenu));

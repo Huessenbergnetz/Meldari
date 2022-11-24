@@ -7,4 +7,6 @@ target_sources(meldari
         root.cpp
         controlcenter.h
         controlcenter.cpp
+        controlcenterusers.h
+        controlcenterusers.cpp
 )
