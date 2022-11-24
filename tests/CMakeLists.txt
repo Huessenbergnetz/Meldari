@@ -24,3 +24,4 @@ endfunction (meldari_test_app _testname)
 
 meldari_test_app(testuser)
 meldari_test_app(testerrorobject)
+meldari_test_app(testsimpleuser)

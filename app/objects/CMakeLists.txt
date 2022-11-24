@@ -9,4 +9,6 @@ target_sources(meldari
         user.h
         error.cpp
         error.h
+        simpleuser.cpp
+        simpleuser.h
 )
