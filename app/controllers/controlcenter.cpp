@@ -27,7 +27,7 @@ ControlCenter::ControlCenter(QObject *parent)
 void ControlCenter::index(Context *c)
 {
     c->stash({
-                 {QStringLiteral("site_title"), c->translate("ControlCenter", "Control Center")},
+                 {QStringLiteral("site_title"), c->translate("ControlCenter", "Dashboard")},
                  {QStringLiteral("template"), QStringLiteral("index.html")}
              });
 }
@@ -59,7 +59,7 @@ void ControlCenter::login(Context *c)
                 return;
             } else {
                 qCWarning(MEL_AUTHN, "Login failed: bad password for user %s. IP: %s", qUtf8Printable(username), qUtf8Printable(req->addressString()));
-                c->setStash(QStringLiteral("error_msg"), c->translate("Loging", "Arrrgh, bad username and/or password!"));
+                c->setStash(QStringLiteral("error_msg"), c->translate("ControlCenter", "Arrrgh, bad username and/or password!"));
                 c->res()->setStatus(Response::Forbidden);
             }
         }
