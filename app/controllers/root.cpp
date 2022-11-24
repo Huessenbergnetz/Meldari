@@ -9,6 +9,7 @@
 #include "objects/user.h"
 
 #include <Cutelyst/Plugins/Authentication/authentication.h>
+#include <Cutelyst/Plugins/StatusMessage>
 
 Root::Root(QObject *parent) : Controller(parent)
 {
@@ -30,6 +31,8 @@ void Root::pageNotFound(Context *c)
 
 bool Root::Auto(Context *c)
 {
+    StatusMessage::load(c);
+
     const AuthenticationUser authUser = Authentication::user(c);
 
     if (!authUser.isNull()) {
