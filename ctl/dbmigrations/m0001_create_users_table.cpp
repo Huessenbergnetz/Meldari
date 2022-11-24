@@ -29,7 +29,7 @@ void M0001_Create_Users_Table::up()
     t->dateTime(QStringLiteral("updated_at"));
     t->dateTime(QStringLiteral("valid_until"))->nullable();
     t->dateTime(QStringLiteral("last_seen"))->nullable();
-    t->bigInteger(QStringLiteral("locked_at"))->defaultValue(0)->nullable();
+    t->dateTime(QStringLiteral("locked_at"))->nullable();
     t->integer(QStringLiteral("locked_by"))->unSigned()->defaultValue(0)->nullable();
 
     switch(dbType()) {
