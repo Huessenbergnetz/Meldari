@@ -54,7 +54,7 @@ void ControlCenter::login(Context *c)
 
     c->stash({
                  {QStringLiteral("no_wrapper"), true},
-                 {QStringLiteral("template"), QStringLiteral("cc/login.html")},
+                 {QStringLiteral("template"), QStringLiteral("login.html")},
                  {QStringLiteral("site_title"), c->translate("ControlCenter", "Login", "site title")},
                  {QStringLiteral("login_field_label_username"), c->translate("ControlCenter", "Username")},
                  {QStringLiteral("login_field_label_password"), c->translate("ControlCenter", "Password")},
