@@ -8,7 +8,8 @@
 #include "meldariconfig.h"
 #include "userauthstoresql.h"
 
-#include "common/confignames.h"
+#include "confignames.h"
+#include "credentialbotan.h"
 
 #include "controllers/root.h"
 #include "controllers/controlcenter.h"
@@ -21,7 +22,6 @@
 #include <Cutelyst/Plugins/View/Cutelee/cuteleeview.h>
 #include <Cutelyst/Plugins/Session/Session>
 #include <Cutelyst/Plugins/Authentication/authentication.h>
-#include <Cutelyst/Plugins/Authentication/credentialpassword.h>
 #include <Cutelyst/Plugins/Authentication/authenticationrealm.h>
 #include <Cutelyst/Plugins/Utils/Sql>
 #include <Cutelyst/Plugins/StatusMessage>
@@ -122,10 +122,7 @@ bool Meldari::init()
 
     qCDebug(MEL_CORE) << "Registering Authentication plugin";
     auto authn = new Authentication(this);
-    auto userCreds = new CredentialPassword;
-    userCreds->setPasswordType(CredentialPassword::Hashed);
-    auto userStore = new UserAuthStoreSql;
-    authn->addRealm(userStore, userCreds, QStringLiteral("users"));
+    authn->addRealm(new UserAuthStoreSql, new CredentialBotan, QStringLiteral("users"));
 
     return true;
 }

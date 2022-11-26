@@ -5,10 +5,10 @@
 
 #include "useraddcommand.h"
 
-#include <baseuser.h>
+#include "baseuser.h"
+#include "credentialbotan.h"
 
 #include <Cutelyst/Plugins/Utils/validatoremail.h>
-#include <Cutelyst/Plugins/Authentication/credentialpassword.h>
 
 #include <QCoreApplication>
 #include <QCommandLineOption>
@@ -130,7 +130,7 @@ CLI::RC UserAddCommand::exec(QCommandLineParser *parser)
         _password = password;
     }
 
-    const QString passwordEnc = Cutelyst::CredentialPassword::createPassword(_password);
+    const QString passwordEnc = CredentialBotan::createArgon2Password(_password);
     if (passwordEnc.isEmpty()) {
         printFailed();
         //: CLI error message
