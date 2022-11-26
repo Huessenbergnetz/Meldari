@@ -47,18 +47,6 @@ void CredentialBotan::setPasswordField(const QString &fieldName)
     d->passwordField = fieldName;
 }
 
-//CredentialBotan::PasswordType CredentialBotan::passwordType() const
-//{
-//    Q_D(const CredentialBotan);
-//    return d->passwordType;
-//}
-
-//void CredentialBotan::setPasswordType(CredentialBotan::PasswordType type)
-//{
-//    Q_D(CredentialBotan);
-//    d->passwordType = type;
-//}
-
 QString CredentialBotan::passwordPreSalt() const
 {
     Q_D(const CredentialBotan);

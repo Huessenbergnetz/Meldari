@@ -35,10 +35,6 @@ public:
 
     void setPasswordField(const QString &fieldName);
 
-//    PasswordType passwordType() const;
-
-//    void setPasswordType(PasswordType type);
-
     QString passwordPreSalt() const;
 
     void setPasswordPreSalt(const QString &passwordPreSalt);
