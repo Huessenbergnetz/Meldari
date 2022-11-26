@@ -12,6 +12,9 @@ target_sources(meldaricommon
         baseuser.h
         baseuser_p.h
         meldaricommon_global.h
+        credentialbotan.cpp
+        credentialbotan.h
+        credentialbotan_p.h
 )
 
 configure_file(confignames.h.in confignames.h)
@@ -27,6 +30,7 @@ target_include_directories(meldaricommon
 target_link_libraries(meldaricommon
     PUBLIC
         Qt6::Core
+        Cutelyst::Core
         Cutelyst::Authentication
     PRIVATE
         PkgConfig::Botan
