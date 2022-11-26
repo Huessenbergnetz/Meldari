@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: (C) 2022 Matthias Fehring <https://www.huessenbergnetz.de>
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+pkg_search_module(Botan REQUIRED IMPORTED_TARGET botan-2)
+
 add_library(meldaricommon SHARED)
 
 target_sources(meldaricommon
@@ -9,6 +11,7 @@ target_sources(meldaricommon
         baseuser.cpp
         baseuser.h
         baseuser_p.h
+        meldaricommon_global.h
 )
 
 configure_file(confignames.h.in confignames.h)
@@ -22,8 +25,11 @@ target_include_directories(meldaricommon
 )
 
 target_link_libraries(meldaricommon
-    PRIVATE
+    PUBLIC
         Qt6::Core
+        Cutelyst::Authentication
+    PRIVATE
+        PkgConfig::Botan
 )
 
 target_compile_definitions(meldaricommon
