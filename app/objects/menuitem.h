@@ -33,6 +33,8 @@ class MenuItem
 public:
     MenuItem();
     MenuItem(Cutelyst::Context *c, const QString &name, const QString &title, const QString &action, const QString &ns = QString(), const QStringList &captures = QStringList(), const QStringList &args = QStringList(), const Cutelyst::ParamsMultiMap &queryValues = Cutelyst::ParamsMultiMap());
+    MenuItem(const QString &name, const QString &title, const QUrl &url, bool isActive = false);
+    MenuItem(const QString &name, const QString &title, const QString &url, bool isActive = false);
     MenuItem(const MenuItem &other);
     MenuItem(MenuItem &&other) noexcept;
     MenuItem &operator=(const MenuItem &other);

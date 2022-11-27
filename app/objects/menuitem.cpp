@@ -26,7 +26,7 @@ MenuItem::MenuItem()
 }
 
 MenuItem::MenuItem(Cutelyst::Context *c, const QString &name, const QString &title, const QString &action, const QString &ns, const QStringList &captures, const QStringList &args, const Cutelyst::ParamsMultiMap &queryValues)
-    : data(new MenuItemData)
+    : data{new MenuItemData}
 {
     data->name = name;
     data->title = title;
@@ -35,6 +35,25 @@ MenuItem::MenuItem(Cutelyst::Context *c, const QString &name, const QString &tit
     Q_ASSERT_X(_action, "create new MenuItem", "can not find action");
     data->url = c->uriFor(_action, captures, args, queryValues);
     data->isActive = _action == c->action();
+}
+
+MenuItem::MenuItem(const QString &name, const QString &title, const QUrl &url, bool isActive)
+    : data{new MenuItemData}
+{
+    data->name = name;
+    data->title = title;
+    data->icon = MeldariConfig::tmplIcon(name);
+    data->url = url;
+    data->isActive = isActive;
+}
+
+MenuItem::MenuItem(const QString &name, const QString &title, const QString &url, bool isActive)
+    : data{new MenuItemData}
+{
+    data->name = name;
+    data->title = title;
+    data->icon = MeldariConfig::tmplIcon(name);
+    data->url.setUrl(url);
 }
 
 MenuItem::MenuItem(const MenuItem &other)
