@@ -3,6 +3,8 @@
 
 set(users_FILES
     index.html
+    addUserModal.html
+    indexPageHeader.html
 )
 
 target_sources(meldaritemplate

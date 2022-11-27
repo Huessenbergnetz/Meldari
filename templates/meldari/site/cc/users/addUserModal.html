@@ -1,0 +1,53 @@
+{% extends "parts/modal.html" %}
+{% block label %}{% i18n "Add user" %}{% endblock %}
+
+{% block content %}
+<form id="addUserForm" action="/cc/users/add">
+    {% c_csrf_token %}
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "addUserUsername" as inputId %}
+            {% with "username" as inputName %}
+            {% with _("Username") as inputLabel %}
+            {% include "parts/textInputWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "addUserEmail" as inputId %}
+            {% with "email" as inputName %}
+            {% with _("Email") as inputLabel %}
+            {% include "parts/emailInputWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "addUserPassword" as inputId %}
+            {% with "password" as inputName %}
+            {% with _("Password") as inputLabel %}
+            {% include "parts/passwordInputWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "addUserPasswordConfirmation" as inputId %}
+            {% with "password_confirmed" as inputName %}
+            {% with _("Password confirmation") as inputLabel %}
+            {% include "parts/passwordInputWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block footer %}
+<button type="submit" form="addUserForm" class="btn btn-primary text-capitalize"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span><i class="bi bi-person-plus"></i> {{ _("add user") }}</button>
+{% endblock %}

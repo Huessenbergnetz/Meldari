@@ -1,6 +1,6 @@
 {% with site_title as page_header %}
 {% with "people" as page_header_icon %}
-{% include "parts/page_header.html" %}
+{% include "users/indexPageHeader.html" %}
 {% endwith %}
 {% endwith %}
 
@@ -18,6 +18,7 @@
     </tbody>
 </table>
 
+<!-- start user-row-template -->
 <template id="user-row-template">
     <tr>
         <td>
@@ -35,5 +36,14 @@
         <td></td>
     </tr>
 </template>
+<!-- end user-row-template -->
+
+<!-- start addUserModal -->
+{% with "addUser" as modalId %}
+{% with "modal-lg" as modalSize %}
+{% include "users/addUserModal.html" %}
+{% endwith %}
+{% endwith %}
+<!-- end addUserModal -->
 
 <script id="user-types-translated" type="application/json">{{ user_types_translated|safe }}</script>
