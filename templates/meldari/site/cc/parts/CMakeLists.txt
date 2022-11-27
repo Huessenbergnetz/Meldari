@@ -3,6 +3,11 @@
 
 set(parts_FILES
     page_header.html
+    modal.html
+    inputWithLabel.html
+    textInputWithLabel.html
+    emailInputWithLabel.html
+    passwordInputWithLabel.html
 )
 
 target_sources(meldaritemplate
