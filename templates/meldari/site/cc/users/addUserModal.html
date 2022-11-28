@@ -44,6 +44,18 @@
             {% endwith %}
             {% endwith %}
         </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "addUserType" as selectId %}
+            {% with "type" as selectName %}
+            {% with _("Type") as selectLabel %}
+            {% with user_type_options as selectOptions %}
+            {% include "parts/selectWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
     </div>
 </form>
 {% endblock %}
