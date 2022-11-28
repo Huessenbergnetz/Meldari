@@ -232,6 +232,24 @@ QJsonObject User::typesTranslated(Cutelyst::Context *c)
     return o;
 }
 
+std::vector<OptionItem> User::typeOptions(Cutelyst::Context *c, Type selected)
+{
+    std::vector<OptionItem> opts;
+
+    const QMetaObject mo = User::staticMetaObject;
+    const QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Type"));
+
+    opts.reserve(me.keyCount() - 1);
+
+    for (int i = 1; i < me.keyCount(); ++i) {
+        const int v = me.value(i);
+        const Type t = static_cast<User::Type>(v);
+        opts.emplace_back(User::typeTranslated(c, t), v, t == selected);
+    }
+
+    return opts;
+}
+
 QDebug operator<<(QDebug dbg, const User &user)
 {
     QDebugStateSaver saver(dbg);

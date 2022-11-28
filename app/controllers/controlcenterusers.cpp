@@ -21,9 +21,11 @@ void ControlCenterUsers::index(Context *c)
 {
     const QJsonDocument typesTranslated(User::typesTranslated(c));
     const QString typesTranslatedJson = QString::fromUtf8(typesTranslated.toJson(QJsonDocument::Compact));
+    const std::vector<OptionItem> userTypeOptions = User::typeOptions(c);
 
     c->stash({
                  {QStringLiteral("user_types_translated"), typesTranslatedJson},
+                 {QStringLiteral("user_type_options"), QVariant::fromValue<std::vector<OptionItem>>(userTypeOptions)},
                  {QStringLiteral("template"), QStringLiteral("users/index.html")}
              });
 }

@@ -7,6 +7,7 @@
 #define MELDARI_USER_H
 
 #include <baseuser.h>
+#include "optionitem.h"
 #include <QObject>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -49,6 +50,8 @@ public:
     static QString typeTranslated(Cutelyst::Context *c, Type type);
 
     static QJsonObject typesTranslated(Cutelyst::Context *c);
+
+    static std::vector<OptionItem> typeOptions(Cutelyst::Context *c, Type selected = User::Invalid);
 
 private:
     friend QDataStream &operator<<(QDataStream &stream, const User &user);
