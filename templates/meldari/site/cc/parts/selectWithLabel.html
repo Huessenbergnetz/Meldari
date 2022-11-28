@@ -1,0 +1,8 @@
+<label for="{{ selectId  }}" class="form-label">{{ selectLabel }}</label>
+<select id="{{ selectId }}" name="{{ selectName|default:selectId }}" class="form-select" aria-describedby="{{ selectId}}Feedback {{ selectId }}Help">
+    {% for opt in selectOptions %}
+    <option value="{{ opt.value }}"{% if opt.selected %} selected{% endif %}>{{ opt.name }}</option>
+    {%  endfor %}
+</select>
+<div id="{{ selectId }}Feedback" class="invalid-feedback"></div>
+<div id="{{ selectId }}Help" class="form-text"></div>
