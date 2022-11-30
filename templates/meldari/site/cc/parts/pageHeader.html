@@ -1,0 +1,5 @@
+<div class="d-flex">
+    <h1 class="display-6">{% if pageHeaderIcon %}<i class="bi bi-{{ pageHeaderIcon }}"></i> {% endif %}{{ pageHeader }}{% if pageSubHeader %} <small class="text-muted">{{ pageSubHeader }}</small>{% endif %}</h1>
+    {% block pageHeaderMenu %}
+    {% endblock pageHeaderMenu %}
+</div>

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 set(parts_FILES
-    page_header.html
+    pageHeader.html
     modal.html
     inputWithLabel.html
     textInputWithLabel.html
