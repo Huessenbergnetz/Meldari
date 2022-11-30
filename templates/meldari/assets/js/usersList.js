@@ -26,7 +26,6 @@ MeldariTmpl.Users.List.exec = function() {
         }
     })
     .then(users => {
-        console.log(users);
         const template = document.getElementById('user-row-template');
         const tbody = MeldariTmpl.Users.List.table.getElementsByTagName('tbody')[0];
         const typeTrans = JSON.parse(document.getElementById('user-types-translated').textContent);
