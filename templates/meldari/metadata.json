@@ -37,10 +37,9 @@
         }
     ],
     "icons": {
-        "mainMenuDashboard": "<i class=\"bi bi-speedometer2 me-2\"></i>",
-        "mainMenuUsers": "<i class=\"bi bi-people me-2\"></i>",
-        "userMenuSettings": "<i class=\"bi bi-person-gear me-2\"></i>",
-        "userMenuLogout": "<i class=\"bi bi-box-arrow-right me-2\"></i>",
-        "usersMenuAdd": "person-add"
+        "mainMenuDashboard": "speedometer2",
+        "mainMenuUsers": "people",
+        "userMenuSettings": "person-gear",
+        "userMenuLogout": "box-arrow-right"
     }
 }
