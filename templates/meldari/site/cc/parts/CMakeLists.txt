@@ -9,6 +9,7 @@ set(parts_FILES
     emailInputWithLabel.html
     passwordInputWithLabel.html
     selectWithLabel.html
+    datetimeInputWithLabel.html
 )
 
 target_sources(meldaritemplate
