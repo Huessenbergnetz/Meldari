@@ -56,6 +56,16 @@
             {% endwith %}
             {% endwith %}
         </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "addUserValidUntil" as inputId %}
+            {% with "validUntil" as inputName %}
+            {% with _("Valid until") as inputLabel %}
+            {% include "parts/datetimeInputWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
     </div>
 </form>
 {% endblock %}
