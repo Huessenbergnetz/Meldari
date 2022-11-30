@@ -9,7 +9,9 @@
             {% with "addUserUsername" as inputId %}
             {% with "username" as inputName %}
             {% with _("Username") as inputLabel %}
+            {% with "off" as inputAutocomplete %}
             {% include "parts/textInputWithLabel.html" %}
+            {% endwith %}
             {% endwith %}
             {% endwith %}
             {% endwith %}
@@ -19,7 +21,9 @@
             {% with "addUserEmail" as inputId %}
             {% with "email" as inputName %}
             {% with _("Email") as inputLabel %}
+            {% with "off" as inputAutocomplete %}
             {% include "parts/emailInputWithLabel.html" %}
+            {% endwith %}
             {% endwith %}
             {% endwith %}
             {% endwith %}
@@ -29,7 +33,9 @@
             {% with "addUserPassword" as inputId %}
             {% with "password" as inputName %}
             {% with _("Password") as inputLabel %}
+            {% with "off" as inputAutocomplete %}
             {% include "parts/passwordInputWithLabel.html" %}
+            {% endwith %}
             {% endwith %}
             {% endwith %}
             {% endwith %}
@@ -39,7 +45,9 @@
             {% with "addUserPasswordConfirmation" as inputId %}
             {% with "password_confirmed" as inputName %}
             {% with _("Password confirmation") as inputLabel %}
+            {% with "off" as inputAutocomplete %}
             {% include "parts/passwordInputWithLabel.html" %}
+            {% endwith %}
             {% endwith %}
             {% endwith %}
             {% endwith %}
@@ -61,7 +69,7 @@
             {% with "addUserValidUntil" as inputId %}
             {% with "validUntil" as inputName %}
             {% with _("Valid until") as inputLabel %}
-            {% include "parts/datetimeInputWithLabel.html" %}
+            {% include "parts/validUntilInputWithLabel.html" %}
             {% endwith %}
             {% endwith %}
             {% endwith %}

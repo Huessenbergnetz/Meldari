@@ -10,6 +10,7 @@ set(parts_FILES
     passwordInputWithLabel.html
     selectWithLabel.html
     datetimeInputWithLabel.html
+    validUntilInputWithLabel.html
 )
 
 target_sources(meldaritemplate

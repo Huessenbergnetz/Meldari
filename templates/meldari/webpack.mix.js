@@ -18,6 +18,7 @@ mix.scripts([
     'node_modules/@popperjs/core/dist/umd/popper.js',
     'node_modules/bootstrap/dist/js/bootstrap.js',
     'assets/js/general.js',
+    'assets/js/validUntilInput.js',
     'assets/js/users.js',
     'assets/js/usersList.js',
 ], 'static/js/scripts.js');

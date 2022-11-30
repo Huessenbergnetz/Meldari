@@ -5,6 +5,7 @@ target_sources(meldaritemplate
     PRIVATE
         licenseheader.js
         general.js
+        validUntilInput.js
         users.js
         usersList.js
 )
