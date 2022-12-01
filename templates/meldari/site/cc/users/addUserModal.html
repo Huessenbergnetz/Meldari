@@ -2,7 +2,7 @@
 {% block label %}{% i18n "Add user" %}{% endblock %}
 
 {% block content %}
-<form id="addUserForm" action="/cc/users/add">
+<form id="addUserForm" action="/cc/users/add" method="POST">
     {% c_csrf_token %}
     <div class="row">
         <div class="col-12 col-lg-6 mb-3">
@@ -43,7 +43,7 @@
 
         <div class="col-12 col-lg-6 mb-3">
             {% with "addUserPasswordConfirmation" as inputId %}
-            {% with "password_confirmed" as inputName %}
+            {% with "password_confirmation" as inputName %}
             {% with _("Password confirmation") as inputLabel %}
             {% with "off" as inputAutocomplete %}
             {% include "parts/passwordInputWithLabel.html" %}
@@ -79,5 +79,5 @@
 {% endblock %}
 
 {% block footer %}
-<button type="submit" form="addUserForm" class="btn btn-primary text-capitalize"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span><i class="bi bi-person-plus"></i> {{ _("add user") }}</button>
+<button id="addUserFormSubmit" type="submit" form="addUserForm" class="btn btn-primary text-capitalize"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span><i class="bi bi-person-plus"></i> {{ _("add user") }}</button>
 {% endblock %}

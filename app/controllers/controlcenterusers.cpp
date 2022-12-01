@@ -8,6 +8,15 @@
 #include "objects/error.h"
 #include "objects/simpleuser.h"
 
+#include <Cutelyst/Plugins/Utils/Validator>
+#include <Cutelyst/Plugins/Utils/ValidatorResult>
+#include <Cutelyst/Plugins/Utils/validatorrequired.h>
+#include <Cutelyst/Plugins/Utils/validatordatetime.h>
+#include <Cutelyst/Plugins/Utils/validatorconfirmed.h>
+#include <Cutelyst/Plugins/Utils/validatoremail.h>
+#include <Cutelyst/Plugins/Utils/validatorin.h>
+#include <Cutelyst/Plugins/Utils/validatorinteger.h>
+
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -38,7 +47,7 @@ void ControlCenterUsers::list(Context *c)
 
     Error e;
     const QJsonArray users = params.value(QStringLiteral("details")) == u"full" ? User::listJson(c, e, minType) : SimpleUser::listJson(c, e, minType);
-    if (e.type() != Error::NoError) {
+    if (e) {
         e.toStash(c, true);
         return;
     }
@@ -46,11 +55,49 @@ void ControlCenterUsers::list(Context *c)
     c->res()->setJsonArrayBody(users);
 }
 
+void ControlCenterUsers::add(Context *c)
+{
+    if (!c->req()->isPost()) {
+        c->res()->setStatus(Response::MethodNotAllowed);
+        c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("POST"));
+        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This path only accepts POST requests."));
+        c->res()->setJsonObjectBody(e.toJson(c));
+        return;
+    }
+
+    static Validator v({
+                           new ValidatorRequired(QStringLiteral("username")),
+                           new ValidatorRequired(QStringLiteral("email")),
+                           new ValidatorEmail(QStringLiteral("email")),
+                           new ValidatorRequired(QStringLiteral("password")),
+                           new ValidatorConfirmed(QStringLiteral("password")),
+                           new ValidatorRequired(QStringLiteral("type")),
+                           new ValidatorIn(QStringLiteral("type"), User::typeValues()),
+                           new ValidatorInteger(QStringLiteral("type"), QMetaType::Int),
+                           new ValidatorDateTime(QStringLiteral("validUntil"), QString(), "yyyy-MM-ddTHH:mm")
+                       });
+
+    const ValidatorResult vr = v.validate(c, Validator::BodyParamsOnly);
+
+    if (vr) {
+        Error e;
+        const User u = User::add(c, e, vr.values());
+        if (!e) {
+            c->res()->setJsonObjectBody(u.toJson());;
+        } else {
+            e.toStash(c, true);
+        }
+    } else {
+        c->res()->setStatus(400);
+        c->res()->setJsonObjectBody(QJsonObject({{QStringLiteral("fielderrors"), vr.errorsJsonObject()}}));
+    }
+}
+
 bool ControlCenterUsers::Auto(Context *c)
 {
     const User currentUser = User::fromStash(c);
     if (!currentUser.isAdmin()) {
-        Error::toStash(c, Error::AuthorizationError, c->translate("ControlCenterUsers", "You do not have the required permissions."), true);
+        Error::toStash(c, Response::Forbidden, c->translate("ControlCenterUsers", "You do not have the required permissions."), true);
         return false;
     }
 

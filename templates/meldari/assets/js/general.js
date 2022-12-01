@@ -41,3 +41,20 @@ MeldariTmpl.switchButton = function(button) {
         icon.classList.add('d-none');
     }
 }
+
+MeldariTmpl.setFormFieldErrors = function(form, errors) {
+    for (const field in errors) {
+        if (errors.hasOwnProperty(field)) {
+            const formField = form.elements.namedItem(field);
+            const feedback = formField.nextElementSibling;
+            feedback.innerHTML = errors[field].join('<br>');
+            formField.classList.add('is-invalid');
+        }
+    }
+}
+
+MeldariTmpl.resetFormFieldErrors = function(form) {
+    for (let i = 0; i < form.elements.length; ++i) {
+        form.elements[i].classList.remove('is-invalid');
+    }
+}

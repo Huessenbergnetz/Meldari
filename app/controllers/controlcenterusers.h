@@ -24,6 +24,9 @@ public:
     C_ATTR(list, :Local :Args(0))
     void list(Context *c);
 
+    C_ATTR(add, :Local :Args(0))
+    void add(Context *c);
+
 private:
     C_ATTR(Auto, :Private)
     bool Auto(Context *c);

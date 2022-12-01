@@ -8,4 +8,5 @@ target_sources(meldaritemplate
         validUntilInput.js
         users.js
         usersList.js
+        usersAdd.js
 )
