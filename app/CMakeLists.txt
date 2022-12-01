@@ -12,6 +12,7 @@ target_sources(meldari
         meldariconfig.h
         userauthstoresql.cpp
         userauthstoresql.h
+        qtimezonevariant_p.h
 )
 
 add_subdirectory(controllers)

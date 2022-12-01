@@ -5,6 +5,8 @@
 
 #include "controlcenter.h"
 #include "logging.h"
+#include "qtimezonevariant_p.h"
+#include "meldariconfig.h"
 #include "objects/menuitem.h"
 #include "objects/user.h"
 #include "objects/error.h"
@@ -16,6 +18,8 @@
 
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QLocale>
+#include <QTimeZone>
 
 #include <vector>
 
@@ -53,6 +57,22 @@ void ControlCenter::login(Context *c)
                 if (Q_UNLIKELY(!q.exec())) {
                     qCWarning(MEL_AUTHN) << "Failed to update last_seen column for user" << username << "in the database:" << q.lastError().text();
                 }
+
+                AuthenticationUser user = Authentication::user(c);
+                const QVariantMap userSetings = user.value(QStringLiteral("settings")).toMap();
+
+                QLocale lang(userSetings.value(QStringLiteral("language"), MeldariConfig::defLanguage()).toString());
+                if (lang.language() == QLocale::C) {
+                    qCWarning(MEL_CORE) << "Invalid language" << userSetings.value(QStringLiteral("language")).toString() << "selected by user" << username << "(ID: " << user.id().toInt() << ')';
+                }
+                Session::setValue(c, QStringLiteral("lang"), QVariant::fromValue<QLocale>(lang));
+
+                QTimeZone tz(userSetings.value(QStringLiteral("timezone"), MeldariConfig::defTimezone()).toString().toLatin1());
+                if (!tz.isValid()) {
+                    qCWarning(MEL_CORE) << "Invalid timezone" << userSetings.value(QStringLiteral("timezone")).toString() << "selected by user" << username << "(ID: " << user.id().toInt() << ')';
+                    tz = QTimeZone::utc();
+                }
+                Session::setValue(c, QStringLiteral("tz"), QVariant::fromValue<QTimeZone>(tz));
 
                 const QString redirectToQueryParam = params.value(QStringLiteral("redirect_to"));
                 const QUrl redirectToUrl = redirectToQueryParam.isEmpty() ? c->uriFor(QStringLiteral("/cc")) : QUrl::fromEncoded(redirectToQueryParam.toLatin1());
