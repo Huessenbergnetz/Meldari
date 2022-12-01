@@ -29,6 +29,7 @@
 #include <Cutelyst/Plugins/MemcachedSessionStore/MemcachedSessionStore>
 #include <Cutelyst/Plugins/CSRFProtection/CSRFProtection>
 #include <Cutelyst/Plugins/Utils/LangSelect>
+#include <Cutelyst/Plugins/Utils/Validator>
 
 #include <cutelee/engine.h>
 
@@ -123,6 +124,8 @@ bool Meldari::init()
     qCDebug(MEL_CORE) << "Registering Authentication plugin";
     auto authn = new Authentication(this);
     authn->addRealm(new UserAuthStoreSql, new CredentialBotan, QStringLiteral("users"));
+
+    Validator::loadTranslations(this);
 
     return true;
 }
