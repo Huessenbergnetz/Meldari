@@ -47,11 +47,15 @@ public:
 
     static QJsonArray listJson(Cutelyst::Context *c, Error &e, Type minType = User::Invalid);
 
+    static User add(Cutelyst::Context *c, Error &e, const QVariantHash &values);
+
     static QString typeTranslated(Cutelyst::Context *c, Type type);
 
     static QJsonObject typesTranslated(Cutelyst::Context *c);
 
     static std::vector<OptionItem> typeOptions(Cutelyst::Context *c, Type selected = User::Invalid);
+
+    static QStringList typeValues();
 
 private:
     friend QDataStream &operator<<(QDataStream &stream, const User &user);

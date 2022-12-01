@@ -182,7 +182,7 @@ QJsonArray User::listJson(Cutelyst::Context *c, Error &e, User::Type minType)
 
     const std::vector<User> users = User::list(c, e);
 
-    if (e.type() != Error::NoError) {
+    if (e.isError()) {
         return json;
     }
 
@@ -191,6 +191,20 @@ QJsonArray User::listJson(Cutelyst::Context *c, Error &e, User::Type minType)
     }
 
     return json;
+}
+
+User User::add(Cutelyst::Context *c, Error &e, const QVariantHash &values)
+{
+    User u;
+
+    const QString   username   = values.value(QStringLiteral("username")).toString();
+    const QString   email      = values.value(QStringLiteral("email")).toString();
+    const QString   password   = values.value(QStringLiteral("password")).toString();
+    const Type      type       = static_cast<Type>(values.value(QStringLiteral("type")).toInt());
+    const QDateTime validUntil = values.value(QStringLiteral("validUntil")).toDateTime();
+    const QDateTime now        = QDateTime::currentDateTimeUtc();
+
+    return u;
 }
 
 QString User::typeTranslated(Cutelyst::Context *c, Type type)
@@ -248,6 +262,20 @@ std::vector<OptionItem> User::typeOptions(Cutelyst::Context *c, Type selected)
     }
 
     return opts;
+}
+
+QStringList User::typeValues()
+{
+    QStringList list;
+
+    const QMetaObject mo = User::staticMetaObject;
+    const QMetaEnum   me = mo.enumerator(mo.indexOfEnumerator("Type"));
+    list.reserve(me.keyCount() - 1);
+    for (int i = 1; i < me.keyCount(); ++i) {
+        list << QString::number(me.value(i));
+    }
+
+    return list;
 }
 
 QDebug operator<<(QDebug dbg, const User &user)
