@@ -30,6 +30,8 @@ class MELDARICOMMON_LIBRARY BaseUser
     Q_PROPERTY(BaseUser::dbid_t lockedById READ lockedById CONSTANT)
     Q_PROPERTY(QString lockedByName READ lockedByName CONSTANT)
     Q_PROPERTY(QVariantMap settings READ settings CONSTANT)
+    Q_PROPERTY(QString tz READ tz CONSTANT)
+    Q_PROPERTY(QString lang READ lang CONSTANT)
     Q_PROPERTY(bool isAdmin READ isAdmin CONSTANT)
 public:
     using dbid_t = quint32;
@@ -74,6 +76,10 @@ public:
     QString lockedByName() const;
 
     QVariantMap settings() const;
+
+    QString tz() const;
+
+    QString lang() const;
 
     bool isAdmin() const;
 

@@ -141,6 +141,16 @@ QVariantMap BaseUser::settings() const
     return data ? data->settings : QVariantMap();
 }
 
+QString BaseUser::tz() const
+{
+    return data ? data->settings.value(QStringLiteral("timezone")).toString() : QStringLiteral("UTC");
+}
+
+QString BaseUser::lang() const
+{
+    return data ? data->settings.value(QStringLiteral("language")).toString() : QStringLiteral("en_US");
+}
+
 bool BaseUser::isAdmin() const
 {
     return data && data->type >= BaseUser::Administrator;
