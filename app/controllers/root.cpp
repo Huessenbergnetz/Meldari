@@ -7,6 +7,7 @@
 #include "logging.h"
 #include "meldariconfig.h"
 #include "objects/user.h"
+#include "objects/error.h"
 
 #include <Cutelyst/Plugins/Authentication/authentication.h>
 #include <Cutelyst/Plugins/StatusMessage>
@@ -51,13 +52,31 @@ void Root::End(Context *c)
 
 void Root::csrfDenied(Context *c)
 {
-    c->res()->setBody(u"CSRF check failed!");
-    c->res()->setContentType(QStringLiteral("text/plain; charset=utf-8"));
+    if (c->req()->xhr()) {
+        QJsonObject error({
+                              {QStringLiteral("error"), QJsonObject({
+                                   {QStringLiteral("status"), 403},
+                                   {QStringLiteral("title"), c->translate("Root", "Access denied")},
+                                   {QStringLiteral("text"), c->translate("Root", "CSRF check failed.")}
+                               })}
+                          });
+        c->res()->setJsonObjectBody(error);
+    } else {
+        c->res()->setBody(u"CSRF check failed!");
+        c->res()->setContentType(QStringLiteral("text/plain; charset=utf-8"));
+    }
+    c->detach();
 }
 
 void Root::error(Context *c)
 {
+    Error e = Error::fromStash(c);
+    c->res()->setStatus(e.status());
 
+    if (c->req()->xhr()) {
+        c->res()->setJsonObjectBody(e.toJson(c));
+    }
+    c->detach();
 }
 
 #include "moc_root.cpp"
