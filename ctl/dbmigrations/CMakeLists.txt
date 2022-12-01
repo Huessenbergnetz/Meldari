@@ -7,4 +7,6 @@ target_sources(meldarictl
         m0001_create_users_table.h
         m0002_create_options_table.cpp
         m0002_create_options_table.h
+        m0003_create_usersettings_table.cpp
+        m0003_create_usersettings_table.h
 )
