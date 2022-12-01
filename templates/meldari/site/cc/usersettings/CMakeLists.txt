@@ -3,6 +3,9 @@
 
 set(usersettings_FILES
     index.html
+    pageHeader.html
+    localizationTab.html
+    passwordTab.html
 )
 
 target_sources(meldaritemplate

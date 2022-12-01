@@ -1,5 +1,31 @@
 {% with site_title as pageHeader %}
 {% with "person-gear" as pageHeaderIcon %}
-{% include "parts/pageHeader.html" %}
+{% include "usersettings/pageHeader.html" %}
 {% endwith %}
 {% endwith %}
+
+<form id="usersettingsForm" action="/cc/usersettings" method="POST">
+
+    <ul class="nav nav-tabs" id="usersettingsTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button type="button" class="nav-link active" id="localization-tab" data-bs-toggle="tab" data-bs-target="#localization-tab-pane" role="tab" aria-controls="localization-tab-pane" aria-selected="true">{{ _("Localization") }}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button type="button" class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password-tab-pane" role="tab" aria-controls="password-tab-pane" aria-selected="false">{{ _("Password") }}</button>
+        </li>
+    </ul>
+
+    {% c_csrf_token %}
+
+    <div class="tab-content" id="usersettingsTabContent">
+
+        <div class="tab-pane fade show active" id="localization-tab-pane" role="tabpanel" aria-labelledby="localization-tab">
+            {% include "usersettings/localizationTab.html" %}
+        </div>
+
+        <div class="tab-pane fade" id="password-tab-pane" role="tabpanel" aria-labelledby="password-tab">
+            {% include "usersettings/passwordTab.html" %}
+        </div>
+
+    </div>
+</form>
