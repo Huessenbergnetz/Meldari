@@ -132,7 +132,7 @@ QJsonArray SimpleUser::listJson(Cutelyst::Context *c, Error &e, BaseUser::Type m
     QJsonArray json;
 
     const std::vector<SimpleUser> users = SimpleUser::list(c, e, minType);
-    if (e.type() != Error::NoError) {
+    if (e.isError()) {
         return json;
     }
 

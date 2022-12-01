@@ -10,6 +10,7 @@
 
 #include <QSharedDataPointer>
 #include <QObject>
+#include <QJsonObject>
 
 class ErrorData;
 class QSqlError;
@@ -23,21 +24,8 @@ class Error
 {
     Q_GADGET
 public:
-    enum Type : int {
-        NoError = 0,
-        SqlError,
-        ConfigError,
-        ApplicationError,
-        AuthenticationError,
-        AuthorizationError,
-        NotFound,
-        InputError,
-        UnknownError
-    };
-    Q_ENUM(Type)
-
     Error();
-    Error(Type type, const QString &text);
+    Error(Cutelyst::Response::HttpStatus status, const QString &text);
     Error(const QSqlError &sqlError, const QString &text);
     Error(const QSqlQuery &query, const QString &text);
     Error(const Error &other);
@@ -45,8 +33,6 @@ public:
     Error &operator=(const Error &other);
     Error &operator=(Error && other) noexcept;
     ~Error();
-
-    Type type() const;
 
     Cutelyst::Response::HttpStatus status() const;
 
@@ -56,11 +42,19 @@ public:
 
     QString title(Cutelyst::Context *c) const;
 
+    bool isError() const;
+
+    explicit operator bool() const {
+        return isError();
+    }
+
     void toStash(Cutelyst::Context *c, bool detach = false) const;
 
     static Error fromStash(Cutelyst::Context *c);
 
-    static void toStash(Cutelyst::Context *c, Type type, const QString &text, bool detach = false);
+    static void toStash(Cutelyst::Context *c, Cutelyst::Response::HttpStatus status, const QString &text, bool detach = false);
+
+    QJsonObject toJson(Cutelyst::Context *c) const;
 
 private:
     QSharedDataPointer<ErrorData> data;
