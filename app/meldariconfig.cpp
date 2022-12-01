@@ -165,6 +165,18 @@ bool MeldariConfig::useMemcachedSession()
     return cfg->useMemcachedSession;
 }
 
+QString MeldariConfig::defTimezone()
+{
+    QReadLocker(&cfg->lock);
+    return getDbOption<QString>(QStringLiteral("defaultTimezone"), QStringLiteral("UTC"));
+}
+
+QString MeldariConfig::defLanguage()
+{
+    QReadLocker(&cfg->lock);
+    return getDbOption<QString>(QStringLiteral("defaultLanguage"), QStringLiteral("en_US"));
+}
+
 template< typename T >
 T MeldariConfig::getDbOption(const QString &option, const T &defVal)
 {
@@ -185,7 +197,7 @@ T MeldariConfig::getDbOption(const QString &option, const T &defVal)
         if (Q_LIKELY(q.next())) {
             retVal = q.value(0).value<T>();
         } else {
-            qCWarning(MEL_CONF) << "Can not find option" << option << "in the database";
+            retVal = defVal;
         }
     } else {
         qCCritical(MEL_CONF) << "Failed to query option" << option << "from database:" << q.lastError().text();

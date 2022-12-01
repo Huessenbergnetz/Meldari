@@ -35,6 +35,9 @@ public:
     static bool useMemcached();
     static bool useMemcachedSession();
 
+    static QString defTimezone();
+    static QString defLanguage();
+
 private:
     template< typename T >
     static T getDbOption(const QString &option, const T &defVal);
