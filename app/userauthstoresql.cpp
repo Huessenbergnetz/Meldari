@@ -48,6 +48,20 @@ AuthenticationUser UserAuthStoreSql::findUser(Context *c, const ParamsMultiMap &
             user.insert(QStringLiteral("last_seen"), q.value(7));
             user.insert(QStringLiteral("locked_at"), q.value(8));
             user.insert(QStringLiteral("locked_by"), q.value(9));
+
+            QSqlQuery qq = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT name, value FROM usersettings WHERE user_id = :user_id"));
+            qq.bindValue(QStringLiteral(":user_id"), user.id());
+
+            if (Q_LIKELY(qq.exec())) {
+                QVariantMap settings;
+                while (qq.next()) {
+                    settings.insert(qq.value(0).toString(), qq.value(1));
+                }
+                user.insert(QStringLiteral("settings"), settings);
+            } else {
+                qCCritical(MEL_AUTHN) << "Failed to execute database query to get usersettings for user" << username << "from the database:" << qq.lastError().text();
+            }
+
         } else {
             qCWarning(MEL_AUTHN, "Login failed: username %s not found. IP: %s", qUtf8Printable(username), qUtf8Printable(c->req()->addressString()));
         }
