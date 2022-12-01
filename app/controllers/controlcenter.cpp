@@ -7,6 +7,7 @@
 #include "logging.h"
 #include "objects/menuitem.h"
 #include "objects/user.h"
+#include "objects/error.h"
 
 #include <Cutelyst/Plugins/Authentication/authentication.h>
 #include <Cutelyst/Plugins/Authentication/authenticationuser.h>
@@ -92,7 +93,13 @@ void ControlCenter::logout(Context *c)
 
 void ControlCenter::error(Context *c)
 {
+    Error e = Error::fromStash(c);
+    c->res()->setStatus(e.status());
 
+    if (c->req()->xhr()) {
+        c->res()->setJsonObjectBody(e.toJson(c));
+    }
+    c->detach();
 }
 
 bool ControlCenter::Auto(Context *c)
