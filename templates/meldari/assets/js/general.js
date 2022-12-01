@@ -23,3 +23,21 @@ MeldariTmpl.createInputDate = function(date) {
     const rv = y + '-' + (m < 10 ? '0' : '') + m + '-' + (d < 10 ? '0' : '') + d + 'T' + (hrs < 10 ? '0' : '') + hrs + ':' + (min < 10 ? '0' : '') + min;
     return rv;
 }
+
+MeldariTmpl.switchButton = function(button) {
+    if (button.disabled) {
+        button.disabled = false;
+        const spinner = button.getElementsByTagName('span')[0];
+        spinner.classList.remove('d-inline-block');
+        spinner.classList.add('d-none');
+        const icon = button.getElementsByTagName('i')[0];
+        icon.classList.remove('d-none');
+    } else {
+        button.disabled = true;
+        const spinner = button.getElementsByTagName('span')[0];
+        spinner.classList.remove('d-none');
+        spinner.classList.add('d-inline-block');
+        const icon = button.getElementsByTagName('i')[0];
+        icon.classList.add('d-none');
+    }
+}
