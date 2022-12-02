@@ -19,3 +19,15 @@ QStringList Utils::getTimezoneList()
     })();
     return tzs;
 }
+
+std::vector<OptionItem> Utils::getTimezoneOptionsList(const QString &selected)
+{
+    std::vector<OptionItem> lst;
+    const QList<QByteArray> availableTzIds = QTimeZone::availableTimeZoneIds();
+    lst.reserve(availableTzIds.size());
+    for (const QByteArray &tz : availableTzIds) {
+        const auto tzStr = QString::fromLatin1(tz);
+        lst.emplace_back(tzStr, tzStr, tzStr == selected);
+    }
+    return lst;
+}
