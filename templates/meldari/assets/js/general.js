@@ -9,6 +9,10 @@ MeldariTmpl.currentToastId = 0;
 
 MeldariTmpl.toastContainer = null;
 
+MeldariTmpl.lang = null;
+
+MeldariTmpl.tz = null;
+
 MeldariTmpl.newXhrHeaders = function() {
     return new Headers({'X-Requested-With': 'XMLHttpRequest'});
 }
@@ -163,8 +167,16 @@ MeldariTmpl.createSuccess = function(message) {
     }
 }
 
+MeldariTmpl.setLang = function(lang) {
+    const bcp47 = lang.replace('_', '-');
+    MeldariTmpl.lang = bcp47;
+    document.documentElement.lang = bcp47;
+}
+
 MeldariTmpl.init = function() {
     MeldariTmpl.toastContainer = document.getElementById('toastContainer');
+    MeldariTmpl.lang = document.documentElement.lang;
+    MeldariTmpl.tz = document.documentElement.dataset.timezone;
 }
 
 MeldariTmpl.init();

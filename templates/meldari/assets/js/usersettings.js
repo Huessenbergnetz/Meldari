@@ -30,8 +30,13 @@ MeldariTmpl.UserSettings.exec = function() {
               }
           })
     .then(json => {
+              MeldariTmpl.setLang(json.data.settings.language);
+
+              MeldariTmpl.tz = json.data.settings.timezone;
+              document.documentElement.dataset.timezone = MeldariTmpl.tz;
+
               const updated = new Date(json.data.updated);
-              MeldariTmpl.UserSettings.form.elements['updated'].value = updated.toLocaleString([], {dateStyle: "long", timeStyle: "medium"});
+              MeldariTmpl.UserSettings.form.elements['updated'].value = updated.toLocaleString(MeldariTmpl.lang, {dateStyle: "long", timeStyle: "medium", timeZone: MeldariTmpl.tz});
               MeldariTmpl.createSuccess(json.message);
           })
     .catch(error => {
