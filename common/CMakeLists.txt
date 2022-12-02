@@ -15,6 +15,8 @@ target_sources(meldaricommon
         credentialbotan.cpp
         credentialbotan.h
         credentialbotan_p.h
+        utils.cpp
+        utils.h
 )
 
 configure_file(confignames.h.in confignames.h)
