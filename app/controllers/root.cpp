@@ -41,7 +41,10 @@ bool Root::Auto(Context *c)
         user.toStash(c);
     }
 
-    c->setStash(QStringLiteral("site_name"), MeldariConfig::siteName());
+    c->stash({
+                 {QStringLiteral("site_name"), MeldariConfig::siteName()},
+                 {QStringLiteral("default_timezone"), MeldariConfig::defTimezone()}
+             });
     return true;
 }
 
