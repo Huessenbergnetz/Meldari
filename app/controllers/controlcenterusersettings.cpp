@@ -4,6 +4,13 @@
  */
 
 #include "controlcenterusersettings.h"
+#include "objects/user.h"
+#include "utils.h"
+#include "meldariconfig.h"
+
+#include <Cutelyst/Plugins/Session/Session>
+
+#include <QTimeZone>
 
 ControlCenterUsersettings::ControlCenterUsersettings(QObject *parent) : Controller{parent}
 {
@@ -12,7 +19,12 @@ ControlCenterUsersettings::ControlCenterUsersettings(QObject *parent) : Controll
 
 void ControlCenterUsersettings::index(Context *c)
 {
+    User u = User::fromStash(c);
+
+
+
     c->stash({
+                 {QStringLiteral("timezones"), QVariant::fromValue<std::vector<OptionItem>>(Utils::getTimezoneOptionsList(Session::value(c, QStringLiteral("tz")).value<QTimeZone>().id()))},
                  {QStringLiteral("template"), QStringLiteral("usersettings/index.html")},
                  {QStringLiteral("site_title"), c->translate("ControlCenterUsersettings", "My settings")}
              });
