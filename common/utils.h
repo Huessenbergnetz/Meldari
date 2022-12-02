@@ -15,6 +15,12 @@ class Utils
 public:
     static QStringList getTimezoneList();
     static std::vector<OptionItem> getTimezoneOptionsList(const QString &selected = QString());
+    inline static std::vector<OptionItem> getTimezoneOptionsList(const QByteArray &selected = QByteArray());
 };
+
+inline std::vector<OptionItem> Utils::getTimezoneOptionsList(const QByteArray &selected)
+{
+    return Utils::getTimezoneOptionsList(QString::fromLatin1(selected));
+}
 
 #endif // MELDARICOMMON_UTILS_H
