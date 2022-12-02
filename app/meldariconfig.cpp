@@ -7,6 +7,7 @@
 #include "logging.h"
 #include "confignames.h"
 
+#include <Cutelyst/Context>
 #include <Cutelyst/Plugins/Memcached/Memcached>
 #include <Cutelyst/Plugins/Utils/Sql>
 
@@ -21,6 +22,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonParseError>
+#include <algorithm>
 
 #define MEMC_CONFIG_GROUP_KEY "options"
 #define MEMC_CONFIG_STORAGE_DURATION 7200
@@ -34,6 +36,8 @@ Q_LOGGING_CATEGORY(MEL_CONF, "meldari.config", QtInfoMsg)
 struct ConfigValues {
     mutable QReadWriteLock lock{QReadWriteLock::Recursive};
 
+    QVector<QLocale> supportedLocales;
+    QStringList supportedLocaleNames;
     QHash<QString,QString> tmplIcons;
     QString tmpl = QStringLiteral(MELDARI_CONF_MEL_TEMPLATE_DEFVAL);
     QString tmplDir = QStringLiteral(MELDARI_TEMPLATESDIR);
@@ -43,6 +47,7 @@ struct ConfigValues {
     bool useMemcachedSession = MELDARI_CONF_MEL_USEMEMCACHEDSESSION_DEFVAL;
 
     bool loaded = false;
+    bool langsLoaded = false;
 };
 
 Q_GLOBAL_STATIC(ConfigValues, cfg)
@@ -113,6 +118,26 @@ void MeldariConfig::load(const QVariantMap &meldari, const QVariantMap &email)
     cfg->loaded = true;
 }
 
+void MeldariConfig::loadSupportedLocales(const QVector<QLocale> &locales)
+{
+    QWriteLocker locker(&cfg->lock);
+
+    if (cfg->langsLoaded) {
+        return;
+    }
+
+    cfg->supportedLocales = locales;
+
+    cfg->supportedLocaleNames.reserve(locales.size());
+    for (const QLocale &locale : locales) {
+        cfg->supportedLocaleNames << locale.name();
+    }
+
+    qCDebug(MEL_CONF) << "Loading supported languages";
+
+    cfg->langsLoaded = true;
+}
+
 QString MeldariConfig::tmpl()
 {
     QReadLocker locker(&cfg->lock);
@@ -167,14 +192,38 @@ bool MeldariConfig::useMemcachedSession()
 
 QString MeldariConfig::defTimezone()
 {
-    QReadLocker(&cfg->lock);
+    QReadLocker locker(&cfg->lock);
     return getDbOption<QString>(QStringLiteral("defaultTimezone"), QStringLiteral("UTC"));
 }
 
 QString MeldariConfig::defLanguage()
 {
-    QReadLocker(&cfg->lock);
+    QReadLocker locker(&cfg->lock);
     return getDbOption<QString>(QStringLiteral("defaultLanguage"), QStringLiteral("en_US"));
+}
+
+QStringList MeldariConfig::supportedLocaleNames()
+{
+    QReadLocker locker(&cfg->lock);
+    return cfg->supportedLocaleNames;
+}
+
+std::vector<OptionItem> MeldariConfig::supportedLocaleOptionItems(Cutelyst::Context *c, const QLocale &selected)
+{
+    std::vector<OptionItem> locales;
+    QReadLocker locker(&cfg->lock);
+
+    locales.reserve(cfg->supportedLocales.size());
+    for (const QLocale &locale : qAsConst(cfg->supportedLocales)) {
+         const QString name = locale.nativeLanguageName() + u" (" + locale.nativeCountryName() + u") - " + locale.name();
+         locales.emplace_back(name, locale.name(), locale == selected);
+    }
+    if (locales.size() > 1) {
+        OptionItemCollator lnc(c->locale());
+        std::sort(locales.begin(), locales.end(), lnc);
+    }
+
+    return locales;
 }
 
 template< typename T >

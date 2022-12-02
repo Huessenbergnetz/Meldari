@@ -6,9 +6,15 @@
 #ifndef MELDARICONFIG_H
 #define MELDARICONFIG_H
 
+#include "optionitem.h"
 #include <QString>
 #include <QStringList>
 #include <QVariantMap>
+#include <vector>
+
+namespace Cutelyst {
+class Context;
+}
 
 class MeldariConfig
 {
@@ -20,6 +26,7 @@ public:
     };
 
     static void load(const QVariantMap &meldari, const QVariantMap &email);
+    static void loadSupportedLocales(const QVector<QLocale> &locales);
     static bool loaded();
 
     static QString tmpl();
@@ -37,6 +44,9 @@ public:
 
     static QString defTimezone();
     static QString defLanguage();
+
+    static QStringList supportedLocaleNames();
+    static std::vector<OptionItem> supportedLocaleOptionItems(Cutelyst::Context *c, const QLocale &selected = QLocale());
 
 private:
     template< typename T >
