@@ -66,7 +66,7 @@ set(meldarictl_TS_FILES
 )
 
 set_source_files_properties(${meldarictl_TS_FILES}
-    PROPERTIES OUTPUT_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/translations"
+    PROPERTIES OUTPUT_LOCATION "${CMAKE_BINARY_DIR}/translations"
 )
 
 qt_add_lupdate(meldarictl
