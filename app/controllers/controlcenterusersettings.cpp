@@ -21,6 +21,7 @@ void ControlCenterUsersettings::index(Context *c)
 {
     c->stash({
                  {QStringLiteral("timezones"), QVariant::fromValue<std::vector<OptionItem>>(Utils::getTimezoneOptionsList(Session::value(c, QStringLiteral("tz")).value<QTimeZone>().id()))},
+                 {QStringLiteral("locales"), QVariant::fromValue<std::vector<OptionItem>>(MeldariConfig::supportedLocaleOptionItems(c, c->locale()))},
                  {QStringLiteral("template"), QStringLiteral("usersettings/index.html")},
                  {QStringLiteral("site_title"), c->translate("ControlCenterUsersettings", "My settings")}
              });
