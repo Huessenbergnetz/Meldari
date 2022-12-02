@@ -59,7 +59,6 @@ bool Meldari::init()
                         engine()->config(QStringLiteral(MELDARI_CONF_MAIL)));
 
     const auto supportedLocales = loadTranslationsFromDir(QStringLiteral("meldari"), QStringLiteral(MELDARI_TRANSLATIONSDIR));
-    qCInfo(MEL_CORE) << "Loaded locales:" << supportedLocales;
 
 #if defined(QT_DEBUG)
     const bool viewCache = false;
@@ -116,6 +115,12 @@ bool Meldari::init()
             sess->setStorage(new MemcachedSessionStore(this, this));
         }
     }
+
+    qCDebug(MEL_CORE) << "Registering LangSelect plugin";
+    auto lsp = new LangSelect(this, LangSelect::Session);
+    lsp->setFallbackLocale(QLocale(QLocale::English));
+    lsp->setSupportedLocales(supportedLocales);
+    lsp->setSessionKey(QStringLiteral("lang"));
 
     qCDebug(MEL_CORE) << "Registering CSRFProtection plugin";
     auto csrf = new CSRFProtection(this);
