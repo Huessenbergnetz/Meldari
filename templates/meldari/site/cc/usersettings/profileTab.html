@@ -23,3 +23,47 @@
         {% endwith %}
     </div>
 </div>
+
+<div class="row">
+    <div class="col-12 col-sm-6 col-lg-4 mb-3">
+        {% with "created" as inputId %}
+        {% with _("Created") as inputLabel %}
+        {% with _(user.created) as inputValue %}
+        {% include "parts/roInputWithLabel.html" %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg-4 mb-3">
+        {% with "updated" as inputId %}
+        {% with _("Updated") as inputLabel %}
+        {% with _(user.updated) as inputValue %}
+        {% include "parts/roInputWithLabel.html" %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-sm-6 col-lg-4 mb-3">
+        {% with "lastSeen" as inputId %}
+        {% with _("Last seen") as inputLabel %}
+        {% with _(user.lastSeen) as inputValue %}
+        {% include "parts/roInputWithLabel.html" %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg-4 mb-3">
+        {% with "validUntil" as inputId %}
+        {% with _("Valid until") as inputLabel %}
+        {% with _(user.validUntil) as inputValue %}
+        {% include "parts/roInputWithLabel.html" %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+    </div>
+</div>

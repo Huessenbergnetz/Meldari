@@ -21,7 +21,8 @@ mix.scripts([
     'assets/js/validUntilInput.js',
     'assets/js/users.js',
     'assets/js/usersList.js',
-    'assets/js/usersAdd.js'
+    'assets/js/usersAdd.js',
+    'assets/js/usersettings.js'
 ], 'static/js/scripts.js');
 
 mix.copy('node_modules/bootstrap-icons/font/fonts', 'static/fonts');

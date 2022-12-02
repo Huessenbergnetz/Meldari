@@ -20,6 +20,9 @@ public:
 
     C_ATTR(index, :Path :Args(0))
     void index(Context *c);
+
+    C_ATTR(update, :Local :Args(0))
+    void update(Context *c);
 };
 
 #endif // MELDARI_CONTROLCENTERUSERSETTINGS_H

@@ -1,6 +1,6 @@
 {% extends "parts/pageHeader.html" %}
 {% block pageHeaderMenu %}
 <div class="ms-auto">
-    <button type="submit" class="btn btn-outline-primary text-capitalize" form="usersettingsForm" aria-label="{{ _("save") }}"><i class="bi bi-check2-circle"></i><span class="ms-1">{{ _("save") }}<span></button>
+    <button type="submit" id="userSettingsFormSubmit" class="btn btn-outline-primary text-capitalize" form="usersettingsForm" aria-label="{{ _("save") }}"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span><i class="bi bi-check2-circle"></i><span class="ms-1">{{ _("save") }}<span></button>
 </div>
 {% endblock %}
