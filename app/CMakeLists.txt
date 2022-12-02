@@ -71,3 +71,24 @@ target_compile_options(meldari
 )
 
 install(TARGETS meldari DESTINATION ${CMAKE_INSTALL_LIBDIR}/cutelyst${Cutelyst3Qt6_VERSION_MAJOR}-qt6-apps)
+
+set(meldari_TS_FILES
+    translations/meldari.ts
+    translations/meldari.de.ts
+)
+
+set_source_files_properties(${meldari_TS_FILES}
+    PROPERTIES OUTPUT_LOCATION "${CMAKE_BINARY_DIR}/translations"
+)
+
+qt_add_lupdate(meldari
+    TS_FILES ${meldari_TS_FILES}
+    OPTIONS -no-obsolete -locations none -source-language en
+)
+
+qt_add_lrelease(meldari
+    TS_FILES ${meldari_TS_FILES}
+    QM_FILES_OUTPUT_VARIABLE meldari_QM_FILES
+)
+
+install(FILES ${meldari_QM_FILES} DESTINATION ${MELDARI_TRANSLATIONSDIR})
