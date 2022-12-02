@@ -6,6 +6,7 @@
 #ifndef MELDARICOMMON_UTILS_H
 #define MELDARICOMMON_UTILS_H
 
+#include "meldaricommon_global.h"
 #include "optionitem.h"
 #include <QStringList>
 #include <vector>
@@ -17,7 +18,7 @@ namespace Cutelyst {
 class Context;
 }
 
-class Utils
+class MELDARICOMMON_LIBRARY Utils
 {
 public:
     static QStringList getTimezoneList();
