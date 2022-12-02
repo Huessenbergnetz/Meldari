@@ -12,6 +12,7 @@ set(parts_FILES
     datetimeInputWithLabel.html
     validUntilInputWithLabel.html
     roPlaintextInputWithLabel.html
+    roInputWithLabel.html
 )
 
 target_sources(meldaritemplate
