@@ -8,6 +8,7 @@
 
 #include <QSharedDataPointer>
 #include <QObject>
+#include <QCollator>
 
 class OptionItemData;
 
@@ -33,6 +34,14 @@ public:
 
 private:
     QSharedDataPointer<OptionItemData> data;
+};
+
+class OptionItemCollator : public QCollator
+{
+public:
+    explicit OptionItemCollator(const QLocale &locale) : QCollator(locale) {}
+
+    bool operator() (const OptionItem &left, const OptionItem &right) { return compare(left.name(), right.name()); }
 };
 
 Q_DECLARE_METATYPE(OptionItem)
