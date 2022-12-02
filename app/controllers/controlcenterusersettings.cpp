@@ -19,10 +19,6 @@ ControlCenterUsersettings::ControlCenterUsersettings(QObject *parent) : Controll
 
 void ControlCenterUsersettings::index(Context *c)
 {
-    User u = User::fromStash(c);
-
-
-
     c->stash({
                  {QStringLiteral("timezones"), QVariant::fromValue<std::vector<OptionItem>>(Utils::getTimezoneOptionsList(Session::value(c, QStringLiteral("tz")).value<QTimeZone>().id()))},
                  {QStringLiteral("template"), QStringLiteral("usersettings/index.html")},
