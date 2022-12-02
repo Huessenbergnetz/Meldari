@@ -46,15 +46,14 @@ MeldariTmpl.Users.Add.exec = function() {
     .catch(error => {
                if (error instanceof Response) {
                    error.json().then(json => {
-                                         console.log(json);
                                          if (json.error) {
-
+                                             MeldariTmpl.createError(json.error)
                                          } else if (json.fielderrors) {
                                              MeldariTmpl.setFormFieldErrors(MeldariTmpl.Users.Add.form, json.fielderrors);
                                          }
                                      });
                } else {
-                   console.log(error);
+                   MeldariTmpl.createErrorFull(error.name, error.message);
                }
            })
     .finally(() => {
