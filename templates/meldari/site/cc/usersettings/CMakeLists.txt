@@ -4,7 +4,7 @@
 set(usersettings_FILES
     index.html
     pageHeader.html
-    localizationTab.html
+    profileTab.html
     passwordTab.html
 )
 
