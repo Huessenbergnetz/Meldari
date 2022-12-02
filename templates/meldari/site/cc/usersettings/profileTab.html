@@ -10,4 +10,16 @@
         {% endwith %}
         {% endwith %}
     </div>
+
+    <div class="col-12 col-sm-6 col-lg-4 mb-3">
+        {% with "editLanguage" as selectId %}
+        {% with "language" as selectName %}
+        {% with _("Language") as selectLabel %}
+        {% with locales as selectOptions %}
+        {% include "parts/selectWithLabel.html" %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+    </div>
 </div>
