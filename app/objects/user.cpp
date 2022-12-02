@@ -6,16 +6,22 @@
 #include "user.h"
 #include "logging.h"
 #include "error.h"
+#include "credentialbotan.h"
+#include "qtimezonevariant_p.h"
 #include <baseuser_p.h>
 
 #include <Cutelyst/Context>
+#include <Cutelyst/Plugins/Authentication/authentication.h>
 #include <Cutelyst/Plugins/Authentication/authenticationuser.h>
 #include <Cutelyst/Plugins/Utils/Sql>
+#include <Cutelyst/Plugins/Session/Session>
 
+#include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMetaObject>
 #include <QMetaEnum>
+#include <QLocale>
 
 #define USER_STASH_KEY "user"
 
@@ -205,6 +211,116 @@ User User::add(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     const QDateTime now        = QDateTime::currentDateTimeUtc();
 
     return u;
+}
+
+bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
+{
+    bool somethingChanged = false;
+    bool pwChanged = false;
+
+    const QString oldPassword   = values.value(QStringLiteral("password")).toString();
+    const QString newPassword   = values.value(QStringLiteral("newpassword")).toString();
+    const QString language      = values.value(QStringLiteral("language")).toString();
+    const QString timezone      = values.value(QStringLiteral("timezone")).toString();
+
+    if (!newPassword.isEmpty()) {
+        if (oldPassword != newPassword) {
+            pwChanged = true;
+            somethingChanged = true;
+            if (oldPassword.isEmpty()) {
+                e = Error(Cutelyst::Response::Forbidden, c->translate("User", "Can not update password: empty current password."));
+                return false;
+            }
+
+            Cutelyst::AuthenticationUser authUser = Cutelyst::Authentication::user(c);
+            if (!CredentialBotan::validatePassword(oldPassword.toUtf8(), authUser.value(QStringLiteral("password")).toString().toUtf8())) {
+                e = Error(Cutelyst::Response::Forbidden, c->translate("User", "Can not update password: invalid current password."));
+                return false;
+            }
+        }
+    }
+
+    if (language != data->settings.value(QStringLiteral("language")).toString()) {
+        somethingChanged = true;
+    }
+
+    if (timezone != data->settings.value(QStringLiteral("timezone")).toString()) {
+        somethingChanged = true;
+    }
+
+    if (!somethingChanged) {
+        return true;
+    }
+
+    const auto now = QDateTime::currentDateTimeUtc();
+
+    QSqlDatabase db = Cutelyst::Sql::databaseThread();
+    Cutelyst::Sql::Transaction dbtrans(db);
+
+    QSqlQuery q(db);
+
+    if (!newPassword.isEmpty()) {
+        const QString newPwEnc = CredentialBotan::createArgon2Password(newPassword);
+        if (newPwEnc.isEmpty()) {
+            e = Error(Cutelyst::Response::InternalServerError, c->translate("User", "Failed to encrypt new password."));
+            qCCritical(MEL_CORE, "Failed to encrypt new password for user '%s' (ID: %i)", qUtf8Printable(data->username), data->id);
+            return false;
+        }
+
+        q = CPreparedSqlQueryThread(QStringLiteral("UPDATE users SET password = :password, updated_at = :updated_at WHERE id = :id"));
+        q.bindValue(QStringLiteral(":password"), newPwEnc);
+    } else {
+        q = CPreparedSqlQueryThread(QStringLiteral("UPDATE users SET updated_at = :updated_at WHERE id = :id"));
+    }
+    q.bindValue(QStringLiteral(":updated_at"), now);
+    q.bindValue(QStringLiteral(":id"), data->id);
+
+    if (Q_UNLIKELY(!q.exec())) {
+        e = Error(q, c->translate("User", "Failed to update user data in the database."));
+        return false;
+    }
+
+    const QStringList settingsKeys({QStringLiteral("language"), QStringLiteral("timezone")});
+
+    for (const QString &key : settingsKeys) {
+        q = CPreparedSqlQueryThread(QStringLiteral("INSERT INTO usersettings (user_id, name, value) "
+                                                   "VALUES (:user_id, :name, :value) "
+                                                   "ON DUPLICATE KEY UPDATE "
+                                                   "value = :value"));
+        q.bindValue(QStringLiteral(":user_id"), data->id);
+        q.bindValue(QStringLiteral(":name"), key);
+        q.bindValue(QStringLiteral(":value"), values.value(key).toString());
+
+        if (Q_UNLIKELY(!q.exec())) {
+            e = Error(q, c->translate("User", "Failed to update settings key “%1” in the database.").arg(key));
+            return false;
+        }
+    }
+
+    if (!dbtrans.commit()) {
+        e = Error(db.lastError(), c->translate("User", "Failed to update user settings in the database."));
+        return false;
+    }
+
+    for (const QString &key : settingsKeys) {
+        data->settings.insert(key, values.value(key));
+    }
+
+    data->updated = now;
+
+    QLocale ln(language);
+    Cutelyst::Session::setValue(c, QStringLiteral("lang"), QVariant::fromValue<QLocale>(ln));
+    QTimeZone tz(timezone.toLatin1());
+    Cutelyst::Session::setValue(c, QStringLiteral("tz"), QVariant::fromValue<QTimeZone>(tz));
+
+    if (pwChanged) {
+        ParamsMultiMap userParams;
+        userParams.insert(QStringLiteral("username"), data->username);
+        userParams.insert(QStringLiteral("password"), newPassword);
+        Cutelyst::Authentication::authenticate(c, userParams, QStringLiteral("users"));
+    }
+
+    return true;
 }
 
 QString User::typeTranslated(Cutelyst::Context *c, Type type)

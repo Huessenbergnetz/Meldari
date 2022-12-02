@@ -49,6 +49,8 @@ public:
 
     static User add(Cutelyst::Context *c, Error &e, const QVariantHash &values);
 
+    bool update(Cutelyst::Context *c, Error &e, const QVariantHash &values);
+
     static QString typeTranslated(Cutelyst::Context *c, Type type);
 
     static QJsonObject typesTranslated(Cutelyst::Context *c);
