@@ -50,15 +50,17 @@ void ControlCenter::login(Context *c)
             if (Authentication::authenticate(c, params, QStringLiteral("users"))) {
                 qCInfo(MEL_AUTHN, "User %s successfully logged in", qUtf8Printable(username));
 
+                AuthenticationUser user = Authentication::user(c);
+                const QDateTime lastSeen = user.value(QStringLiteral("last_seen")).toDateTime();
+
                 QSqlQuery q = CPreparedSqlQueryThread(QStringLiteral("UPDATE users SET last_seen = :last_seen WHERE username = :username"));
-                q.bindValue(QStringLiteral(":last_seen"), QDateTime::currentDateTimeUtc());
+                q.bindValue(QStringLiteral(":last_seen"), lastSeen);
                 q.bindValue(QStringLiteral(":username"), username);
 
                 if (Q_UNLIKELY(!q.exec())) {
                     qCWarning(MEL_AUTHN) << "Failed to update last_seen column for user" << username << "in the database:" << q.lastError().text();
                 }
 
-                AuthenticationUser user = Authentication::user(c);
                 const QVariantMap userSetings = user.value(QStringLiteral("settings")).toMap();
 
                 QLocale lang(userSetings.value(QStringLiteral("language"), MeldariConfig::defLanguage()).toString());

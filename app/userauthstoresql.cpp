@@ -11,6 +11,7 @@
 #include <Cutelyst/Plugins/Utils/Sql>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QDateTime>
 
 #if defined(QT_DEBUG)
 Q_LOGGING_CATEGORY(MEL_AUTHN, "meldari.authn")
@@ -45,7 +46,7 @@ AuthenticationUser UserAuthStoreSql::findUser(Context *c, const ParamsMultiMap &
             user.insert(QStringLiteral("created_at"), q.value(4));
             user.insert(QStringLiteral("updated_at"), q.value(5));
             user.insert(QStringLiteral("valid_until"), q.value(6));
-            user.insert(QStringLiteral("last_seen"), q.value(7));
+            user.insert(QStringLiteral("last_seen"), QDateTime::currentDateTimeUtc());
             user.insert(QStringLiteral("locked_at"), q.value(8));
             user.insert(QStringLiteral("locked_by"), q.value(9));
 
