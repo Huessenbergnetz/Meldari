@@ -106,7 +106,8 @@ void ControlCenter::logout(Context *c)
 
     qCInfo(MEL_AUTHN) << "User" << username << "logged out";
 
-    Session::deleteSession(c, QStringLiteral("User %1 logged out").arg(username));
+//    Session::deleteSession(c, QStringLiteral("User %1 logged out").arg(username));
+    Authentication::logout(c);
 
     c->res()->redirect(c->uriFor(QStringLiteral("/")));
 }
