@@ -58,6 +58,9 @@ bool Meldari::init()
     MeldariConfig::load(engine()->config(QStringLiteral(MELDARI_CONF_MEL)),
                         engine()->config(QStringLiteral(MELDARI_CONF_MAIL)));
 
+    const auto supportedLocales = loadTranslationsFromDir(QStringLiteral("meldari"), QStringLiteral(MELDARI_TRANSLATIONSDIR));
+    qCInfo(MEL_CORE) << "Loaded locales:" << supportedLocales;
+
 #if defined(QT_DEBUG)
     const bool viewCache = false;
 #else
