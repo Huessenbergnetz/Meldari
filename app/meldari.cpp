@@ -60,6 +60,8 @@ bool Meldari::init()
 
     const auto supportedLocales = loadTranslationsFromDir(QStringLiteral("meldari"), QStringLiteral(MELDARI_TRANSLATIONSDIR));
 
+    MeldariConfig::loadSupportedLocales(supportedLocales);
+
 #if defined(QT_DEBUG)
     const bool viewCache = false;
 #else
