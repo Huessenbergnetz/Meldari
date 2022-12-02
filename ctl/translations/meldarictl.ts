@@ -296,5 +296,12 @@ This command line client helps to manage several aspects of Meldari from the com
         <extracomment>CLI command description</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message id="melctl-warn-db-set-con-tz">
+        <source>Failed to set database connection time zone to UTC: %1</source>
+        <oldsource>Failed to set database connection time zone to UTC: %1&apos;
+</oldsource>
+        <extracomment>CLI warning message</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
