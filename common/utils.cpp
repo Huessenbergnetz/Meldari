@@ -4,7 +4,11 @@
  */
 
 #include "utils.h"
+#include <Cutelyst/Context>
+#include <Cutelyst/Response>
 #include <QTimeZone>
+#include <QJsonObject>
+#include <QJsonArray>
 
 QStringList Utils::getTimezoneList()
 {
@@ -30,4 +34,28 @@ std::vector<OptionItem> Utils::getTimezoneOptionsList(const QString &selected)
         lst.emplace_back(tzStr, tzStr, tzStr == selected);
     }
     return lst;
+}
+
+void Utils::setJsonResponse(Cutelyst::Context *c, const QJsonObject &data, const QString &messageTitle, const QString &messageText, int status)
+{
+    QJsonObject o;
+    o.insert(u"status", status);
+    QJsonObject m;
+    m.insert(u"title", messageTitle);
+    m.insert(u"text", messageText);
+    o.insert(u"message", m);
+    o.insert(u"data", data);
+    c->res()->setJsonObjectBody(o);
+}
+
+void Utils::setJsonResponse(Cutelyst::Context *c, const QJsonArray &data, const QString &messageTitle, const QString &messageText, int status)
+{
+    QJsonObject o;
+    o.insert(u"status", status);
+    QJsonObject m;
+    m.insert(u"title", messageTitle);
+    m.insert(u"text", messageText);
+    o.insert(u"message", m);
+    o.insert(u"data", data);
+    c->res()->setJsonObjectBody(o);
 }
