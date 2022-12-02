@@ -16,6 +16,8 @@
 #include "controllers/controlcenterusersettings.h"
 #include "controllers/controlcenterusers.h"
 
+#include "cutelee/meldaricutelee.h"
+
 #include <Cutelyst/Engine>
 #include <Cutelyst/Plugins/StaticSimple/StaticSimple>
 #include <Cutelyst/Plugins/StaticCompressed/StaticCompressed>
@@ -75,6 +77,7 @@ bool Meldari::init()
     ccView->setWrapper(QStringLiteral("wrapper.html"));
     ccView->setIncludePaths({MeldariConfig::tmplPath(u"site/cc")});
     ccView->engine()->addDefaultLibrary(QStringLiteral("cutelee_i18ntags"));
+    ccView->engine()->insertDefaultLibrary(QStringLiteral("cutelee_meldari"), new MeldariCutelee(ccView->engine()));
     qCDebug(MEL_CORE) << "Template include paths for view cc:" << ccView->includePaths();
 
     qCDebug(MEL_CORE) << "Registering view: public";
