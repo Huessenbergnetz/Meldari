@@ -10,7 +10,9 @@
             {% with "username" as inputName %}
             {% with _("Username") as inputLabel %}
             {% with "off" as inputAutocomplete %}
+            {% with 1 as inputRequired %}
             {% include "parts/textInputWithLabel.html" %}
+            {% endwith %}
             {% endwith %}
             {% endwith %}
             {% endwith %}
@@ -22,7 +24,9 @@
             {% with "email" as inputName %}
             {% with _("Email") as inputLabel %}
             {% with "off" as inputAutocomplete %}
+            {% with 1 as inputRequired %}
             {% include "parts/emailInputWithLabel.html" %}
+            {% endwith %}
             {% endwith %}
             {% endwith %}
             {% endwith %}
@@ -34,7 +38,9 @@
             {% with "password" as inputName %}
             {% with _("Password") as inputLabel %}
             {% with "off" as inputAutocomplete %}
+            {% with 1 as inputRequired %}
             {% include "parts/passwordInputWithLabel.html" %}
+            {% endwith %}
             {% endwith %}
             {% endwith %}
             {% endwith %}
@@ -46,7 +52,9 @@
             {% with "password_confirmation" as inputName %}
             {% with _("Password confirmation") as inputLabel %}
             {% with "off" as inputAutocomplete %}
+            {% with 1 as inputRequired %}
             {% include "parts/passwordInputWithLabel.html" %}
+            {% endwith %}
             {% endwith %}
             {% endwith %}
             {% endwith %}
