@@ -305,6 +305,10 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     QTimeZone tz(timezone.toLatin1());
     Cutelyst::Session::setValue(c, QStringLiteral("tz"), QVariant::fromValue<QTimeZone>(tz));
 
+    if (MeldariConfig::useMemcached()) {
+        Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), *this, MEMC_USERS_STORAGE_DURATION, &rt);
+    }
+
     if (pwChanged) {
         ParamsMultiMap userParams;
         userParams.insert(QStringLiteral("username"), data->username);
