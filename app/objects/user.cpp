@@ -215,7 +215,8 @@ User User::add(Cutelyst::Context *c, Error &e, const QVariantHash &values)
 
 bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
 {
-    bool somethingChanged = false;
+    qCDebug(MEL_CORE, "Updating data for user “%s” (ID: %i)", qUtf8Printable(data->username), data->id);
+
     bool pwChanged = false;
 
     const QString oldPassword   = values.value(QStringLiteral("password")).toString();
@@ -226,7 +227,6 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     if (!newPassword.isEmpty()) {
         if (oldPassword != newPassword) {
             pwChanged = true;
-            somethingChanged = true;
             if (oldPassword.isEmpty()) {
                 e = Error(Cutelyst::Response::Forbidden, c->translate("User", "Can not update password: empty current password."));
                 return false;
@@ -238,18 +238,6 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
                 return false;
             }
         }
-    }
-
-    if (language != data->settings.value(QStringLiteral("language")).toString()) {
-        somethingChanged = true;
-    }
-
-    if (timezone != data->settings.value(QStringLiteral("timezone")).toString()) {
-        somethingChanged = true;
-    }
-
-    if (!somethingChanged) {
-        return true;
     }
 
     const auto now = QDateTime::currentDateTimeUtc();
