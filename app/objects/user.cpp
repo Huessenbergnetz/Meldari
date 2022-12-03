@@ -306,7 +306,7 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     Cutelyst::Session::setValue(c, QStringLiteral("tz"), QVariant::fromValue<QTimeZone>(tz));
 
     if (MeldariConfig::useMemcached()) {
-        Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), *this, MEMC_USERS_STORAGE_DURATION, &rt);
+        Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), *this, MEMC_USERS_STORAGE_DURATION);
     }
 
     if (pwChanged) {
@@ -336,7 +336,7 @@ bool User::updateLastSeen(Context *c, Error &e)
     data->lastSeen = now;
 
     if (MeldariConfig::useMemcached()) {
-        Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), *this, MEMC_USERS_STORAGE_DURATION, &rt);
+        Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), *this, MEMC_USERS_STORAGE_DURATION);
     }
 
     return true;
