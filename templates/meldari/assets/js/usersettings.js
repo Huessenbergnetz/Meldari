@@ -35,8 +35,28 @@ MeldariTmpl.UserSettings.exec = function() {
               MeldariTmpl.tz = json.data.settings.timezone;
               document.documentElement.dataset.timezone = MeldariTmpl.tz;
 
+              const localeDtOptions = {dateStyle: "long", timeStyle: "medium", timeZone: MeldariTmpl.tz}
+
+              const created = new Date(json.data.created);
+              MeldariTmpl.UserSettings.form.elements['created'].value = created.toLocaleString(MeldariTmpl.lang, localeDtOptions);
+
               const updated = new Date(json.data.updated);
-              MeldariTmpl.UserSettings.form.elements['updated'].value = updated.toLocaleString(MeldariTmpl.lang, {dateStyle: "long", timeStyle: "medium", timeZone: MeldariTmpl.tz});
+              MeldariTmpl.UserSettings.form.elements['updated'].value = updated.toLocaleString(MeldariTmpl.lang, localeDtOptions);
+
+              if (json.data.lastSeen) {
+                  const lastSeen = new Date(json.data.lastSeen);
+                  MeldariTmpl.UserSettings.form.elements['lastSeen'].value = lastSeen.toLocaleString(MeldariTmpl.lang, localeDtOptions);
+              } else {
+                  MeldariTmpl.UserSettings.form.elements['lastSeen'].value = '';
+              }
+
+              if (json.data.validUntil) {
+                  const validUntil = new Date(json.data.validUntil);
+                  MeldariTmpl.UserSettings.form.elements['validUntil'].value = validUntil.toLocaleString(MeldariTmpl.lang, localeDtOptions);
+              } else {
+                  MeldariTmpl.UserSettings.form.elements['validUntil'].value = '';
+              }
+
               MeldariTmpl.createSuccess(json.message);
           })
     .catch(error => {
