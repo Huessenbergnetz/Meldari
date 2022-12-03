@@ -26,9 +26,10 @@
 
 <div class="row">
     <div class="col-12 col-sm-6 col-lg-4 mb-3">
+        {% mel_dateformat_var user.created "long" as userCreated %}
         {% with "created" as inputId %}
         {% with _("Created") as inputLabel %}
-        {% with _(user.created) as inputValue %}
+        {% with userCreated as inputValue %}
         {% include "parts/roInputWithLabel.html" %}
         {% endwith %}
         {% endwith %}
@@ -36,9 +37,10 @@
     </div>
 
     <div class="col-12 col-sm-6 col-lg-4 mb-3">
+        {% mel_dateformat_var user.updated "long" as userUpdated %}
         {% with "updated" as inputId %}
         {% with _("Updated") as inputLabel %}
-        {% with _(user.updated) as inputValue %}
+        {% with userUpdated as inputValue %}
         {% include "parts/roInputWithLabel.html" %}
         {% endwith %}
         {% endwith %}
@@ -48,9 +50,10 @@
 
 <div class="row">
     <div class="col-12 col-sm-6 col-lg-4 mb-3">
+        {% mel_dateformat_var user.updated "long" as userLastSeen %}
         {% with "lastSeen" as inputId %}
         {% with _("Last seen") as inputLabel %}
-        {% with _(user.lastSeen) as inputValue %}
+        {% with userLastSeen as inputValue %}
         {% include "parts/roInputWithLabel.html" %}
         {% endwith %}
         {% endwith %}
@@ -58,9 +61,10 @@
     </div>
 
     <div class="col-12 col-sm-6 col-lg-4 mb-3">
+        {% mel_dateformat_var user.validUntil "long" as userValidUntil %}
         {% with "validUntil" as inputId %}
         {% with _("Valid until") as inputLabel %}
-        {% with _(user.validUntil) as inputValue %}
+        {% with userValidUntil as inputValue %}
         {% include "parts/roInputWithLabel.html" %}
         {% endwith %}
         {% endwith %}
