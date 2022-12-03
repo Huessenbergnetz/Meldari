@@ -286,15 +286,10 @@ QDebug operator<<(QDebug dbg, const BaseUser &user)
 {
     QDebugStateSaver saver(dbg);
     Q_UNUSED(saver)
-    dbg.nospace() << "User(";
+    dbg.nospace() << "BaseUser(";
     dbg << "ID: " << user.id();
     dbg << ", Username: " << user.username();
     dbg << ", Type: " << user.type();
-    dbg << ", Email: " << user.email();
-    dbg << ", Created: " << user.created();
-    dbg << ", Updated: " << user.updated();
-    dbg << ", Valid Until: " << user.validUntil();
-    dbg << ", Last Seen: " << user.lastSeen();
     dbg << ')';
     return dbg.maybeSpace();
 }
