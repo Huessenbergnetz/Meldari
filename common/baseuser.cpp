@@ -166,6 +166,15 @@ bool BaseUser::isNull() const
     return data ? false : true;
 }
 
+QString BaseUser::logInfo() const
+{
+    if (data) {
+        return data->username + u" (ID: " + QString::number(data->id) + u')';
+    } else {
+        return QStringLiteral("NULL");
+    }
+}
+
 QJsonObject BaseUser::toJson() const
 {
     if (isNull() || !isValid()) {

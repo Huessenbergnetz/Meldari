@@ -87,6 +87,8 @@ public:
 
     bool isNull() const;
 
+    QString logInfo() const;
+
     QJsonObject toJson() const;
 
     bool operator==(const BaseUser &other) const noexcept;
