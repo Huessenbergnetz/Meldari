@@ -5,4 +5,6 @@ target_sources(meldari
     PRIVATE
         meldaricutelee.cpp
         meldaricutelee.h
+        dateformattag.cpp
+        dateformattag.h
 )

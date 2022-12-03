@@ -4,6 +4,14 @@
  */
 
 #include "meldaricutelee.h"
+#include "logging.h"
+#include "dateformattag.h"
+
+#if defined(QT_DEBUG)
+Q_LOGGING_CATEGORY(MEL_CUTELEE, "meldari.cutelee")
+#else
+Q_LOGGING_CATEGORY(MEL_CUTELEE, "meldari.cutelee", QtInfoMsg)
+#endif
 
 MeldariCutelee::MeldariCutelee(QObject *parent)
     : QObject{parent}
@@ -16,6 +24,8 @@ QHash<QString, Cutelee::AbstractNodeFactory*> MeldariCutelee::nodeFactories(cons
     Q_UNUSED(name)
 
     QHash<QString, Cutelee::AbstractNodeFactory*> ret;
+    ret.insert(QStringLiteral("mel_dateformat"), new DateFormatTag);
+    ret.insert(QStringLiteral("mel_dateformat_var"), new DateFormatVarTag);
 
     return ret;
 }
