@@ -51,6 +51,8 @@ public:
 
     bool update(Cutelyst::Context *c, Error &e, const QVariantHash &values);
 
+    bool updateLastSeen(Cutelyst::Context *c, Error &e);
+
     static User get(Cutelyst::Context *c, Error &e, BaseUser::dbid_t id);
 
     static bool toStash(Cutelyst::Context *c, Error &e, BaseUser::dbid_t id);

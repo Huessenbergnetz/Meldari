@@ -319,6 +319,29 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     return true;
 }
 
+bool User::updateLastSeen(Context *c, Error &e)
+{
+    const auto now = QDateTime::currentDateTimeUtc();
+
+    QSqlQuery q = CPreparedSqlQueryThread(QStringLiteral("UPDATE users SET last_seen = :last_seen WHERE id = :id"));
+    q.bindValue(QStringLiteral(":last_seen"), now);
+    q.bindValue(QStringLiteral(":id"), data->id);
+
+    if (Q_UNLIKELY(!q.exec())) {
+        e = Error(q, c->translate("User", "Failed to update last seen state for user “%1”.").arg(data->username));
+        qCWarning(MEL_CORE) << "Failed to update last seen state for user" << data->username << "(ID:" << data->id << ')';
+        return false;
+    }
+
+    data->lastSeen = now;
+
+    if (MeldariConfig::useMemcached()) {
+        Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), *this, MEMC_USERS_STORAGE_DURATION, &rt);
+    }
+
+    return true;
+}
+
 User User::get(Cutelyst::Context *c, Error &e, dbid_t id)
 {
     User u;
