@@ -14,10 +14,7 @@
 #include <Cutelyst/Plugins/Authentication/authentication.h>
 #include <Cutelyst/Plugins/Authentication/authenticationuser.h>
 #include <Cutelyst/Plugins/Session/Session>
-#include <Cutelyst/Plugins/Utils/Sql>
 
-#include <QSqlQuery>
-#include <QSqlError>
 #include <QLocale>
 #include <QTimeZone>
 
@@ -48,35 +45,34 @@ void ControlCenter::login(Context *c)
 
         if (!username.isEmpty() && !password.isEmpty()) {
             if (Authentication::authenticate(c, params, QStringLiteral("users"))) {
-                qCInfo(MEL_AUTHN, "User %s successfully logged in", qUtf8Printable(username));
+                AuthenticationUser authUser = Authentication::user(c);
 
-                AuthenticationUser user = Authentication::user(c);
-                const QDateTime lastSeen = user.value(QStringLiteral("last_seen")).toDateTime();
+                Error error;
+                User user = User::get(c, error, authUser.id().toUInt());
 
-                QSqlQuery q = CPreparedSqlQueryThread(QStringLiteral("UPDATE users SET last_seen = :last_seen WHERE username = :username"));
-                q.bindValue(QStringLiteral(":last_seen"), lastSeen);
-                q.bindValue(QStringLiteral(":username"), username);
-
-                if (Q_UNLIKELY(!q.exec())) {
-                    qCWarning(MEL_AUTHN) << "Failed to update last_seen column for user" << username << "in the database:" << q.lastError().text();
+                if (!user.isNull()) {
+                    user.updateLastSeen(c, error);
+                    user.toStash(c);
                 }
 
-                const QVariantMap userSetings = user.value(QStringLiteral("settings")).toMap();
+                qCInfo(MEL_AUTHN) << user << "successfully logged in";
+
+                const QVariantMap userSetings = user.settings();
 
                 QLocale lang(userSetings.value(QStringLiteral("language"), MeldariConfig::defLanguage()).toString());
                 if (lang.language() == QLocale::C) {
-                    qCWarning(MEL_CORE) << "Invalid language" << userSetings.value(QStringLiteral("language")).toString() << "selected by user" << username << "(ID: " << user.id().toInt() << ')';
+                    qCWarning(MEL_CORE) << "Invalid language" << userSetings.value(QStringLiteral("language")).toString() << "selected by" << user;
                 }
                 Session::setValue(c, QStringLiteral("lang"), QVariant::fromValue<QLocale>(lang));
 
                 QTimeZone tz(userSetings.value(QStringLiteral("timezone"), MeldariConfig::defTimezone()).toString().toLatin1());
                 if (!tz.isValid()) {
-                    qCWarning(MEL_CORE) << "Invalid timezone" << userSetings.value(QStringLiteral("timezone")).toString() << "selected by user" << username << "(ID: " << user.id().toInt() << ')';
+                    qCWarning(MEL_CORE) << "Invalid timezone" << userSetings.value(QStringLiteral("timezone")).toString() << "selected by" << user;
                     tz = QTimeZone::utc();
                 }
                 Session::setValue(c, QStringLiteral("tz"), QVariant::fromValue<QTimeZone>(tz));
 
-                const QString redirectToQueryParam = params.value(QStringLiteral("redirect_to"));
+                const QString redirectToQueryParam = req->queryParam(QStringLiteral("redirect_to"));
                 const QUrl redirectToUrl = redirectToQueryParam.isEmpty() ? c->uriFor(QStringLiteral("/cc")) : QUrl::fromEncoded(redirectToQueryParam.toLatin1());
                 c->res()->redirect(redirectToUrl);
                 return;
