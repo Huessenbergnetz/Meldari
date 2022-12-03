@@ -51,6 +51,10 @@ public:
 
     bool update(Cutelyst::Context *c, Error &e, const QVariantHash &values);
 
+    static User get(Cutelyst::Context *c, Error &e, BaseUser::dbid_t id);
+
+    static bool toStash(Cutelyst::Context *c, Error &e, BaseUser::dbid_t id);
+
     static QString typeTranslated(Cutelyst::Context *c, Type type);
 
     static QJsonObject typesTranslated(Cutelyst::Context *c);

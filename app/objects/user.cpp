@@ -8,6 +8,7 @@
 #include "error.h"
 #include "credentialbotan.h"
 #include "qtimezonevariant_p.h"
+#include "meldariconfig.h"
 #include <baseuser_p.h>
 
 #include <Cutelyst/Context>
@@ -15,6 +16,7 @@
 #include <Cutelyst/Plugins/Authentication/authenticationuser.h>
 #include <Cutelyst/Plugins/Utils/Sql>
 #include <Cutelyst/Plugins/Session/Session>
+#include <Cutelyst/Plugins/Memcached/Memcached>
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -24,6 +26,8 @@
 #include <QLocale>
 
 #define USER_STASH_KEY "user"
+#define MEMC_USERS_GROUP_KEY "users"
+#define MEMC_USERS_STORAGE_DURATION 7200
 
 User::User() : BaseUser()
 {
@@ -309,6 +313,80 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     }
 
     return true;
+}
+
+User User::get(Cutelyst::Context *c, Error &e, dbid_t id)
+{
+    User u;
+
+    if (MeldariConfig::useMemcached()) {
+        Cutelyst::Memcached::MemcachedReturnType rt;
+        u = Cutelyst::Memcached::getByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(id), nullptr, &rt);
+        if (rt == Cutelyst::Memcached::Success) {
+            qCDebug(MEL_CORE) << "Found user with ID" << id << "in memcache";
+            return u;
+        }
+    }
+
+    qCDebug(MEL_CORE) << "Query user with ID" << id << "from the database";
+
+    QSqlQuery q = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT u1.type, u1.username, u1.email, u1.created_at, u1.updated_at, u1.valid_until, u1.last_seen, u1.locked_at, u2.id AS locked_by_id, u2.username AS locked_by_username FROM users u1 LEFT JOIN users u2 ON u2.id = u1.locked_by WHERE u1.id = :id"));
+    q.bindValue(QStringLiteral(":id"), id);
+
+    if (Q_UNLIKELY(!q.exec())) {
+        e = Error(q, c->translate("User", "Failed to get user with ID %s from database.").arg(id));
+        qCCritical(MEL_CORE) << "Failed to get user with ID" << id << "from database:" << q.lastError().text();
+        return u;
+    }
+
+    if (Q_UNLIKELY(!q.next())) {
+        e = Error(Cutelyst::Response::NotFound, c->translate("User", "Can not find user with ID %s in the database.").arg(id));
+        qCWarning(MEL_CORE) << "Can not find user ID" << id << "in the database";
+        return u;
+    }
+
+    const User::Type type = static_cast<User::Type>(q.value(0).toInt());
+    const QString username = q.value(1).toString();
+    const QString email = q.value(2).toString();
+    const QDateTime created = q.value(3).toDateTime();
+    const QDateTime updated = q.value(4).toDateTime();
+    const QDateTime validUntil = q.value(5).toDateTime();
+    const QDateTime lastSeen = q.value(6).toDateTime();
+    const QDateTime lockedAt = q.value(7).toDateTime();
+    const User::dbid_t lockedById = q.value(8).toUInt();
+    const QString lockedByName = q.value(9).toString();
+
+    q = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT name, value FROM usersettings WHERE user_id = :user_id"));
+    q.bindValue(QStringLiteral(":user_id"), id);
+
+    if (Q_UNLIKELY(!q.exec())) {
+        e = Error(q, c->translate("User", "Failed to get usersettings for user ID %s from database.").arg(id));
+        qCCritical(MEL_CORE) << "Failed to get usersettings for user ID" << id << "from database:" << q.lastError().text();
+        return u;
+    }
+
+    QVariantMap settings;
+    while (q.next()) {
+        settings.insert(q.value(0).toString(), q.value(1).toString());
+    }
+
+    u = User(id, type, username, email, created, updated, validUntil, lastSeen, lockedAt, lockedById, lockedByName, settings);
+
+    if (MeldariConfig::useMemcached()) {
+        Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(id), u, MEMC_USERS_STORAGE_DURATION);
+    }
+
+    return u;
+}
+
+bool User::toStash(Context *c, Error &e, dbid_t id)
+{
+    User u = User::get(c, e, id);
+    if (!u.isNull()) {
+        u.toStash(c);
+        return true;
+    }
+    return false;
 }
 
 QString User::typeTranslated(Cutelyst::Context *c, Type type)

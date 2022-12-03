@@ -37,8 +37,8 @@ bool Root::Auto(Context *c)
     const AuthenticationUser authUser = Authentication::user(c);
 
     if (!authUser.isNull()) {
-        User user(authUser);
-        user.toStash(c);
+        Error e;
+        User::toStash(c, e, authUser.id().toUInt());
     }
 
     c->stash({
