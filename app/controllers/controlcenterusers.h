@@ -27,6 +27,9 @@ public:
     C_ATTR(add, :Local :Args(0))
     void add(Context *c);
 
+    C_ATTR(get, :Local :Args(1))
+    void get(Context *c, const QString &id);
+
 private:
     C_ATTR(Auto, :Private)
     bool Auto(Context *c);

@@ -47,6 +47,14 @@ void ControlCenterUsers::index(Context *c)
 
 void ControlCenterUsers::list(Context *c)
 {
+    if (!c->req()->isGet()) {
+        c->res()->setStatus(Response::MethodNotAllowed);
+        c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("GET"));
+        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts GET requests."));
+        c->res()->setJsonObjectBody(e.toJson(c));
+        return;
+    }
+
     auto params = c->req()->queryParams();
 
     User::Type minType = User::typeStringToEnum(params.value(QStringLiteral("minType")));
@@ -105,6 +113,33 @@ void ControlCenterUsers::add(Context *c)
         c->res()->setStatus(400);
         c->res()->setJsonObjectBody(QJsonObject({{QStringLiteral("fielderrors"), vr.errorsJsonObject()}}));
     }
+}
+
+void ControlCenterUsers::get(Context *c, const QString &id)
+{
+    if (!c->req()->isGet()) {
+        c->res()->setStatus(Response::MethodNotAllowed);
+        c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("GET"));
+        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts GET requests."));
+        c->res()->setJsonObjectBody(e.toJson(c));
+        return;
+    }
+
+    bool ok = false;
+    const User::dbid_t _id = User::stringToDbId(id, &ok);
+    if (!ok) {
+        Error::toStash(c, Response::BadRequest, c->translate("ControlCenterUsers", "Invalid user ID."), true);
+        return;
+    }
+
+    Error error;
+    const User user = User::get(c, error, _id);
+    if (error.isError()) {
+        error.toStash(c, true);
+        return;
+    }
+
+    c->res()->setJsonObjectBody(user.toJson());
 }
 
 bool ControlCenterUsers::Auto(Context *c)
