@@ -211,15 +211,80 @@ User User::add(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     const QString   email      = values.value(QStringLiteral("email")).toString();
     const QString   password   = values.value(QStringLiteral("password")).toString();
     const Type      type       = static_cast<Type>(values.value(QStringLiteral("type")).toInt());
-    const QDateTime validUntil = values.value(QStringLiteral("validUntil")).toDateTime();
+          QDateTime validUntil = values.value(QStringLiteral("validUntil")).toDateTime();
     const QDateTime now        = QDateTime::currentDateTimeUtc();
+
+    qCDebug(MEL_CORE) << "Adding new user" << username;
+
+    if (validUntil.isValid()) {
+        validUntil.setTimeZone(Cutelyst::Session::value(c, QStringLiteral("tz")).value<QTimeZone>());
+        validUntil = validUntil.toUTC();
+    }
+
+    const QString passwordEnc = CredentialBotan::createArgon2Password(password);
+    if (Q_UNLIKELY(passwordEnc.isEmpty())) {
+        e = Error(Cutelyst::Response::InternalServerError, c->translate("User", "Failed to encrypt password."));
+        qCCritical(MEL_CORE) << "Failed to encrypt password for new user" << username;
+        return u;
+    }
+
+    QSqlDatabase db = Cutelyst::Sql::databaseThread();
+    Cutelyst::Sql::Transaction dbtrans(db);
+
+    QSqlQuery q = CPreparedSqlQueryThread(QStringLiteral("INSERT INTO users (type, username, password, email, created_at, updated_at, valid_until) "
+                                                         "VALUES (:type, :username, :password, :email, :created_at, :updated_at, :valid_until)"));
+    q.bindValue(QStringLiteral(":type"), static_cast<int>(type));
+    q.bindValue(QStringLiteral(":username"), username);
+    q.bindValue(QStringLiteral(":password"), passwordEnc);
+    q.bindValue(QStringLiteral(":email"), email);
+    q.bindValue(QStringLiteral(":created_at"), now);
+    q.bindValue(QStringLiteral(":updated_at"), now);
+    q.bindValue(QStringLiteral(":valid_until"), validUntil);
+
+    if (Q_UNLIKELY(!q.exec())) {
+        e = Error(q, c->translate("User", "Failed to insert new user “%s“ into database.").arg(username));
+        qCCritical(MEL_CORE) << "Failed to insert new user" << username << "into database:" << q.lastError().text();
+        return u;
+    }
+
+    const dbid_t id = q.lastInsertId().toUInt();
+
+    const QStringList settingsKeys({QStringLiteral("language"), QStringLiteral("timezone")});
+
+    for (const QString &key : settingsKeys) {
+        QSqlQuery q2 = CPreparedSqlQueryThread(QStringLiteral("INSERT INTO usersettings (user_id, name, value) "
+                                                              "VALUES (:user_id, :name, :value)"));
+        q2.bindValue(QStringLiteral(":user_id"), id);
+        q2.bindValue(QStringLiteral(":name"), key);
+        q2.bindValue(QStringLiteral(":value"), values.value(key).toString());
+
+        if (Q_UNLIKELY(!q2.exec())) {
+            e = Error(q2, c->translate("User", "Failed to setting key “%1” into the database.").arg(key));
+            qCCritical(MEL_CORE) << "Failed to insert setting key" << key << "for user" << username << "into the database:" << q2.lastError().text();
+            return u;
+        }
+    }
+
+    if (Q_UNLIKELY(!dbtrans.commit())) {
+        e = Error(db.lastError(), c->translate("User", "Failed to insert new user “%s“ into database.").arg(username));
+        return u;
+    }
+
+    QVariantMap settings;
+    for (const QString &key : settingsKeys) {
+        settings.insert(key, values.value(key));
+    }
+
+    u = User(id, type, username, email, now, now, validUntil, QDateTime(), QDateTime(), 0, QString(), settings);
+
+    qCInfo(MEL_CORE) << User::fromStash(c) << "created new" << u;
 
     return u;
 }
 
 bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
 {
-    qCDebug(MEL_CORE, "Updating data for user “%s” (ID: %i)", qUtf8Printable(data->username), data->id);
+    qCDebug(MEL_CORE) << "Updating data for" << *this;
 
     bool pwChanged = false;
 
