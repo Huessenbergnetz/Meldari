@@ -7,6 +7,8 @@
 #include "objects/user.h"
 #include "objects/error.h"
 #include "objects/simpleuser.h"
+#include "utils.h"
+#include "meldariconfig.h"
 
 #include <Cutelyst/Plugins/Utils/Validator>
 #include <Cutelyst/Plugins/Utils/ValidatorResult>
@@ -28,13 +30,17 @@ ControlCenterUsers::ControlCenterUsers(QObject *parent) : Controller{parent}
 
 void ControlCenterUsers::index(Context *c)
 {
+    const User u = User::fromStash(c);
+
     const QJsonDocument typesTranslated(User::typesTranslated(c));
     const QString typesTranslatedJson = QString::fromUtf8(typesTranslated.toJson(QJsonDocument::Compact));
-    const std::vector<OptionItem> userTypeOptions = User::typeOptions(c);
+    const std::vector<OptionItem> userTypeOptions = User::typeOptions(c, User::Invalid, u.type());
 
     c->stash({
                  {QStringLiteral("user_types_translated"), typesTranslatedJson},
                  {QStringLiteral("user_type_options"), QVariant::fromValue<std::vector<OptionItem>>(userTypeOptions)},
+                 {QStringLiteral("timezones"), QVariant::fromValue<std::vector<OptionItem>>(Utils::getTimezoneOptionsList(MeldariConfig::defTimezone()))},
+                 {QStringLiteral("locales"), QVariant::fromValue<std::vector<OptionItem>>(MeldariConfig::supportedLocaleOptionItems(c, MeldariConfig::defLanguage()))},
                  {QStringLiteral("template"), QStringLiteral("users/index.html")}
              });
 }
@@ -60,10 +66,14 @@ void ControlCenterUsers::add(Context *c)
     if (!c->req()->isPost()) {
         c->res()->setStatus(Response::MethodNotAllowed);
         c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("POST"));
-        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This path only accepts POST requests."));
+        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts POST requests."));
         c->res()->setJsonObjectBody(e.toJson(c));
         return;
     }
+
+    const User u = User::fromStash(c);
+
+    c->setStash(QStringLiteral("_userTypeValues"), User::typeValues(u.type()));
 
     static Validator v({
                            new ValidatorRequired(QStringLiteral("username")),
@@ -72,9 +82,13 @@ void ControlCenterUsers::add(Context *c)
                            new ValidatorRequired(QStringLiteral("password")),
                            new ValidatorConfirmed(QStringLiteral("password")),
                            new ValidatorRequired(QStringLiteral("type")),
-                           new ValidatorIn(QStringLiteral("type"), User::typeValues()),
+                           new ValidatorIn(QStringLiteral("type"), QStringLiteral("_userTypeValues")),
                            new ValidatorInteger(QStringLiteral("type"), QMetaType::Int),
-                           new ValidatorDateTime(QStringLiteral("validUntil"), QString(), "yyyy-MM-ddTHH:mm")
+                           new ValidatorDateTime(QStringLiteral("validUntil"), QString(), "yyyy-MM-ddTHH:mm"),
+                           new ValidatorRequired(QStringLiteral("timezone")),
+                           new ValidatorIn(QStringLiteral("timezone"), Utils::getTimezoneList()),
+                           new ValidatorRequired(QStringLiteral("language")),
+                           new ValidatorIn(QStringLiteral("language"), MeldariConfig::supportedLocaleNames())
                        });
 
     const ValidatorResult vr = v.validate(c, Validator::BodyParamsOnly);
@@ -83,7 +97,7 @@ void ControlCenterUsers::add(Context *c)
         Error e;
         const User u = User::add(c, e, vr.values());
         if (!e) {
-            c->res()->setJsonObjectBody(u.toJson());;
+            Utils::setJsonResponse(c, u.toJson(), c->translate("ControlCenterUsers", "User created"), c->translate("ControlCenterUsers", "Successfully created new user “%1” (ID: %2).").arg(u.username(), QString::number(u.id())));
         } else {
             e.toStash(c, true);
         }
