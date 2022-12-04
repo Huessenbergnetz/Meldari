@@ -30,6 +30,8 @@ MeldariTmpl.Users.addTableRow = function(user, prepend) {
 
     const deleteBtn = actionsTd.getElementsByClassName('delete-user-btn')[0];
     deleteBtn.dataset.value = user.id;
+    deleteBtn.dataset.bsToggle = 'modal';
+    deleteBtn.dataset.bsTarget = '#removeUserModal';
 
     usernameTd.textContent = user.username;
     emailTd.textContent = user.email;
@@ -53,3 +55,4 @@ MeldariTmpl.Users.init = function() {
 }
 
 MeldariTmpl.Users.init();
+//data-bs-toggle="modal" data-bs-target="#addUserModal"

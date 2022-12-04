@@ -142,6 +142,49 @@ void ControlCenterUsers::get(Context *c, const QString &id)
     c->res()->setJsonObjectBody(user.toJson());
 }
 
+void ControlCenterUsers::remove(Context *c, const QString &id)
+{
+    if (!c->req()->isPost()) {
+        c->res()->setStatus(Response::MethodNotAllowed);
+        c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("POST"));
+        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts GET requests."));
+        c->res()->setJsonObjectBody(e.toJson(c));
+        return;
+    }
+
+    bool ok = false;
+    const User::dbid_t _id = User::stringToDbId(id, &ok);
+    if (!ok) {
+        Error::toStash(c, Response::BadRequest, c->translate("ControlCenterUsers", "Invalid user ID."), true);
+        return;
+    }
+
+    Error error;
+    const User user = User::get(c, error, _id);
+    if (error.isError()) {
+        error.toStash(c, true);
+        return;
+    }
+
+    static Validator v({
+                           new ValidatorIn(QStringLiteral("username"), QStringLiteral("_username"))
+                       });
+
+    const ValidatorResult vr = v.validate(c, Validator::BodyParamsOnly);
+
+    if (vr) {
+        if (!user.remove(c, error)) {
+            error.toStash(c, true);
+            return;
+        }
+
+        Utils::setJsonResponse(c, user.toJson(), c->translate("ControlCenterUsers", "User removed"), c->translate("ControlCenterUsers", "Successfully removed user “%1” (ID: %2).").arg(user.username(), QString::number(user.id())));
+    } else {
+        c->res()->setStatus(400);
+        c->res()->setJsonObjectBody(QJsonObject({{QStringLiteral("fielderrors"), vr.errorsJsonObject()}}));
+    }
+}
+
 bool ControlCenterUsers::Auto(Context *c)
 {
     const User currentUser = User::fromStash(c);

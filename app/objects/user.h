@@ -53,6 +53,8 @@ public:
 
     bool updateLastSeen(Cutelyst::Context *c, Error &e);
 
+    bool remove(Cutelyst::Context *c, Error &e) const;
+
     static User get(Cutelyst::Context *c, Error &e, BaseUser::dbid_t id);
 
     static bool toStash(Cutelyst::Context *c, Error &e, BaseUser::dbid_t id);

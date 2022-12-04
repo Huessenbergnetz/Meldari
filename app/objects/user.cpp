@@ -386,7 +386,7 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     return true;
 }
 
-bool User::updateLastSeen(Context *c, Error &e)
+bool User::updateLastSeen(Cutelyst::Context *c, Error &e)
 {
     const auto now = QDateTime::currentDateTimeUtc();
 
@@ -404,6 +404,28 @@ bool User::updateLastSeen(Context *c, Error &e)
 
     if (MeldariConfig::useMemcached()) {
         Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), *this, MEMC_USERS_STORAGE_DURATION);
+    }
+
+    return true;
+}
+
+bool User::remove(Cutelyst::Context *c, Error &e) const
+{
+    if (MeldariConfig::useMemcached()) {
+        Cutelyst::Memcached::MemcachedReturnType rt;
+        if (Q_UNLIKELY(!Cutelyst::Memcached::removeByKey(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), &rt))) {
+            e = Error(Cutelyst::Response::InternalServerError, c->translate("User", "Failed to remove user %1 (ID: %2) from the memcache: %3").arg(data->username, QString::number(data->id), Cutelyst::Memcached::errorString(c, rt)));
+            return false;
+        }
+    }
+
+    QSqlQuery q = CPreparedSqlQueryThread(QStringLiteral("DELETE FROM users WHERE id = :id"));
+    q.bindValue(QStringLiteral(":id"), data->id);
+
+    if (Q_UNLIKELY(!q.exec())) {
+        e = Error(q, c->translate("User", "Failed to remove user %1 (ID: %2) from the database.").arg(data->username, QString::number(data->id)));
+        qCCritical(MEL_CORE) << "Failed to remove" << *this << "from the database:" << q.lastError().text();
+        return false;
     }
 
     return true;

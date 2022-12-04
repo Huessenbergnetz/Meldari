@@ -2,11 +2,25 @@
 {% block label %}{% i18n "Remove user" %}{% endblock %}
 
 {% block content %}
+<p id="removeUserFormDesc">{{ _("Are you sure you want to delete this user? Please enter the username into the form field to confirm your decision.") }}</p>
+<div class="row">
+    <dl class="row">
+        <dt class="col-3">{{ _("Username") }}</dt>
+        <dd id="removeUserModalUsername" class="col-9"></dd>
+
+        <dt class="col-3">{{ _("Type") }}</dt>
+        <dd id="removeUserModalType" class="col-9"></dd>
+
+        <dt class="col-3">{{ _("ID") }}</dt>
+        <dd id="removeUserModalId" class="col-9"></dd>
+    </dl>
+</div>
 <form id="removeUserForm" action="/cc/users/remove" method="POST">
     {% c_csrf_token %}
+    <input id="removeUserFormUsername" type="text" name="username" class="form-control" aria-describedby="removeUserFormDesc" required>
 </form>
 {% endblock %}
 
 {% block footer %}
-<button id="addUserFormSubmit" type="submit" form="addUserForm" class="btn btn-danger text-capitalize"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span><i class="bi bi-person-plus"></i> {{ _("remove user") }}</button>
+<button id="addUserFormSubmit" type="submit" form="removeUserForm" class="btn btn-danger text-capitalize"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span><i class="bi bi-person-plus"></i> {{ _("remove user") }}</button>
 {% endblock %}
