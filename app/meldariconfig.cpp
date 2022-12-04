@@ -226,6 +226,11 @@ std::vector<OptionItem> MeldariConfig::supportedLocaleOptionItems(Cutelyst::Cont
     return locales;
 }
 
+std::vector<OptionItem> MeldariConfig::supportedLocaleOptionItems(Cutelyst::Context *c, const QString &selected)
+{
+    return supportedLocaleOptionItems(c, QLocale(selected));
+}
+
 template< typename T >
 T MeldariConfig::getDbOption(const QString &option, const T &defVal)
 {

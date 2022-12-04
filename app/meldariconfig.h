@@ -47,6 +47,7 @@ public:
 
     static QStringList supportedLocaleNames();
     static std::vector<OptionItem> supportedLocaleOptionItems(Cutelyst::Context *c, const QLocale &selected = QLocale());
+    static std::vector<OptionItem> supportedLocaleOptionItems(Cutelyst::Context *c, const QString &selected);
 
 private:
     template< typename T >
