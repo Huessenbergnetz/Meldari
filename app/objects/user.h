@@ -65,6 +65,8 @@ public:
 
     static QStringList typeValues();
 
+    static QStringList typeValues(Type below);
+
 private:
     friend QDataStream &operator<<(QDataStream &stream, const User &user);
     friend QDataStream &operator>>(QDataStream &stream, User &user);

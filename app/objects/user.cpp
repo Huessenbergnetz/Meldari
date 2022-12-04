@@ -552,6 +552,26 @@ QStringList User::typeValues()
     return list;
 }
 
+QStringList User::typeValues(User::Type below)
+{
+    QStringList list;
+
+    if (below == User::SuperUser) {
+        list = User::typeValues();
+    } else {
+        const QMetaObject mo = User::staticMetaObject;
+        const QMetaEnum   me = mo.enumerator(mo.indexOfEnumerator("Type"));
+        for (int i = 1; i < me.keyCount(); ++i) {
+            const int val = me.value(i);
+            if (val < static_cast<int>(below)) {
+                list << QString::number(val); //clazy:exclude=reserve-candidates
+            }
+        }
+    }
+
+    return list;
+}
+
 QDebug operator<<(QDebug dbg, const User &user)
 {
     QDebugStateSaver saver(dbg);
