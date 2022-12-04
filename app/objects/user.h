@@ -69,6 +69,8 @@ public:
 
     static QStringList typeValues(Type below);
 
+    static dbid_t stringToDbId(const QString &str, bool *ok);
+
 private:
     friend QDataStream &operator<<(QDataStream &stream, const User &user);
     friend QDataStream &operator>>(QDataStream &stream, User &user);

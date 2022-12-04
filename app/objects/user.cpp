@@ -594,6 +594,12 @@ QStringList User::typeValues(User::Type below)
     return list;
 }
 
+User::dbid_t User::stringToDbId(const QString &str, bool *ok)
+{
+    Q_ASSERT(ok);
+    return str.toUInt(ok);
+}
+
 QDebug operator<<(QDebug dbg, const User &user)
 {
     QDebugStateSaver saver(dbg);
