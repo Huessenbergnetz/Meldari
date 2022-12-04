@@ -61,7 +61,9 @@ public:
 
     static QJsonObject typesTranslated(Cutelyst::Context *c);
 
-    static std::vector<OptionItem> typeOptions(Cutelyst::Context *c, Type selected = User::Invalid);
+    static std::vector<OptionItem> typeOptions(Cutelyst::Context *c, Type selected);
+
+    static std::vector<OptionItem> typeOptions(Cutelyst::Context *c, Type selected, Type below);
 
     static QStringList typeValues();
 

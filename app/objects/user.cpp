@@ -538,6 +538,28 @@ std::vector<OptionItem> User::typeOptions(Cutelyst::Context *c, Type selected)
     return opts;
 }
 
+std::vector<OptionItem> User::typeOptions(Context *c, Type selected, Type below)
+{
+    std::vector<OptionItem> opts;
+
+    if (below == User::SuperUser) {
+        opts = typeOptions(c, selected);
+    } else {
+        const QMetaObject mo = User::staticMetaObject;
+        const QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Type"));
+
+        for (int i = 1; i < me.keyCount(); ++i) {
+            const int v = me.value(i);
+            const Type t = static_cast<User::Type>(v);
+            if (t < below) {
+                opts.emplace_back(User::typeTranslated(c, t), v, t == selected);
+            }
+        }
+    }
+
+    return opts;
+}
+
 QStringList User::typeValues()
 {
     QStringList list;
