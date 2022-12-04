@@ -129,6 +129,10 @@ bool ControlCenter::Auto(Context *c)
         return true;
     }
 
+    if (c->actionName() == u"logout") {
+        return true;
+    }
+
     if (Q_UNLIKELY(!Authentication::userExists(c))) {
         ParamsMultiMap query;
         query.insert(QStringLiteral("redirect_to"), QString::fromLatin1(c->req()->uri().toEncoded()));
