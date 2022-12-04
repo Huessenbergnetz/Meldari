@@ -5,6 +5,7 @@ set(users_FILES
     index.html
     addUserModal.html
     indexPageHeader.html
+    removeUserModal.html
 )
 
 target_sources(meldaritemplate

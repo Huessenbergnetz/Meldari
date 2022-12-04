@@ -1,0 +1,12 @@
+{% extends "parts/modal.html" %}
+{% block label %}{% i18n "Remove user" %}{% endblock %}
+
+{% block content %}
+<form id="removeUserForm" action="/cc/users/remove" method="POST">
+    {% c_csrf_token %}
+</form>
+{% endblock %}
+
+{% block footer %}
+<button id="addUserFormSubmit" type="submit" form="addUserForm" class="btn btn-danger text-capitalize"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span><i class="bi bi-person-plus"></i> {{ _("remove user") }}</button>
+{% endblock %}
