@@ -16,9 +16,9 @@ MeldariTmpl.Users.Add.form = null;
 MeldariTmpl.Users.Add.button = null;
 
 MeldariTmpl.Users.Add.resetForm = function() {
-    const elNames = ['username','email','password','password_confirmed','validUntil'];
-    elNames.foreEach((el) => {MeldariTmpl.Users.Add.form.elements.namedItem(el).value = '';});
-    MeldariTmpl.Users.Add.form.elements.namedItem('type').value = 0;
+    const elNames = ['username','email','password','password_confirmation','validUntil'];
+    elNames.forEach((el) => {MeldariTmpl.Users.Add.form.elements.namedItem(el).value = '';});
+    MeldariTmpl.Users.Add.form.elements['type'].value = 0;
 }
 
 MeldariTmpl.Users.Add.exec = function() {
@@ -39,11 +39,14 @@ MeldariTmpl.Users.Add.exec = function() {
                   return Promise.reject(response);
               }
           })
-    .then(user => {
-              console.log(user);
+    .then(json => {
               MeldariTmpl.Users.Add.resetForm();
+              MeldariTmpl.Users.Add.modal.hide();
+              MeldariTmpl.Users.addTableRow(json.data, true);
+              MeldariTmpl.createSuccess(json.message);
           })
     .catch(error => {
+               console.error(error);
                if (error instanceof Response) {
                    error.json().then(json => {
                                          if (json.error) {

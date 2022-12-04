@@ -82,6 +82,30 @@
             {% endwith %}
             {% endwith %}
         </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "addUserTimezone" as selectId %}
+            {% with "timezone" as selectName %}
+            {% with _("Timezone") as selectLabel %}
+            {% with timezones as selectOptions %}
+            {% include "parts/selectWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "addUserLanguage" as selectId %}
+            {% with "language" as selectName %}
+            {% with _("Language") as selectLabel %}
+            {% with locales as selectOptions %}
+            {% include "parts/selectWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
     </div>
 </form>
 {% endblock %}
