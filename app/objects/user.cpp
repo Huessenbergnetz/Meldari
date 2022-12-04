@@ -25,6 +25,8 @@
 #include <QMetaEnum>
 #include <QLocale>
 
+#include <limits>
+
 #define USER_STASH_KEY "user"
 #define MEMC_USERS_GROUP_KEY "users"
 #define MEMC_USERS_STORAGE_DURATION 7200
@@ -597,7 +599,14 @@ QStringList User::typeValues(User::Type below)
 User::dbid_t User::stringToDbId(const QString &str, bool *ok)
 {
     Q_ASSERT(ok);
-    return str.toUInt(ok);
+
+    const qulonglong _id = str.toULongLong(ok);
+
+    if (_id > static_cast<qulonglong>(std::numeric_limits<User::dbid_t>::max())) {
+        *ok = false;
+    }
+
+    return static_cast<User::dbid_t>(_id);
 }
 
 QDebug operator<<(QDebug dbg, const User &user)
