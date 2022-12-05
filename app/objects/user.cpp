@@ -428,6 +428,8 @@ bool User::remove(Cutelyst::Context *c, Error &e) const
         return false;
     }
 
+    qCInfo(MEL_CORE) << User::fromStash(c) << "removed" << *this;
+
     return true;
 }
 

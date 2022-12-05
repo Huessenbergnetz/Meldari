@@ -17,10 +17,10 @@
 </div>
 <form id="removeUserForm" action="/cc/users/remove" method="POST">
     {% c_csrf_token %}
-    <input id="removeUserFormUsername" type="text" name="username" class="form-control" aria-describedby="removeUserFormDesc" required>
+    <input id="removeUserFormUsername" type="text" name="username" class="form-control" aria-describedby="removeUserFormDesc" placeholder="{{ _("Username") }}" required>
 </form>
 {% endblock %}
 
 {% block footer %}
-<button id="addUserFormSubmit" type="submit" form="removeUserForm" class="btn btn-danger text-capitalize"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span><i class="bi bi-person-plus"></i> {{ _("remove user") }}</button>
+<button id="removeUserFormSubmit" type="submit" form="removeUserForm" class="btn btn-danger text-capitalize"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span><i class="bi bi-person-plus"></i> {{ _("remove user") }}</button>
 {% endblock %}

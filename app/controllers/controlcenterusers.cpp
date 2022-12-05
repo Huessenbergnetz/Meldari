@@ -166,6 +166,8 @@ void ControlCenterUsers::remove(Context *c, const QString &id)
         return;
     }
 
+    c->setStash(QStringLiteral("_username"), user.username());
+
     static Validator v({
                            new ValidatorIn(QStringLiteral("username"), QStringLiteral("_username"))
                        });
