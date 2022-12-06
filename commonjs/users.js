@@ -43,3 +43,20 @@ Meldari.Users.list = async (options = {}) => {
         return Promise.reject(res);
     }
 };
+
+Meldari.Users.remove = async (userId, formData) => {
+    const hdrs = Meldari.newXhrHeaders();
+
+    const res = await fetch('/cc/users/remove/' + userId, {
+        method: 'POST',
+        headers: hdrs,
+        body: formData
+    });
+
+    if (res.ok) {
+        const json = await res.json();
+        return Promise.resolve(json);
+    } else {
+        return Promise.reject(res);
+    }
+};
