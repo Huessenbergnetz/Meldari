@@ -18,17 +18,7 @@ MeldariTmpl.Users.Remove.button = null;
 MeldariTmpl.Users.Remove.load = function(userId) {
     const hdrs = MeldariTmpl.newXhrHeaders();
 
-    fetch('/cc/users/get/' + userId, {
-              method: 'GET',
-              headers: hdrs
-          })
-    .then(response => {
-              if (response.ok) {
-                  return response.json();
-              } else {
-                  return Promise.reject(response);
-              }
-          })
+    Meldari.Users.get(userId)
     .then(user => {
               document.getElementById('removeUserModalUsername').textContent = user.username;
               document.getElementById('removeUserModalType').textContent = MeldariTmpl.Users.typeTranslations[user.type + ''];
