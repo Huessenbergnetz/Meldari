@@ -1,0 +1,20 @@
+/*!
+ * \defgroup commonjs CommonJS
+ * \brief Common JS for Meldari frontend.
+ */
+
+/*!
+ * \ingroup commonjs
+ * \brief Main JS namespace
+ *
+ * The Meldari namespace contains general functions used by other Meldari core JS methods.
+ */
+namespace Meldari {
+
+/*!
+ * \brief Create required headers for XHR requests
+ * \return A Header object containing required header values
+ */
+Headers newXhrHeaders();
+
+}

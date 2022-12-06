@@ -1,0 +1,17 @@
+namespace Meldari {
+
+/*!
+ * \brief JS namespace to fetch and manipulate user data.
+ */
+namespace Users {
+
+/*!
+ * \brief Fetches data for a user identified by \a userId from the application.
+ * \param userId The database id of the user to get. Should be convertable into an integer.
+ * \return A Promise that contains JSON on success or an object of type Error or Response on failure.
+ */
+Promise get(mixed userId);
+
+}
+
+}

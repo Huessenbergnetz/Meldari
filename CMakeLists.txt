@@ -34,6 +34,9 @@ set(MELDARI_TEMPLATESDIR ${MELDARI_APPDIR}/templates CACHE PATH "Directory to in
 set(MELDARI_TRANSLATIONSDIR ${MELDARI_APPDIR}/translations CACHE PATH "Directory to install Meldari translation files into")
 set(MELDARI_COMMONJSDIR ${MELDARI_APPDIR}/commonjs CACHE PATH "Directory to install common JS files into")
 
+option(BUILD_DOCS "Add the make docs target to build the documentation. Requires doxygen and dot" OFF)
+option(BUILD_DOCS_QUIET "Tell doxygen to be quiet while building the documentation." OFF)
+
 option(BUILD_TESTS "Build the tests" OFF)
 if (BUILD_TESTS)
     find_package(Qt6 6.2.0 COMPONENTS Test REQUIRED)
@@ -87,3 +90,61 @@ add_subdirectory(templates)
 if (BUILD_TESTS)
     add_subdirectory(tests)
 endif (BUILD_TESTS)
+
+if (BUILD_DOCS)
+    find_package(Doxygen REQUIRED dot)
+
+    if (BUILD_DOCS_QUIET)
+        set(DOXYGEN_QUIET "YES")
+        set(DOXYGEN_WARNINGS "NO")
+        set(DOXYGEN_WARN_IF_UNDOCUMENTED "NO")
+        set(DOXYGEN_WARN_IF_DOC_ERROR "NO")
+    else(BUILD_DOCS_QUIET)
+        set(DOXYGEN_QUIET "NO")
+        set(DOXYGEN_WARNINGS "YES")
+        set(DOXYGEN_WARN_IF_UNDOCUMENTED "YES")
+        set(DOXYGEN_WARN_IF_DOC_ERROR "YES")
+    endif(BUILD_DOCS_QUIET)
+
+    set(DOXYGEN_STRIP_FROM_PATH ${CMAKE_SOURCE_DIR})
+    set(DOXYGEN_BUILTIN_STL_SUPPORT "YES")
+    set(DOXYGEN_VERBATIM_HEADERS "NO")
+    set(DOXYGEN_ALWAYS_DETAILED_SEC "YES")
+    set(DOXYGEN_HIDE_UNDOC_MEMBERS "YES")
+    set(DOXYGEN_HIDE_UNDOC_CLASSES "YES")
+#    set(DOXYGEN_LAYOUT_FILE ${CMAKE_SOURCE_DIR}/dox/DoxygenLayout.xml)
+    set(DOXYGEN_COLLABORATION_GRAPH "NO")
+#    set(DOXYGEN_EXAMPLE_PATH ${CMAKE_SOURCE_DIR}/dox/examples)
+    set(DOXYGEN_SORT_BRIEF_DOCS "YES")
+    set(DOXYGEN_SORT_MEMBERS_CTORS_1ST "YES")
+    set(DOXYGEN_USE_MDFILE_AS_MAINPAGE ${CMAKE_SOURCE_DIR}/README.md)
+    set(DOXYGEN_SHOW_USED_FILES "NO")
+    set(DOXYGEN_EXCLUDE_PATTERNS "*/node_modules/*")
+    set(DOXYGEN_FILE_PATTERNS *.cpp *.h *.dox *.md)
+#    set(DOXYGEN_EXTENSION_MAPPING js=C++)
+
+    set(DOXYGEN_HTML_TIMESTAMP "YES")
+#    set(DOXYGEN_TAGFILES ${ONLINETAGS})
+    set(DOXYGEN_HTML_OUTPUT "webdocs")
+    doxygen_add_docs(webdocs
+        ${CMAKE_CURRENT_SOURCE_DIR}/app
+        ${CMAKE_CURRENT_SOURCE_DIR}/common
+        ${CMAKE_CURRENT_SOURCE_DIR}/commonjs
+        ${CMAKE_CURRENT_SOURCE_DIR}/ctl
+        COMMENT "Generate HTML documentation for online usage"
+    )
+    message(STATUS "Adding build target webdocs")
+
+    set(DOXYGEN_HTML_TIMESTAMP "NO")
+#    set(DOXYGEN_TAGFILES ${LOCALHTMLTAGS})
+    set(DOXYGEN_HTML_OUTPUT "htmldocs")
+    doxygen_add_docs(htmldocs
+        ${CMAKE_CURRENT_SOURCE_DIR}/app
+        ${CMAKE_CURRENT_SOURCE_DIR}/common
+        ${CMAKE_CURRENT_SOURCE_DIR}/commonjs
+        ${CMAKE_CURRENT_SOURCE_DIR}/ctl
+        COMMENT "Generate HTML documentation for local usage"
+    )
+    message(STATUS "Adding build target htmldocs")
+
+endif (BUILD_DOCS)
