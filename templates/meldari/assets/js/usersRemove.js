@@ -16,8 +16,6 @@ MeldariTmpl.Users.Remove.form = null;
 MeldariTmpl.Users.Remove.button = null;
 
 MeldariTmpl.Users.Remove.load = function(userId) {
-    const hdrs = MeldariTmpl.newXhrHeaders();
-
     Meldari.Users.get(userId)
     .then(user => {
               document.getElementById('removeUserModalUsername').textContent = user.username;
@@ -50,7 +48,6 @@ MeldariTmpl.Users.Remove.load = function(userId) {
 MeldariTmpl.Users.Remove.exec = function() {
     MeldariTmpl.switchButton(MeldariTmpl.Users.Remove.button);
 
-    const hdrs = MeldariTmpl.newXhrHeaders();
     const userId = document.getElementById('removeUserModalId').textContent;
     const fd = new FormData(MeldariTmpl.Users.Remove.form);
 
