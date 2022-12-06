@@ -28,28 +28,18 @@ MeldariTmpl.Users.Add.exec = function() {
 
     Meldari.Users.add(fd)
     .then(json => {
-              MeldariTmpl.Users.Add.resetForm();
-              MeldariTmpl.Users.Add.modal.hide();
-              MeldariTmpl.Users.addTableRow(json.data, true);
-              MeldariTmpl.createSuccess(json.message);
-          })
+        MeldariTmpl.Users.Add.resetForm();
+        MeldariTmpl.Users.Add.modal.hide();
+        MeldariTmpl.Users.addTableRow(json.data, true);
+        MeldariTmpl.createSuccess(json.message);
+    })
     .catch(error => {
-               console.error(error);
-               if (error instanceof Response) {
-                   error.json().then(json => {
-                                         if (json.error) {
-                                             MeldariTmpl.createError(json.error)
-                                         } else if (json.fielderrors) {
-                                             MeldariTmpl.setFormFieldErrors(MeldariTmpl.Users.Add.form, json.fielderrors);
-                                         }
-                                     });
-               } else {
-                   MeldariTmpl.createErrorFull(error.name, error.message);
-               }
-           })
+        console.error(error);
+        MeldariTmpl.handleError(error, MeldariTmpl.Users.Add.form);
+    })
     .finally(() => {
-                 MeldariTmpl.switchButton(MeldariTmpl.Users.Add.button);
-             });
+        MeldariTmpl.switchButton(MeldariTmpl.Users.Add.button);
+    });
 }
 
 MeldariTmpl.Users.Add.init = function() {

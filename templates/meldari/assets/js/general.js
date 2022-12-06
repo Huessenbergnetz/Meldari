@@ -151,6 +151,24 @@ MeldariTmpl.createError = function(message) {
     }
 }
 
+MeldariTmpl.handleError = function(error, form = null) {
+    if (error instanceof Response) {
+        error.json().then(json => {
+            if (json.error) {
+                MeldariTmpl.createError(json.error);
+            } else if (json.fielderrors) {
+                if (form) {
+                    MeldariTmpl.setFormFieldErrors(form, json.fielderrors);
+                } else {
+                    console.error("Can not set field errors to a null form!");
+                }
+            }
+        });
+    } else {
+        MeldariTmpl.createErrorFull(error.name, error.message);
+    }
+}
+
 MeldariTmpl.createSuccessFull = function(header, body) {
     MeldariTmpl.createToastFull('check-square', 'success', header, body);
 }
