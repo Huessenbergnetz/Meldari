@@ -143,7 +143,7 @@ void ControlCenterUsers::remove(Context *c, const QString &id)
     if (!c->req()->isPost()) {
         c->res()->setStatus(Response::MethodNotAllowed);
         c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("POST"));
-        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts GET requests."));
+        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts POST requests."));
         c->res()->setJsonObjectBody(e.toJson(c));
         return;
     }
@@ -180,6 +180,31 @@ void ControlCenterUsers::remove(Context *c, const QString &id)
     } else {
         c->res()->setStatus(400);
         c->res()->setJsonObjectBody(QJsonObject({{QStringLiteral("fielderrors"), vr.errorsJsonObject()}}));
+    }
+}
+
+void ControlCenterUsers::edit(Context *c, const QString &id)
+{
+    if (!c->req()->isPost()) {
+        c->res()->setStatus(Response::MethodNotAllowed);
+        c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("POST"));
+        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts POST requests."));
+        c->res()->setJsonObjectBody(e.toJson(c));
+        return;
+    }
+
+    bool ok = false;
+    const User::dbid_t _id = User::stringToDbId(id, &ok);
+    if (!ok) {
+        Error::toStash(c, Response::BadRequest, c->translate("ControlCenterUsers", "Invalid user ID."), true);
+        return;
+    }
+
+    Error error;
+    User user = User::get(c, error, _id);
+    if (error.isError()) {
+        error.toStash(c, true);
+        return;
     }
 }
 
