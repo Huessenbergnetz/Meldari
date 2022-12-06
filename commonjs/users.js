@@ -60,3 +60,20 @@ Meldari.Users.remove = async (userId, formData) => {
         return Promise.reject(res);
     }
 };
+
+Meldari.Users.add = async (formData) => {
+    const hdrs = Meldari.newXhrHeaders();
+
+    const res = await fetch('/cc/users/add', {
+        method: 'POST',
+        headers: hdrs,
+        body: formData
+    });
+
+    if (res.ok) {
+        const json = await res.json();
+        return Promise.resolve(json);
+    } else {
+        return Promise.reject(res);
+    }
+};

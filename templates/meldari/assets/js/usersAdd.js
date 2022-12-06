@@ -25,20 +25,8 @@ MeldariTmpl.Users.Add.exec = function() {
     MeldariTmpl.switchButton(MeldariTmpl.Users.Add.button);
 
     const fd = new FormData(MeldariTmpl.Users.Add.form);
-    const hdrs = MeldariTmpl.newXhrHeaders();
 
-    fetch('/cc/users/add', {
-              method: 'POST',
-              headers: hdrs,
-              body: fd
-          })
-    .then(response => {
-              if (response.ok) {
-                  return response.json();
-              } else {
-                  return Promise.reject(response);
-              }
-          })
+    Meldari.Users.add(fd)
     .then(json => {
               MeldariTmpl.Users.Add.resetForm();
               MeldariTmpl.Users.Add.modal.hide();
