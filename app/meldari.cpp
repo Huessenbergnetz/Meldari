@@ -99,11 +99,11 @@ bool Meldari::init()
     if (MeldariConfig::staticPlugin() == MeldariConfig::StaticSimple) {
         qCDebug(MEL_CORE) << "Registering StaticSimple plugin";
         auto statPlug = new StaticSimple(this);
-        statPlug->setIncludePaths({MeldariConfig::tmplPath(u"static")});
+        statPlug->setIncludePaths({MeldariConfig::tmplPath(u"static"), QStringLiteral(MELDARI_COMMONJSDIR)});
     } else if (MeldariConfig::staticPlugin() == MeldariConfig::StaticCompressed) {
         qCDebug(MEL_CORE) << "Registering StaticCompressed plugin";
         auto statPlug = new StaticCompressed(this);
-        statPlug->setIncludePaths({MeldariConfig::tmplPath(u"static")});
+        statPlug->setIncludePaths({MeldariConfig::tmplPath(u"static"), QStringLiteral(MELDARI_COMMONJSDIR)});
     }
 
     qCDebug(MEL_CORE) << "Registering Session plugin";
