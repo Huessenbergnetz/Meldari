@@ -7,4 +7,5 @@ add_custom_target(commonjs
         webpack.mix.js
         general.js
         users.js
+        usersettings.js
 )

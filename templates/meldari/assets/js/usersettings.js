@@ -15,20 +15,8 @@ MeldariTmpl.UserSettings.exec = function() {
     MeldariTmpl.switchButton(MeldariTmpl.UserSettings.button);
 
     const fd = new FormData(MeldariTmpl.UserSettings.form);
-    const hdrs = MeldariTmpl.newXhrHeaders();
 
-    fetch('/cc/usersettings/update', {
-              method: 'POST',
-              headers: hdrs,
-              body: fd
-          })
-    .then(response => {
-              if (response.ok) {
-                  return response.json();
-              } else {
-                  return Promise.reject(response);
-              }
-          })
+    Meldari.Usersettings.update(fd)
     .then(json => {
               MeldariTmpl.setLang(json.data.settings.language);
 
@@ -60,18 +48,9 @@ MeldariTmpl.UserSettings.exec = function() {
               MeldariTmpl.createSuccess(json.message);
           })
     .catch(error => {
-               if (error instanceof Response) {
-                   error.json().then(json => {
-                                         if (json.error) {
-                                             MeldariTmpl.createError(json.error)
-                                         } else if (json.fielderrors) {
-                                             MeldariTmpl.setFormFieldErrors(MeldariTmpl.UserSettings.form, json.fielderrors);
-                                         }
-                                     });
-               } else {
-                   MeldariTmpl.createErrorFull(error.name, error.message);
-               }
-           })
+        console.log(error);
+        MeldariTmpl.handleError(error, MeldariTmpl.UserSettings.form);
+    })
     .finally(() => {
                  MeldariTmpl.switchButton(MeldariTmpl.UserSettings.button);
              });

@@ -13,5 +13,6 @@ mix.options({
 
 mix.scripts([
     'general.js',
-    'users.js'
+    'users.js',
+    'usersettings.js'
 ], 'js/meldari.js');
