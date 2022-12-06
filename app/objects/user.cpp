@@ -244,7 +244,7 @@ User User::add(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     q.bindValue(QStringLiteral(":valid_until"), validUntil);
 
     if (Q_UNLIKELY(!q.exec())) {
-        e = Error(q, c->translate("User", "Failed to insert new user “%s“ into database.").arg(username));
+        e = Error(q, c->translate("User", "Failed to insert new user “%1“ into database.").arg(username));
         qCCritical(MEL_CORE) << "Failed to insert new user" << username << "into database:" << q.lastError().text();
         return u;
     }
@@ -261,14 +261,14 @@ User User::add(Cutelyst::Context *c, Error &e, const QVariantHash &values)
         q2.bindValue(QStringLiteral(":value"), values.value(key).toString());
 
         if (Q_UNLIKELY(!q2.exec())) {
-            e = Error(q2, c->translate("User", "Failed to setting key “%1” into the database.").arg(key));
+            e = Error(q2, c->translate("User", "Failed to insert key “%1” into the database.").arg(key));
             qCCritical(MEL_CORE) << "Failed to insert setting key" << key << "for user" << username << "into the database:" << q2.lastError().text();
             return u;
         }
     }
 
     if (Q_UNLIKELY(!dbtrans.commit())) {
-        e = Error(db.lastError(), c->translate("User", "Failed to insert new user “%s“ into database.").arg(username));
+        e = Error(db.lastError(), c->translate("User", "Failed to insert new user “%1“ into database.").arg(username));
         return u;
     }
 
