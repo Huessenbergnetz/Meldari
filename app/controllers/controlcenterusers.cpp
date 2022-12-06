@@ -32,13 +32,9 @@ void ControlCenterUsers::index(Context *c)
 {
     const User u = User::fromStash(c);
 
-    const QJsonDocument typesTranslated(User::typesTranslated(c));
-    const QString typesTranslatedJson = QString::fromUtf8(typesTranslated.toJson(QJsonDocument::Compact));
-    const std::vector<OptionItem> userTypeOptions = User::typeOptions(c, User::Invalid, u.type());
-
     c->stash({
-                 {QStringLiteral("user_types_translated"), typesTranslatedJson},
-                 {QStringLiteral("user_type_options"), QVariant::fromValue<std::vector<OptionItem>>(userTypeOptions)},
+                 {QStringLiteral("user_types_translated"), User::typesTranslated(c)},
+                 {QStringLiteral("user_type_options"), QVariant::fromValue<std::vector<OptionItem>>(User::typeOptions(c, User::Invalid, u.type()))},
                  {QStringLiteral("timezones"), QVariant::fromValue<std::vector<OptionItem>>(Utils::getTimezoneOptionsList(MeldariConfig::defTimezone()))},
                  {QStringLiteral("locales"), QVariant::fromValue<std::vector<OptionItem>>(MeldariConfig::supportedLocaleOptionItems(c, MeldariConfig::defLanguage()))},
                  {QStringLiteral("template"), QStringLiteral("users/index.html")}

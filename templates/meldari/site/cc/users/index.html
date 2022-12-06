@@ -52,4 +52,4 @@
 {% endwith %}
 <!-- end removeUserModal -->
 
-<script id="user-types-translated" type="application/json">{{ user_types_translated|safe }}</script>
+{{ user_types_translated|json_script:"user-types-translated" }}
