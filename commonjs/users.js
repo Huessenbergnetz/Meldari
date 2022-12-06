@@ -8,12 +8,33 @@ var Meldari = Meldari || {};
 Meldari.Users = Meldari.Users || {}
 
 Meldari.Users.get = async (userId) => {
-    const hdrs = MeldariTmpl.newXhrHeaders();
+    const hdrs = Meldari.newXhrHeaders();
 
     const res = await fetch('/cc/users/get/' + userId, {
-                                method: 'GET',
-                                headers: hdrs
-                            });
+        method: 'GET',
+        headers: hdrs
+    });
+
+    if (res.ok) {
+        const json = await res.json();
+        return Promise.resolve(json);
+    } else {
+        return Promise.reject(res);
+    }
+};
+
+Meldari.Users.list = async (options = {}) => {
+    const hdrs = Meldari.newXhrHeaders();
+
+    const docUrl = new URL(document.URL);
+    const url = new URL('/cc/users/list', docUrl.origin);
+    const params = new URLSearchParams(options);
+    url.search = params.toString();
+
+    const res = await fetch(url.href, {
+        method: 'GET',
+        headers: hdrs
+    });
 
     if (res.ok) {
         const json = await res.json();

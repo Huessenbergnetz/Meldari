@@ -4,3 +4,7 @@
  */
 
 var Meldari = Meldari || {};
+
+Meldari.newXhrHeaders = function() {
+    return new Headers({'X-Requested-With': 'XMLHttpRequest'});
+}

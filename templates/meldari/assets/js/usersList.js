@@ -14,17 +14,7 @@ MeldariTmpl.Users.List.table = null;
 MeldariTmpl.Users.List.exec = function() {
     const hdrs = MeldariTmpl.newXhrHeaders();
 
-    fetch('/cc/users/list?details=full', {
-        method: 'GET',
-        headers: hdrs
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return Promise.reject(response);
-        }
-    })
+    Meldari.Users.list({details:"full"})
     .then(users => {
         const template = document.getElementById('user-row-template');
         const tbody = MeldariTmpl.Users.List.table.getElementsByTagName('tbody')[0];
