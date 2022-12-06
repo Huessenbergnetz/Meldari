@@ -12,8 +12,6 @@ MeldariTmpl.Users.List = MeldariTmpl.Users.List || {}
 MeldariTmpl.Users.List.table = null;
 
 MeldariTmpl.Users.List.exec = function() {
-    const hdrs = MeldariTmpl.newXhrHeaders();
-
     Meldari.Users.list({details:"full"})
     .then(users => {
         const template = document.getElementById('user-row-template');
