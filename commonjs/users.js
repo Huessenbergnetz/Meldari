@@ -16,8 +16,7 @@ Meldari.Users.get = async (userId) => {
     });
 
     if (res.ok) {
-        const json = await res.json();
-        return Promise.resolve(json);
+        return res.json();
     } else {
         return Promise.reject(res);
     }
@@ -37,8 +36,7 @@ Meldari.Users.list = async (options = {}) => {
     });
 
     if (res.ok) {
-        const json = await res.json();
-        return Promise.resolve(json);
+        return res.json();
     } else {
         return Promise.reject(res);
     }
@@ -54,8 +52,7 @@ Meldari.Users.remove = async (userId, formData) => {
     });
 
     if (res.ok) {
-        const json = await res.json();
-        return Promise.resolve(json);
+        return res.json();
     } else {
         return Promise.reject(res);
     }
@@ -71,8 +68,7 @@ Meldari.Users.add = async (formData) => {
     });
 
     if (res.ok) {
-        const json = await res.json();
-        return Promise.resolve(json);
+        return res.json();
     } else {
         return Promise.reject(res);
     }

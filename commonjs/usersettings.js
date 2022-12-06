@@ -17,8 +17,7 @@ Meldari.Usersettings.update = async (formData) => {
     });
 
     if (res.ok) {
-        const json = await res.json();
-        return Promise.resolve(json);
+        return res.json();
     } else {
         return Promise.reject(res);
     }
