@@ -9,6 +9,7 @@
 #include "objects/simpleuser.h"
 #include "utils.h"
 #include "meldariconfig.h"
+#include "meldariutils.h"
 
 #include <Cutelyst/Plugins/Utils/Validator>
 #include <Cutelyst/Plugins/Utils/ValidatorResult>
@@ -30,6 +31,10 @@ ControlCenterUsers::ControlCenterUsers(QObject *parent) : Controller{parent}
 
 void ControlCenterUsers::index(Context *c)
 {
+    if (!MeldariUtils::checkAllowedMethod(c, u"GET")) {
+        return;
+    }
+
     const User u = User::fromStash(c);
 
     c->stash({
@@ -43,11 +48,7 @@ void ControlCenterUsers::index(Context *c)
 
 void ControlCenterUsers::list(Context *c)
 {
-    if (!c->req()->isGet()) {
-        c->res()->setStatus(Response::MethodNotAllowed);
-        c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("GET"));
-        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts GET requests."));
-        c->res()->setJsonObjectBody(e.toJson(c));
+    if (!MeldariUtils::checkAllowedMethod(c, u"GET")) {
         return;
     }
 
@@ -67,11 +68,7 @@ void ControlCenterUsers::list(Context *c)
 
 void ControlCenterUsers::add(Context *c)
 {
-    if (!c->req()->isPost()) {
-        c->res()->setStatus(Response::MethodNotAllowed);
-        c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("POST"));
-        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts POST requests."));
-        c->res()->setJsonObjectBody(e.toJson(c));
+    if (!MeldariUtils::checkAllowedMethod(c, u"POST")) {
         return;
     }
 
@@ -113,11 +110,7 @@ void ControlCenterUsers::add(Context *c)
 
 void ControlCenterUsers::get(Context *c, const QString &id)
 {
-    if (!c->req()->isGet()) {
-        c->res()->setStatus(Response::MethodNotAllowed);
-        c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("GET"));
-        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts GET requests."));
-        c->res()->setJsonObjectBody(e.toJson(c));
+    if (!MeldariUtils::checkAllowedMethod(c, u"GET")) {
         return;
     }
 
@@ -139,11 +132,7 @@ void ControlCenterUsers::get(Context *c, const QString &id)
 
 void ControlCenterUsers::remove(Context *c, const QString &id)
 {
-    if (!c->req()->isPost()) {
-        c->res()->setStatus(Response::MethodNotAllowed);
-        c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("POST"));
-        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts POST requests."));
-        c->res()->setJsonObjectBody(e.toJson(c));
+    if (!MeldariUtils::checkAllowedMethod(c, u"POST")) {
         return;
     }
 
@@ -183,11 +172,7 @@ void ControlCenterUsers::remove(Context *c, const QString &id)
 
 void ControlCenterUsers::edit(Context *c, const QString &id)
 {
-    if (!c->req()->isPost()) {
-        c->res()->setStatus(Response::MethodNotAllowed);
-        c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("POST"));
-        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This route only accepts POST requests."));
-        c->res()->setJsonObjectBody(e.toJson(c));
+    if (!MeldariUtils::checkAllowedMethod(c, u"POST")) {
         return;
     }
 
