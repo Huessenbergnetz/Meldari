@@ -54,18 +54,6 @@ MeldariTmpl.Users.Remove.exec = function() {
     const userId = document.getElementById('removeUserModalId').textContent;
     const fd = new FormData(MeldariTmpl.Users.Remove.form);
 
-    // fetch('/cc/users/remove/' + userId, {
-    //           method: 'POST',
-    //           headers: hdrs,
-    //           body: fd
-    //       })
-    // .then(response => {
-    //           if (response.ok) {
-    //               return response.json();
-    //           } else {
-    //               return Promise.reject(response);
-    //           }
-    //       })
     Meldari.Users.remove(userId, fd)
     .then(json => {
               MeldariTmpl.Users.Remove.modal.hide();
