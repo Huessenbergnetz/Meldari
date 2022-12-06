@@ -55,4 +55,3 @@ MeldariTmpl.Users.init = function() {
 }
 
 MeldariTmpl.Users.init();
-//data-bs-toggle="modal" data-bs-target="#addUserModal"
