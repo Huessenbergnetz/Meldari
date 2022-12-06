@@ -71,7 +71,7 @@ public:
 
     static QStringList typeValues(Type below);
 
-    static dbid_t stringToDbId(const QString &str, bool *ok);
+    static dbid_t stringToDbId(const QString &str, bool *ok, Cutelyst::Context *c, bool detach = false);
 
 private:
     friend QDataStream &operator<<(QDataStream &stream, const User &user);

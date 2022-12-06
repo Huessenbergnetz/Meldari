@@ -122,9 +122,8 @@ void ControlCenterUsers::get(Context *c, const QString &id)
     }
 
     bool ok = false;
-    const User::dbid_t _id = User::stringToDbId(id, &ok);
+    const User::dbid_t _id = User::stringToDbId(id, &ok, c, true);
     if (!ok) {
-        Error::toStash(c, Response::BadRequest, c->translate("ControlCenterUsers", "Invalid user ID."), true);
         return;
     }
 
@@ -149,9 +148,8 @@ void ControlCenterUsers::remove(Context *c, const QString &id)
     }
 
     bool ok = false;
-    const User::dbid_t _id = User::stringToDbId(id, &ok);
+    const User::dbid_t _id = User::stringToDbId(id, &ok, c, true);
     if (!ok) {
-        Error::toStash(c, Response::BadRequest, c->translate("ControlCenterUsers", "Invalid user ID."), true);
         return;
     }
 
@@ -194,9 +192,8 @@ void ControlCenterUsers::edit(Context *c, const QString &id)
     }
 
     bool ok = false;
-    const User::dbid_t _id = User::stringToDbId(id, &ok);
+    const User::dbid_t _id = User::stringToDbId(id, &ok, c, true);
     if (!ok) {
-        Error::toStash(c, Response::BadRequest, c->translate("ControlCenterUsers", "Invalid user ID."), true);
         return;
     }
 

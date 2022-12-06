@@ -620,14 +620,21 @@ QStringList User::typeValues(User::Type below)
     return list;
 }
 
-User::dbid_t User::stringToDbId(const QString &str, bool *ok)
+User::dbid_t User::stringToDbId(const QString &str, bool *ok, Cutelyst::Context *c, bool detach)
 {
     Q_ASSERT(ok);
 
     const qulonglong _id = str.toULongLong(ok);
 
-    if (_id > static_cast<qulonglong>(std::numeric_limits<User::dbid_t>::max())) {
-        *ok = false;
+    if (*ok) {
+        if (_id > static_cast<qulonglong>(std::numeric_limits<User::dbid_t>::max())) {
+            *ok = false;
+            Error::toStash(c, Response::BadRequest, c->translate("User", "Invalid user ID."), detach);
+            return 0;
+        }
+    } else {
+        Error::toStash(c, Response::BadRequest, c->translate("User", "Invalid user ID."), detach);
+        return 0;
     }
 
     return static_cast<User::dbid_t>(_id);
