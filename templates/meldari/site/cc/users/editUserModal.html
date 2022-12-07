@@ -1,0 +1,108 @@
+{% extends "parts/modal.html" %}
+{% block label %}{% i18n "Edit user" %}{% endblock %}
+
+{% block content %}
+<form id="editUserForm" action="/cc/users/edit" method="POST">
+    {% c_csrf_token %}
+    <input type="hidden" name="userId">
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "editUserUsername" as inputId %}
+            {% with "username" as inputName %}
+            {% with _("Username") as inputLabel %}
+            {% include "parts/roInputWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "editUserEmail" as inputId %}
+            {% with "email" as inputName %}
+            {% with _("Email") as inputLabel %}
+            {% with "off" as inputAutocomplete %}
+            {% with 1 as inputRequired %}
+            {% include "parts/emailInputWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "editUserPassword" as inputId %}
+            {% with "password" as inputName %}
+            {% with _("Password") as inputLabel %}
+            {% with "off" as inputAutocomplete %}
+            {% include "parts/passwordInputWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "editUserPasswordConfirmation" as inputId %}
+            {% with "password_confirmation" as inputName %}
+            {% with _("Password confirmation") as inputLabel %}
+            {% with "off" as inputAutocomplete %}
+            {% include "parts/passwordInputWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "editUserType" as selectId %}
+            {% with "type" as selectName %}
+            {% with _("Type") as selectLabel %}
+            {% with user_type_options as selectOptions %}
+            {% include "parts/selectWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "editUserValidUntil" as inputId %}
+            {% with "validUntil" as inputName %}
+            {% with _("Valid until") as inputLabel %}
+            {% include "parts/validUntilInputWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "editUserTimezone" as selectId %}
+            {% with "timezone" as selectName %}
+            {% with _("Timezone") as selectLabel %}
+            {% with timezones as selectOptions %}
+            {% include "parts/selectWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12 col-lg-6 mb-3">
+            {% with "editUserLanguage" as selectId %}
+            {% with "language" as selectName %}
+            {% with _("Language") as selectLabel %}
+            {% with locales as selectOptions %}
+            {% include "parts/selectWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block footer %}
+<button id="editUserFormSubmit" type="submit" form="editUserForm" class="btn btn-primary text-capitalize"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span><i class="bi bi-person-check"></i> {{ _("update user") }}</button>
+{% endblock %}

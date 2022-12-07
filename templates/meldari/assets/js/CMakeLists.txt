@@ -10,5 +10,6 @@ target_sources(meldaritemplate
         usersList.js
         usersAdd.js
         usersRemove.js
+        usersEdit.js
         usersettings.js
 )

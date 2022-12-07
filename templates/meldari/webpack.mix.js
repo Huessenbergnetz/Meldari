@@ -23,6 +23,7 @@ mix.scripts([
     'assets/js/usersList.js',
     'assets/js/usersAdd.js',
     'assets/js/usersRemove.js',
+    'assets/js/usersEdit.js',
     'assets/js/usersettings.js'
 ], 'static/js/scripts.js');
 
