@@ -73,3 +73,19 @@ Meldari.Users.add = async (formData) => {
         return Promise.reject(res);
     }
 };
+
+Meldari.Users.edit = async (userId, formData) => {
+    const hdrs = Meldari.newXhrHeaders();
+
+    const res = await fetch('/cc/users/edit/' + userId, {
+        method: 'POST',
+        headers: hdrs,
+        body: formData
+    });
+
+    if (res.ok) {
+        return res.json();
+    } else {
+        return Promise.reject(res);
+    }
+};
