@@ -8,9 +8,24 @@ namespace Users {
 /*!
  * \brief Fetches data for a user identified by \a userId from the application.
  * \param userId The database id of the user to get. Should be convertable into an integer.
- * \return A Promise that contains JSON on success or an object of type Error or Response on failure.
+ * \return A Promise that resolves to a JSON object on success or an object of type Error or Response on failure.
  */
 Promise get(mixed userId);
+
+/*!
+ * \brief Fetches list of users from the application.
+ * \param options An optional object providing list options.
+ * \return A Promise that resolves to a JSON array on success or an object of type Error or Response on failure.
+ */
+Promise list(object options = {});
+
+/*!
+ * \brief Removes a user identified by \a userId from the application.
+ * \param userId The database id of the user to remove. Should be convertable into an integer.
+ * \param formData Has to contain the username of the user to delete in the username field.
+ * \return A Promise that resolves to a JSON object on success or an object of type Error or Response on failure.
+ */
+Promise remove(mixed userId, FormData formData);
 
 }
 
