@@ -20,6 +20,7 @@ target_sources(meldari
 add_subdirectory(controllers)
 add_subdirectory(objects)
 add_subdirectory(cutelee)
+add_subdirectory(validators)
 
 target_link_libraries(meldari
     PRIVATE
