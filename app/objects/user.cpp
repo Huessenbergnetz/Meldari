@@ -290,26 +290,9 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
 
     bool pwChanged = false;
 
-    const QString oldPassword   = values.value(QStringLiteral("password")).toString();
     const QString newPassword   = values.value(QStringLiteral("newpassword")).toString();
     const QString language      = values.value(QStringLiteral("language")).toString();
     const QString timezone      = values.value(QStringLiteral("timezone")).toString();
-
-    if (!newPassword.isEmpty()) {
-        if (oldPassword != newPassword) {
-            pwChanged = true;
-            if (oldPassword.isEmpty()) {
-                e = Error(Cutelyst::Response::Forbidden, c->translate("User", "Can not update password: empty current password."));
-                return false;
-            }
-
-            Cutelyst::AuthenticationUser authUser = Cutelyst::Authentication::user(c);
-            if (!CredentialBotan::validatePassword(oldPassword.toUtf8(), authUser.value(QStringLiteral("password")).toString().toUtf8())) {
-                e = Error(Cutelyst::Response::Forbidden, c->translate("User", "Can not update password: invalid current password."));
-                return false;
-            }
-        }
-    }
 
     const auto now = QDateTime::currentDateTimeUtc();
 
@@ -319,6 +302,7 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     QSqlQuery q(db);
 
     if (!newPassword.isEmpty()) {
+        pwChanged = true;
         const QString newPwEnc = CredentialBotan::createArgon2Password(newPassword);
         if (newPwEnc.isEmpty()) {
             e = Error(Cutelyst::Response::InternalServerError, c->translate("User", "Failed to encrypt new password."));

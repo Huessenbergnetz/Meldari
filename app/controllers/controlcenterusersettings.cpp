@@ -8,6 +8,7 @@
 #include "objects/error.h"
 #include "utils.h"
 #include "meldariconfig.h"
+#include "validators/melvalidatorpwcheck.h"
 
 #include <Cutelyst/Plugins/Session/Session>
 #include <Cutelyst/Plugins/Utils/Validator>
@@ -44,11 +45,15 @@ void ControlCenterUsersettings::update(Context *c)
         return;
     }
 
+    User u = User::fromStash(c);
+    c->setStash(QStringLiteral("_userId"), u.id());
+
     static Validator v({
                            new ValidatorRequired(QStringLiteral("timezone")),
                            new ValidatorIn(QStringLiteral("timezone"), Utils::getTimezoneList()),
                            new ValidatorRequired(QStringLiteral("language")),
                            new ValidatorIn(QStringLiteral("language"), MeldariConfig::supportedLocaleNames()),
+                           new MelValidatorPwCheck(QStringLiteral("password"), QStringLiteral("_userId")),
                            new ValidatorConfirmed(QStringLiteral("newpassword"))
                        });
 
@@ -56,7 +61,6 @@ void ControlCenterUsersettings::update(Context *c)
 
     if (vr) {
         Error e;
-        User u = User::fromStash(c);
         QVariantHash values = vr.values();
         values.insert(QStringLiteral("password"), c->req()->bodyParam(QStringLiteral("password")));
         if (u.update(c, e, values)) {
