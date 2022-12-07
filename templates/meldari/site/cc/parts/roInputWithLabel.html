@@ -1,5 +1,5 @@
 <div{% if inputDivClass %} class="{{ inputDivClass }}"{% endif %}>
     <label for="{{ inputId }}" class="form-label">{{ inputLabel }}</label>
-    <input type="text" readonly class="form-control" id="{{ inputId }}" value="{{ inputValue }}"{% if inputDesc %} aria-describedby="{{ inputId }}Help"{% endif %}>
+    <input type="text" readonly class="form-control" id="{{ inputId }}" name="{{ inputName|default:inputId }}" value="{{ inputValue }}"{% if inputDesc %} aria-describedby="{{ inputId }}Help"{% endif %}>
     {% if inputDesc %}<div id="{{ inputId }}Help" class="form-text">{{ inputDesc }}</div>{% endif %}
 </div>
