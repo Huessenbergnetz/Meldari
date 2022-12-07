@@ -13,7 +13,7 @@ MeldariTmpl.UserSettings.button = null;
 
 MeldariTmpl.UserSettings.exec = function() {
     MeldariTmpl.switchButton(MeldariTmpl.UserSettings.button);
-
+    MeldariTmpl.resetFormFieldErrors(MeldariTmpl.UserSettings.form);
     const fd = new FormData(MeldariTmpl.UserSettings.form);
 
     Meldari.Usersettings.update(fd)
