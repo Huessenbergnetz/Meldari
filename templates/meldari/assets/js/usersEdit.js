@@ -38,7 +38,7 @@ MeldariTmpl.Users.Edit.load = function(userId) {
 MeldariTmpl.Users.Edit.exec = function() {
     const fd = new FormData(MeldariTmpl.Users.Edit.form);
     const userId = fd.get('userId');
-    Meldari.Users.edit(userId, fd).
+    Meldari.Users.edit(userId, fd)
     .then(json => {
         console.log(json);
     })
