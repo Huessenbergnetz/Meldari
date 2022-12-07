@@ -45,7 +45,7 @@ public:
 
     static bool validatePassword(const QByteArray &password, const QByteArray &correctHash);
 
-    static bool validatePassword(const QString &password, const QString &correctHash);
+    inline static bool validatePassword(const QString &password, const QString &correctHash);
 
     static QByteArray createArgon2Password(const QByteArray &password, PasswordType type, size_t parallelization, size_t memory, size_t iterations, size_t saltLength, size_t outputLength);
 
