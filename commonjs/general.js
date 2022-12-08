@@ -26,6 +26,16 @@ Date.prototype.addYears = function(years) {
     return date;
 }
 
+Date.prototype.toInputForm = function() {
+    const y = this.getFullYear();
+    const m = this.getMonth() + 1;
+    const d = this.getDate();
+    const hrs = this.getHours();
+    const min = this.getMinutes();
+    const rv = y + '-' + (m < 10 ? '0' : '') + m + '-' + (d < 10 ? '0' : '') + d + 'T' + (hrs < 10 ? '0' : '') + hrs + ':' + (min < 10 ? '0' : '') + min;
+    return rv;
+}
+
 var Meldari = Meldari || {};
 
 Meldari.newXhrHeaders = function() {
