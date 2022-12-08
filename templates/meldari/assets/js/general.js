@@ -35,6 +35,15 @@ MeldariTmpl.switchButton = function(button) {
     }
 }
 
+MeldariTmpl.togglePageSpinner = function() {
+    const spinner = document.getElementById('mel-page-spinner');
+    if (spinner.classList.contains('d-flex')) {
+        spinner.classList.replace('d-flex', 'd-none');
+    } else {
+        spinner.classList.replace('d-none', 'd-flex');
+    }
+}
+
 MeldariTmpl.setFormFieldErrors = function(form, errors) {
     for (const field in errors) {
         if (errors.hasOwnProperty(field)) {
