@@ -50,6 +50,7 @@ public:
     static std::vector<OptionItem> supportedLocaleOptionItems(Cutelyst::Context *c, const QString &selected);
 
     static QString pwQualitySettingsFile();
+    static int pwQualityThreshold();
     static int pwMinLength();
 
 private:

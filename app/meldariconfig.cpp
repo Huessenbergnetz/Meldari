@@ -46,6 +46,7 @@ struct ConfigValues {
     QString tmplDir = QStringLiteral(MELDARI_TEMPLATESDIR);
     QString siteName = QStringLiteral(MELDARI_CONF_MEL_SITENAME_DEFVAL);
     QString pwQualitySettingsFile;
+    int pwQualityThreshold = 30;
     int pwMinLength = 8;
     MeldariConfig::StaticPlugin staticPlugin = MeldariConfig::StaticSimple;
     bool useMemcached = MELDARI_CONF_MEL_USEMEMCACHED_DEFVAL;
@@ -89,6 +90,14 @@ void MeldariConfig::load(const QVariantMap &meldari, const QVariantMap &email)
 
     cfg->useMemcached = meldari.value(QStringLiteral(MELDARI_CONF_MEL_USEMEMCACHED), MELDARI_CONF_MEL_USEMEMCACHED_DEFVAL).toBool();
     cfg->useMemcachedSession = meldari.value(QStringLiteral(MELDARI_CONF_MEL_USEMEMCACHEDSESSION), MELDARI_CONF_MEL_USEMEMCACHEDSESSION_DEFVAL).toBool();
+
+    const int _pwQualityThreshold = meldari.value(QStringLiteral(MELDARI_CONF_MEL_PWQUALITYTHRESHOLD), MELDARI_CONF_MEL_PWQUALITYTHRESHOLD_DEFVAL).toInt();
+    if ((_pwQualityThreshold < 1) || (_pwQualityThreshold > 100)) {
+        cfg->pwQualityThreshold = MELDARI_CONF_MEL_PWQUALITYTHRESHOLD_DEFVAL;
+        qCWarning(MEL_CONF) << "Invalid settings value for" << MELDARI_CONF_MEL_PWQUALITYTHRESHOLD << ", using default value" << MELDARI_CONF_MEL_PWQUALITYTHRESHOLD_DEFVAL;
+    } else {
+        cfg->pwQualityThreshold = _pwQualityThreshold;
+    }
 
     cfg->pwQualitySettingsFile = meldari.value(QStringLiteral(MELDARI_CONF_MEL_PWQUALITYSETTINGSFILE), QStringLiteral(MELDARI_CONF_MEL_PWQUALITYSETTINGSFILE_DEFVAL)).toString();
     {
