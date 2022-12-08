@@ -49,6 +49,9 @@ public:
     static std::vector<OptionItem> supportedLocaleOptionItems(Cutelyst::Context *c, const QLocale &selected = QLocale());
     static std::vector<OptionItem> supportedLocaleOptionItems(Cutelyst::Context *c, const QString &selected);
 
+    static QString pwQualitySettingsFile();
+    static int pwMinLength();
+
 private:
     template< typename T >
     static T getDbOption(const QString &option, const T &defVal);

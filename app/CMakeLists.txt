@@ -43,6 +43,7 @@ target_link_libraries(meldari
         Cutelyst::MemcachedSessionStore
         Cutelyst::CSRFProtection
         Cutelee::Templates
+        PkgConfig::Pwquality
 )
 
 target_compile_features(meldari PRIVATE cxx_std_17)

@@ -22,6 +22,9 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonParseError>
+
+#include <pwquality.h>
+
 #include <algorithm>
 
 #define MEMC_CONFIG_GROUP_KEY "options"
@@ -42,6 +45,8 @@ struct ConfigValues {
     QString tmpl = QStringLiteral(MELDARI_CONF_MEL_TEMPLATE_DEFVAL);
     QString tmplDir = QStringLiteral(MELDARI_TEMPLATESDIR);
     QString siteName = QStringLiteral(MELDARI_CONF_MEL_SITENAME_DEFVAL);
+    QString pwQualitySettingsFile;
+    int pwMinLength = 8;
     MeldariConfig::StaticPlugin staticPlugin = MeldariConfig::StaticSimple;
     bool useMemcached = MELDARI_CONF_MEL_USEMEMCACHED_DEFVAL;
     bool useMemcachedSession = MELDARI_CONF_MEL_USEMEMCACHEDSESSION_DEFVAL;
@@ -85,6 +90,25 @@ void MeldariConfig::load(const QVariantMap &meldari, const QVariantMap &email)
     cfg->useMemcached = meldari.value(QStringLiteral(MELDARI_CONF_MEL_USEMEMCACHED), MELDARI_CONF_MEL_USEMEMCACHED_DEFVAL).toBool();
     cfg->useMemcachedSession = meldari.value(QStringLiteral(MELDARI_CONF_MEL_USEMEMCACHEDSESSION), MELDARI_CONF_MEL_USEMEMCACHEDSESSION_DEFVAL).toBool();
 
+    cfg->pwQualitySettingsFile = meldari.value(QStringLiteral(MELDARI_CONF_MEL_PWQUALITYSETTINGSFILE), QStringLiteral(MELDARI_CONF_MEL_PWQUALITYSETTINGSFILE_DEFVAL)).toString();
+    {
+        pwquality_settings_t *pwq = pwquality_default_settings();
+        if (cfg->pwQualitySettingsFile.isEmpty()) {
+            pwquality_read_config(pwq, nullptr, nullptr);
+        } else {
+            if (pwquality_read_config(pwq, cfg->pwQualitySettingsFile.toUtf8().constData(), nullptr) != 0) {
+                qCWarning(MEL_CONF) << "Can not read libpwquality settings from" << cfg->pwQualitySettingsFile;
+                pwquality_read_config(pwq, nullptr, nullptr);
+            }
+        }
+        int minLen = 8;
+        if (pwquality_get_int_value(pwq, PWQ_SETTING_MIN_LENGTH, &minLen) != 0) {
+            qCWarning(MEL_CONF) << "Can not get min password length from libpwquality config";
+            minLen = 8;
+        }
+        cfg->pwMinLength = minLen;
+        pwquality_free_settings(pwq);
+    }
 
     // Start load template meta data
     qCDebug(MEL_CONF) << "Reading template meta data";
@@ -229,6 +253,16 @@ std::vector<OptionItem> MeldariConfig::supportedLocaleOptionItems(Cutelyst::Cont
 std::vector<OptionItem> MeldariConfig::supportedLocaleOptionItems(Cutelyst::Context *c, const QString &selected)
 {
     return supportedLocaleOptionItems(c, QLocale(selected));
+}
+
+QString MeldariConfig::pwQualitySettingsFile()
+{
+    return cfg->pwQualitySettingsFile;
+}
+
+int MeldariConfig::pwMinLength()
+{
+    return cfg->pwMinLength;
 }
 
 template< typename T >

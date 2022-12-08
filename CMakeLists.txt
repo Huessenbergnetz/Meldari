@@ -19,6 +19,7 @@ find_package(Cutelyst3Qt6 REQUIRED)
 find_package(Cutelee6Qt6 REQUIRED)
 find_package(FirfuoridaQt6 REQUIRED)
 find_package(PkgConfig REQUIRED)
+pkg_search_module(Pwquality REQUIRED IMPORTED_TARGET pwquality>=1.2.2)
 
 # Auto generate moc files
 set(CMAKE_AUTOMOC ON)
@@ -68,6 +69,8 @@ set(MELDARI_CONF_MEL_USEMEMCACHEDSESSION "usememcachedsession")
 set(MELDARI_CONF_MEL_USEMEMCACHEDSESSION_DEFVAL false)
 set(MELDARI_CONF_MEL_STATICPLUGIN "staticplugin")
 set(MELDARI_CONF_MEL_STATICPLUGIN_DEFVAL "simple")
+set(MELDARI_CONF_MEL_PWQUALITYSETTINGSFILE "pwqualitysettingsfile")
+set(MELDARI_CONF_MEL_PWQUALITYSETTINGSFILE_DEFVAL "")
 
 set(MELDARI_CONF_MAIL "email")
 SET(MELDARI_CONF_MAIL_HOST "host")
