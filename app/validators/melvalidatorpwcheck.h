@@ -10,12 +10,14 @@
 
 using namespace Cutelyst;
 
+class UserAuthStoreSql;
+
 class MelValidatorPwCheck final : public ValidatorRule
 {
 public:
-    explicit MelValidatorPwCheck(const QString &field, const QString &usernameOrId, const Cutelyst::ValidatorMessages &messages = Cutelyst::ValidatorMessages());
+    explicit MelValidatorPwCheck(const QString &field, const QString &username, const Cutelyst::ValidatorMessages &messages = Cutelyst::ValidatorMessages());
 
-    ~MelValidatorPwCheck() final = default;
+    ~MelValidatorPwCheck() final;
 
 protected:
     ValidatorReturnType validate(Context *c, const ParamsMultiMap &params) const final;
@@ -25,13 +27,8 @@ protected:
     QString genericValidationDataError(Context *c, const QVariant &errorData) const final;
 
 private:
-    QString m_userNameOrId;
-    enum ValidationDataErrors {
-        UsernameOrIdNotFound,
-        IdOutOfRange,
-        SqlFailed,
-        UserNotFound
-    };
+    UserAuthStoreSql *m_userStore = nullptr;
+    QString m_username;
 };
 
 #endif // MELVALIDATORPWCHECK_H
