@@ -130,6 +130,7 @@ bool Meldari::init()
     qCDebug(MEL_CORE) << "Registering CSRFProtection plugin";
     auto csrf = new CSRFProtection(this);
     csrf->setDefaultDetachTo(QStringLiteral("/csrfDenied"));
+    csrf->setCookieName(QStringLiteral("Meldari_csrftoken"));
 
     qCDebug(MEL_CORE) << "Registering StatusMessage plugin";
     new StatusMessage(this);
