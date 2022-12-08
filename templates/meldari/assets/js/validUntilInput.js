@@ -28,7 +28,7 @@ MeldariTmpl.validUntilInput.init = function() {
                 } else if (val.endsWith('y')) {
                     date = now.addYears(count);
                 }
-                input.value = MeldariTmpl.createInputDate(date);
+                input.value = date.toInputForm();
             });
         }
     }
