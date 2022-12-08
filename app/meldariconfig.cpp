@@ -269,6 +269,11 @@ QString MeldariConfig::pwQualitySettingsFile()
     return cfg->pwQualitySettingsFile;
 }
 
+int MeldariConfig::pwQualityThreshold()
+{
+    return cfg->pwQualityThreshold;
+}
+
 int MeldariConfig::pwMinLength()
 {
     return cfg->pwMinLength;
