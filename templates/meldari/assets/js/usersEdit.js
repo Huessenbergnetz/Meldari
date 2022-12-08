@@ -44,7 +44,9 @@ MeldariTmpl.Users.Edit.exec = function() {
     const userId = fd.get('userId');
     Meldari.Users.edit(userId, fd)
     .then(json => {
-        console.log(json);
+        MeldariTmpl.Users.updateTableRow(json.data);
+        MeldariTmpl.createSuccess(json.message);
+        MeldariTmpl.Users.Edit.modal.hide();
     })
     .catch(error => {
         console.error(error);

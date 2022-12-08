@@ -45,6 +45,17 @@ MeldariTmpl.Users.addTableRow = function(user, prepend) {
     }
 }
 
+MeldariTmpl.Users.updateTableRow = function(user) {
+    const row = document.getElementById('user-' + user.id);
+    const tds = row.getElementsByTagName('td');
+
+    const emailTd = tds[2];
+    const typeTd = tds[3];
+
+    emailTd.textContent = user.email;
+    typeTd.textContent = MeldariTmpl.Users.typeTranslations[user.type + ''];
+}
+
 MeldariTmpl.Users.init = function() {
     const _table = document.getElementById('usersTable');
     if (_table) {

@@ -32,7 +32,7 @@
 
         <div class="col-12 col-lg-6 mb-3">
             {% with "editUserPassword" as inputId %}
-            {% with "password" as inputName %}
+            {% with "newpassword" as inputName %}
             {% with _("Password") as inputLabel %}
             {% with "off" as inputAutocomplete %}
             {% with password_min_length as inputMinLength %}
@@ -46,7 +46,7 @@
 
         <div class="col-12 col-lg-6 mb-3">
             {% with "editUserPasswordConfirmation" as inputId %}
-            {% with "password_confirmation" as inputName %}
+            {% with "newpassword_confirmation" as inputName %}
             {% with _("Password confirmation") as inputLabel %}
             {% with "off" as inputAutocomplete %}
             {% include "parts/passwordInputWithLabel.html" %}

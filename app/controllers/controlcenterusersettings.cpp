@@ -8,6 +8,7 @@
 #include "objects/error.h"
 #include "utils.h"
 #include "meldariconfig.h"
+#include "meldariutils.h"
 #include "validators/melvalidatorpwcheck.h"
 
 #include <Cutelyst/Plugins/Session/Session>
@@ -40,11 +41,7 @@ void ControlCenterUsersettings::index(Context *c)
 
 void ControlCenterUsersettings::update(Context *c)
 {
-    if (!c->req()->isPost()) {
-        c->res()->setStatus(Response::MethodNotAllowed);
-        c->res()->setHeader(QStringLiteral("Allow"), QStringLiteral("POST"));
-        Error e(Response::MethodNotAllowed, c->translate("ControlCenterUsers", "This path only accepts POST requests."));
-        c->res()->setJsonObjectBody(e.toJson(c));
+    if (!MeldariUtils::checkAllowedMethod(c, u"POST")) {
         return;
     }
 
@@ -65,7 +62,13 @@ void ControlCenterUsersettings::update(Context *c)
 
     if (vr) {
         Error e;
-        const QVariantHash values = vr.values();
+        QVariantHash values = vr.values();
+        // put this values into the hash as they are required
+        // but should not be settable by the user that updates
+        // his own data
+        values.insert(QStringLiteral("email"), u.email());
+        values.insert(QStringLiteral("validUntil"), u.validUntil().toTimeZone(Cutelyst::Session::value(c, QStringLiteral("tz")).value<QTimeZone>()));
+        values.insert(QStringLiteral("type"), static_cast<int>(u.type()));
         if (u.update(c, e, values)) {
             QLocale ln(u.settings().value(QStringLiteral("language")).toString());
             Cutelyst::Session::setValue(c, QStringLiteral("lang"), QVariant::fromValue<QLocale>(ln));

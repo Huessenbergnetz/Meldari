@@ -191,6 +191,37 @@ void ControlCenterUsers::edit(Context *c, const QString &id)
         error.toStash(c, true);
         return;
     }
+
+    c->setStash(QStringLiteral("_userTypeValues"), User::typeValues(User::fromStash(c).type()));
+
+    static Validator v({
+                           new ValidatorRequired(QStringLiteral("email")),
+                           new ValidatorEmail(QStringLiteral("email")),
+                           new ValidatorConfirmed(QStringLiteral("newpassword")),
+                           new ValidatorPwQuality(QStringLiteral("newpassword"), MeldariConfig::pwQualityThreshold(), MeldariConfig::pwQualitySettingsFile(), QStringLiteral("username")),
+                           new ValidatorRequired(QStringLiteral("type")),
+                           new ValidatorIn(QStringLiteral("type"), QStringLiteral("_userTypeValues")),
+                           new ValidatorInteger(QStringLiteral("type"), QMetaType::Int),
+                           new ValidatorDateTime(QStringLiteral("validUntil"), QString(), "yyyy-MM-ddTHH:mm"),
+                           new ValidatorRequired(QStringLiteral("timezone")),
+                           new ValidatorIn(QStringLiteral("timezone"), Utils::getTimezoneList()),
+                           new ValidatorRequired(QStringLiteral("language")),
+                           new ValidatorIn(QStringLiteral("language"), MeldariConfig::supportedLocaleNames())
+                       });
+
+    const ValidatorResult vr = v.validate(c, Validator::BodyParamsOnly);
+
+    if (vr) {
+        Error e;
+        if (user.update(c, e, vr.values())) {
+            Utils::setJsonResponse(c, user.toJson(), c->translate("ControlCenterUsers", "User updated"), c->translate("ControlCenterUsers", "Successfully updated the data for user “%1” (ID: %2).").arg(user.username(), QString::number(user.id())));
+        } else {
+            e.toStash(c, true);
+        }
+    } else {
+        c->res()->setStatus(Response::BadRequest);
+        c->res()->setJsonObjectBody(QJsonObject({{QStringLiteral("fielderrors"), vr.errorsJsonObject()}}));
+    }
 }
 
 bool ControlCenterUsers::Auto(Context *c)

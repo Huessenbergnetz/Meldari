@@ -287,7 +287,15 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
 {
     qCDebug(MEL_CORE) << "Updating data for" << *this;
 
-    const QString newPassword   = values.value(QStringLiteral("newpassword")).toString();
+    const QString   newPassword = values.value(QStringLiteral("newpassword")).toString();
+    const QString   email       = values.value(QStringLiteral("email")).toString();
+          QDateTime validUntil  = values.value(QStringLiteral("validUntil")).toDateTime();
+    const Type      type        = static_cast<Type>(values.value(QStringLiteral("type")).toInt());
+
+    if (validUntil.isValid()) {
+        validUntil.setTimeZone(Cutelyst::Session::value(c, QStringLiteral("tz")).value<QTimeZone>());
+        validUntil = validUntil.toUTC();
+    }
 
     const auto now = QDateTime::currentDateTimeUtc();
 
@@ -304,12 +312,15 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
             return false;
         }
 
-        q = CPreparedSqlQueryThread(QStringLiteral("UPDATE users SET password = :password, updated_at = :updated_at WHERE id = :id"));
+        q = CPreparedSqlQueryThread(QStringLiteral("UPDATE users SET password = :password, updated_at = :updated_at, email = :email, valid_until = :valid_until, type = :type WHERE id = :id"));
         q.bindValue(QStringLiteral(":password"), newPwEnc);
     } else {
-        q = CPreparedSqlQueryThread(QStringLiteral("UPDATE users SET updated_at = :updated_at WHERE id = :id"));
+        q = CPreparedSqlQueryThread(QStringLiteral("UPDATE users SET updated_at = :updated_at, email = :email, valid_until = :valid_until, type = :type WHERE id = :id"));
     }
     q.bindValue(QStringLiteral(":updated_at"), now);
+    q.bindValue(QStringLiteral(":email"), email);
+    q.bindValue(QStringLiteral(":valid_until"), validUntil);
+    q.bindValue(QStringLiteral(":type"), static_cast<int>(type));
     q.bindValue(QStringLiteral(":id"), data->id);
 
     if (Q_UNLIKELY(!q.exec())) {
@@ -344,6 +355,9 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     }
 
     data->updated = now;
+    data->email = email;
+    data->type = type;
+    data->validUntil = validUntil;
 
     if (MeldariConfig::useMemcached()) {
         Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), *this, MEMC_USERS_STORAGE_DURATION);
