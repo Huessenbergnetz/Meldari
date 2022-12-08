@@ -35,7 +35,9 @@
             {% with "password" as inputName %}
             {% with _("Password") as inputLabel %}
             {% with "off" as inputAutocomplete %}
+            {% with password_min_length as inputMinLength %}
             {% include "parts/passwordInputWithLabel.html" %}
+            {% endwith %}
             {% endwith %}
             {% endwith %}
             {% endwith %}

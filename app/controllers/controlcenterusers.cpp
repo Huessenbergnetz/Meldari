@@ -19,6 +19,7 @@
 #include <Cutelyst/Plugins/Utils/validatoremail.h>
 #include <Cutelyst/Plugins/Utils/validatorin.h>
 #include <Cutelyst/Plugins/Utils/validatorinteger.h>
+#include <Cutelyst/Plugins/Utils/validatorpwquality.h>
 
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -38,6 +39,7 @@ void ControlCenterUsers::index(Context *c)
     const User u = User::fromStash(c);
 
     c->stash({
+                 {QStringLiteral("password_min_length"), MeldariConfig::pwMinLength()},
                  {QStringLiteral("user_types_translated"), User::typesTranslated(c)},
                  {QStringLiteral("user_type_options"), QVariant::fromValue<std::vector<OptionItem>>(User::typeOptions(c, User::Invalid, u.type()))},
                  {QStringLiteral("timezones"), QVariant::fromValue<std::vector<OptionItem>>(Utils::getTimezoneOptionsList(MeldariConfig::defTimezone()))},
@@ -82,6 +84,7 @@ void ControlCenterUsers::add(Context *c)
                            new ValidatorEmail(QStringLiteral("email")),
                            new ValidatorRequired(QStringLiteral("password")),
                            new ValidatorConfirmed(QStringLiteral("password")),
+                           new ValidatorPwQuality(QStringLiteral("password"), MeldariConfig::pwQualityThreshold(), MeldariConfig::pwQualitySettingsFile(), QStringLiteral("username")),
                            new ValidatorRequired(QStringLiteral("type")),
                            new ValidatorIn(QStringLiteral("type"), QStringLiteral("_userTypeValues")),
                            new ValidatorInteger(QStringLiteral("type"), QMetaType::Int),

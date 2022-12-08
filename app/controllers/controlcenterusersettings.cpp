@@ -18,6 +18,7 @@
 #include <Cutelyst/Plugins/Utils/validatorin.h>
 #include <Cutelyst/Plugins/Utils/validatorconfirmed.h>
 #include <Cutelyst/Plugins/Utils/validatorrequired.h>
+#include <Cutelyst/Plugins/Utils/validatorpwquality.h>
 
 #include <QTimeZone>
 
@@ -29,6 +30,7 @@ ControlCenterUsersettings::ControlCenterUsersettings(QObject *parent) : Controll
 void ControlCenterUsersettings::index(Context *c)
 {
     c->stash({
+                 {QStringLiteral("password_min_length"), MeldariConfig::pwMinLength()},
                  {QStringLiteral("timezones"), QVariant::fromValue<std::vector<OptionItem>>(Utils::getTimezoneOptionsList(Session::value(c, QStringLiteral("tz")).value<QTimeZone>().id()))},
                  {QStringLiteral("locales"), QVariant::fromValue<std::vector<OptionItem>>(MeldariConfig::supportedLocaleOptionItems(c, c->locale()))},
                  {QStringLiteral("template"), QStringLiteral("usersettings/index.html")},
@@ -55,7 +57,8 @@ void ControlCenterUsersettings::update(Context *c)
                            new ValidatorRequired(QStringLiteral("language")),
                            new ValidatorIn(QStringLiteral("language"), MeldariConfig::supportedLocaleNames()),
                            new MelValidatorPwCheck(QStringLiteral("password"), QStringLiteral("_username")),
-                           new ValidatorConfirmed(QStringLiteral("newpassword"))
+                           new ValidatorConfirmed(QStringLiteral("newpassword")),
+                           new ValidatorPwQuality(QStringLiteral("newpassword"), MeldariConfig::pwQualityThreshold(), MeldariConfig::pwQualitySettingsFile(), QStringLiteral("_username"), QStringLiteral("password")),
                        });
 
     const ValidatorResult vr = v.validate(c, Validator::BodyParamsOnly);
