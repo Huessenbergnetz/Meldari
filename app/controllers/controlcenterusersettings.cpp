@@ -11,6 +11,7 @@
 #include "validators/melvalidatorpwcheck.h"
 
 #include <Cutelyst/Plugins/Session/Session>
+#include <Cutelyst/Plugins/Authentication/authentication.h>
 #include <Cutelyst/Plugins/Utils/Validator>
 #include <Cutelyst/Plugins/Utils/ValidatorResult>
 #include <Cutelyst/Plugins/Utils/validatorrequired.h>
@@ -61,11 +62,24 @@ void ControlCenterUsersettings::update(Context *c)
 
     if (vr) {
         Error e;
-        QVariantHash values = vr.values();
-        values.insert(QStringLiteral("password"), c->req()->bodyParam(QStringLiteral("password")));
+        const QVariantHash values = vr.values();
         if (u.update(c, e, values)) {
-            Utils::setJsonResponse(c, u.toJson(), c->translate("ControlCenterUsersettings", "Settings saved"));
+            QLocale ln(u.settings().value(QStringLiteral("language")).toString());
+            Cutelyst::Session::setValue(c, QStringLiteral("lang"), QVariant::fromValue<QLocale>(ln));
+            QTimeZone tz(u.settings().value(QStringLiteral("timezone")).toString().toLatin1());
+            Cutelyst::Session::setValue(c, QStringLiteral("tz"), QVariant::fromValue<QTimeZone>(tz));
+
+            const QString newPassword = values.value(QStringLiteral("newpassword")).toString();
+            if (!newPassword.isEmpty()) {
+                ParamsMultiMap userParams;
+                userParams.insert(QStringLiteral("username"), u.username());
+                userParams.insert(QStringLiteral("password"), newPassword);
+                Cutelyst::Authentication::authenticate(c, userParams, QStringLiteral("users"));
+            }
+
             u.toStash(c);
+
+            Utils::setJsonResponse(c, u.toJson(), c->translate("ControlCenterUsersettings", "Settings saved"));
         } else {
             e.toStash(c, true);
         }

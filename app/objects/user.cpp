@@ -12,7 +12,6 @@
 #include <baseuser_p.h>
 
 #include <Cutelyst/Context>
-#include <Cutelyst/Plugins/Authentication/authentication.h>
 #include <Cutelyst/Plugins/Authentication/authenticationuser.h>
 #include <Cutelyst/Plugins/Utils/Sql>
 #include <Cutelyst/Plugins/Session/Session>
@@ -288,11 +287,7 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
 {
     qCDebug(MEL_CORE) << "Updating data for" << *this;
 
-    bool pwChanged = false;
-
     const QString newPassword   = values.value(QStringLiteral("newpassword")).toString();
-    const QString language      = values.value(QStringLiteral("language")).toString();
-    const QString timezone      = values.value(QStringLiteral("timezone")).toString();
 
     const auto now = QDateTime::currentDateTimeUtc();
 
@@ -302,7 +297,6 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     QSqlQuery q(db);
 
     if (!newPassword.isEmpty()) {
-        pwChanged = true;
         const QString newPwEnc = CredentialBotan::createArgon2Password(newPassword);
         if (newPwEnc.isEmpty()) {
             e = Error(Cutelyst::Response::InternalServerError, c->translate("User", "Failed to encrypt new password."));
@@ -351,20 +345,8 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
 
     data->updated = now;
 
-    QLocale ln(language);
-    Cutelyst::Session::setValue(c, QStringLiteral("lang"), QVariant::fromValue<QLocale>(ln));
-    QTimeZone tz(timezone.toLatin1());
-    Cutelyst::Session::setValue(c, QStringLiteral("tz"), QVariant::fromValue<QTimeZone>(tz));
-
     if (MeldariConfig::useMemcached()) {
         Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), *this, MEMC_USERS_STORAGE_DURATION);
-    }
-
-    if (pwChanged) {
-        ParamsMultiMap userParams;
-        userParams.insert(QStringLiteral("username"), data->username);
-        userParams.insert(QStringLiteral("password"), newPassword);
-        Cutelyst::Authentication::authenticate(c, userParams, QStringLiteral("users"));
     }
 
     return true;
