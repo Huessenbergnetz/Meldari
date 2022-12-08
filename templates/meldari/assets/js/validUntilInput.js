@@ -14,10 +14,22 @@ MeldariTmpl.validUntilInput.init = function() {
         const as = inputs[i].getElementsByClassName('dropdown-item');
         for (let j = 0; j < as.length; ++j) {
             as[j].addEventListener('click', (e) => {
-                                       e.preventDefault();
-                                       const date = new Date(Date.now() + parseInt(e.target.dataset.value) * 1000);
-                                       input.value = MeldariTmpl.createInputDate(date);
-                                   });
+                e.preventDefault();
+                const val = e.target.dataset.value;
+                const count = parseInt(val.slice(0, val.length - 1));
+                const now = new Date();
+                let date;
+                if (val.endsWith('d')) {
+                    date = now.addDays(count);
+                } else if (val.endsWith('w')) {
+                    date = now.addWeeks(count);
+                } else if (val.endsWith('m')) {
+                    date = now.addMonths(count);
+                } else if (val.endsWith('y')) {
+                    date = now.addYears(count);
+                }
+                input.value = MeldariTmpl.createInputDate(date);
+            });
         }
     }
 }

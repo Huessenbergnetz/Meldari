@@ -4,10 +4,10 @@
         <input type="datetime-local" class="form-control" id="{{ inputId }}" name="{{ inputName|default:inputId }}" value="{{ inputValue }}" aria-describedby="{{ inputId }}Feedback {{ inputId }}Help"{% if inputRequired %} required="required"{% endif %}>
         <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ _("Time periods") }}</button>
         <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#" data-value="86400">{{ _("+1 day from now") }}</a></li>
-            <li><a class="dropdown-item" href="#" data-value="604800">{{ _("+1 week from now") }}</a></li>
-            <li><a class="dropdown-item" href="#" data-value="2678400">{{ _("+1 month from now") }}</a></li>
-            <li><a class="dropdown-item" href="#" data-value="31557600">{{ _("+1 year from now") }}</a></li>
+            <li><a class="dropdown-item" href="#" data-value="1d">{{ _("+1 day from now") }}</a></li>
+            <li><a class="dropdown-item" href="#" data-value="1w">{{ _("+1 week from now") }}</a></li>
+            <li><a class="dropdown-item" href="#" data-value="1m">{{ _("+1 month from now") }}</a></li>
+            <li><a class="dropdown-item" href="#" data-value="1y">{{ _("+1 year from now") }}</a></li>
         </ul>
     </div>
     <div id="{{ inputId }}Feedback" class="invalid-feedback"></div>
