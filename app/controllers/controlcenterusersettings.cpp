@@ -46,14 +46,14 @@ void ControlCenterUsersettings::update(Context *c)
     }
 
     User u = User::fromStash(c);
-    c->setStash(QStringLiteral("_userId"), u.id());
+    c->setStash(QStringLiteral("_username"), u.username());
 
     static Validator v({
                            new ValidatorRequired(QStringLiteral("timezone")),
                            new ValidatorIn(QStringLiteral("timezone"), Utils::getTimezoneList()),
                            new ValidatorRequired(QStringLiteral("language")),
                            new ValidatorIn(QStringLiteral("language"), MeldariConfig::supportedLocaleNames()),
-                           new MelValidatorPwCheck(QStringLiteral("password"), QStringLiteral("_userId")),
+                           new MelValidatorPwCheck(QStringLiteral("password"), QStringLiteral("_username")),
                            new ValidatorConfirmed(QStringLiteral("newpassword"))
                        });
 
