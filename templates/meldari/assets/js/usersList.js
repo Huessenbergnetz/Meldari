@@ -12,6 +12,8 @@ MeldariTmpl.Users.List = MeldariTmpl.Users.List || {}
 MeldariTmpl.Users.List.table = null;
 
 MeldariTmpl.Users.List.exec = function() {
+    MeldariTmpl.togglePageSpinner();
+
     Meldari.Users.list({details:"full"})
     .then(users => {
         users.forEach(user => {
@@ -23,6 +25,7 @@ MeldariTmpl.Users.List.exec = function() {
         MeldariTmpl.handleError(error);
     })
     .finally(() => {
+        MeldariTmpl.togglePageSpinner();
     });
 }
 
