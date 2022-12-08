@@ -20,30 +20,36 @@ MeldariTmpl.UserSettings.exec = function() {
     .then(json => {
               MeldariTmpl.setLang(json.data.settings.language);
 
+              const f = MeldariTmpl.UserSettings.form;
+
               MeldariTmpl.tz = json.data.settings.timezone;
               document.documentElement.dataset.timezone = MeldariTmpl.tz;
 
               const localeDtOptions = {dateStyle: "long", timeStyle: "medium", timeZone: MeldariTmpl.tz}
 
               const created = new Date(json.data.created);
-              MeldariTmpl.UserSettings.form.elements['created'].value = created.toLocaleString(MeldariTmpl.lang, localeDtOptions);
+              f.elements['created'].value = created.toLocaleString(MeldariTmpl.lang, localeDtOptions);
 
               const updated = new Date(json.data.updated);
-              MeldariTmpl.UserSettings.form.elements['updated'].value = updated.toLocaleString(MeldariTmpl.lang, localeDtOptions);
+              f.elements['updated'].value = updated.toLocaleString(MeldariTmpl.lang, localeDtOptions);
 
               if (json.data.lastSeen) {
                   const lastSeen = new Date(json.data.lastSeen);
-                  MeldariTmpl.UserSettings.form.elements['lastSeen'].value = lastSeen.toLocaleString(MeldariTmpl.lang, localeDtOptions);
+                  f.elements['lastSeen'].value = lastSeen.toLocaleString(MeldariTmpl.lang, localeDtOptions);
               } else {
-                  MeldariTmpl.UserSettings.form.elements['lastSeen'].value = '';
+                  f.elements['lastSeen'].value = '';
               }
 
               if (json.data.validUntil) {
                   const validUntil = new Date(json.data.validUntil);
-                  MeldariTmpl.UserSettings.form.elements['validUntil'].value = validUntil.toLocaleString(MeldariTmpl.lang, localeDtOptions);
+                  f.elements['validUntil'].value = validUntil.toLocaleString(MeldariTmpl.lang, localeDtOptions);
               } else {
-                  MeldariTmpl.UserSettings.form.elements['validUntil'].value = '';
+                  f.elements['validUntil'].value = '';
               }
+
+              f.elements['password'].value = '';
+              f.elements['newpassword'].value = '';
+              f.elements['newpassword_confirmation'].value = '';
 
               MeldariTmpl.createSuccess(json.message);
           })
