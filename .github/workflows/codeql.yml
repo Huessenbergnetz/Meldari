@@ -52,6 +52,11 @@ jobs:
         # Details on CodeQL's query packs refer to : https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
         # queries: security-extended,security-and-quality
 
+    - name: Install Dependencies
+      if: matrix.language != 'javascript'
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y qt6-base-dev qt6-base-dev-tools qt6-l10n-tools libpwquality-dev libbotan-2-dev
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
