@@ -19,6 +19,9 @@ target_sources(meldaricommon
         utils.h
         optionitem.cpp
         optionitem.h
+        basedomain.cpp
+        basedomain.h
+        basedomain_p.h
 )
 
 configure_file(confignames.h.in confignames.h)
