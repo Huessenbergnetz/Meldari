@@ -16,8 +16,8 @@ BaseDomain::BaseDomain(dbid_t id, const QString &name, Status status, BaseUser::
     data->name = name;
     data->ownerName = ownerName;
     data->lockedByName = lockedByName;
-    data->createdAt = created;
-    data->updatedAt = updated;
+    data->created = created;
+    data->updated = updated;
     data->validUntil = validUntil;
     data->lockedAt = lockedAt;
     data->id = id;
@@ -63,12 +63,12 @@ QString BaseDomain::ownerName() const
 
 QDateTime BaseDomain::created() const
 {
-    return data ? data->createdAt : QDateTime();
+    return data ? data->created : QDateTime();
 }
 
 QDateTime BaseDomain::updated() const
 {
-    return data ? data->updatedAt : QDateTime();
+    return data ? data->updated : QDateTime();
 }
 
 QDateTime BaseDomain::validUntil() const
@@ -123,8 +123,8 @@ QJsonObject BaseDomainData::toJson() const
     o.insert(u"status", static_cast<int>(status));
     o.insert(u"ownerId", static_cast<qint64>(ownerId));
     o.insert(u"ownerName", ownerName);
-    o.insert(u"created", createdAt.toMSecsSinceEpoch());
-    o.insert(u"updated", updatedAt.toMSecsSinceEpoch());
+    o.insert(u"created", created.toMSecsSinceEpoch());
+    o.insert(u"updated", updated.toMSecsSinceEpoch());
     o.insert(u"validUntil", validUntil.isNull() ? QJsonValue() : validUntil.toMSecsSinceEpoch());
     o.insert(u"lockedAt", lockedAt.isNull() ? QJsonValue() : lockedAt.toMSecsSinceEpoch());
     o.insert(u"lockedById", static_cast<qint64>(lockedById));

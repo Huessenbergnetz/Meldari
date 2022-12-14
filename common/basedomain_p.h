@@ -14,8 +14,8 @@ public:
     QString name;
     QString ownerName;
     QString lockedByName;
-    QDateTime createdAt;
-    QDateTime updatedAt;
+    QDateTime created;
+    QDateTime updated;
     QDateTime validUntil;
     QDateTime lockedAt;
     BaseDomain::dbid_t id = 0;
