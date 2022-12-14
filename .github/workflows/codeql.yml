@@ -58,7 +58,7 @@ jobs:
         curl -fsSL https://download.opensuse.org/repositories/home:/buschmann23:/Cutelyst/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/keyrings/obs-home-buschmann23.gpg > /dev/null
         echo "deb [signed-by=/etc/apt/keyrings/obs-home-buschmann23.gpg allow-insecure=yes] https://download.opensuse.org/repositories/home:/buschmann23:/Cutelyst/xUbuntu_22.04 ./" | sudo tee /etc/apt/sources.list.d/obs-home-buschmann23-cutelyst.list > /dev/null
         sudo apt-get update -qq
-        sudo apt-get install -y --allow-unauthenticated qt6-base-dev qt6-base-dev-tools qt6-l10n-tools qt6-tools-dev qt6-tools-dev-tools libpwquality-dev libbotan-2-dev cutelee6-qt6-dev cutelyst3-qt6-dev
+        sudo apt-get install -y --allow-unauthenticated qt6-base-dev qt6-base-dev-tools qt6-l10n-tools qt6-tools-dev qt6-tools-dev-tools libpwquality-dev libbotan-2-dev cutelee6-qt6-dev cutelyst3-qt6-dev libgl1-mesa-dev
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
