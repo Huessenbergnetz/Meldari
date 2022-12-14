@@ -9,6 +9,7 @@ function (meldari_test_common _testname)
 endfunction (meldari_test_common _testname)
 
 meldari_test_common(testbaseuser)
+meldari_test_common(testbasedomain)
 meldari_test_common(testcredentialbotan)
 
 function (meldari_test_app _testname)
