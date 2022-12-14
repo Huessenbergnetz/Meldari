@@ -17,9 +17,17 @@ BaseDomain::BaseDomain(dbid_t id, const QString &name, Status status, BaseUser::
     data->ownerName = ownerName;
     data->lockedByName = lockedByName;
     data->created = created;
+    data->created.setTimeSpec(Qt::UTC);
     data->updated = updated;
+    data->updated.setTimeSpec(Qt::UTC);
     data->validUntil = validUntil;
+    if (data->validUntil.isValid()) {
+        data->validUntil.setTimeSpec(Qt::UTC);
+    }
     data->lockedAt = lockedAt;
+    if (data->lockedAt.isValid()) {
+        data->lockedAt.setTimeSpec(Qt::UTC);
+    }
     data->id = id;
     data->ownerId = ownerId;
     data->lockedById = lockedById;
