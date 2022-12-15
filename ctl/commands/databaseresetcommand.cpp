@@ -15,7 +15,7 @@ DatabaseResetCommand::DatabaseResetCommand(QObject *parent)
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
     setObjectName(u"reset");
 #else
-    setObjectName(QStringLiteral("reset"))
+    setObjectName(QStringLiteral("reset"));
 #endif
 }
 

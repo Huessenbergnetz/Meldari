@@ -16,7 +16,7 @@ DatabaseMigrationCommand::DatabaseMigrationCommand(QObject *parent)
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
     setObjectName(u"migrate");
 #else
-    setObjectName(QStringLiteral("migrate"))
+    setObjectName(QStringLiteral("migrate"));
 #endif
 }
 

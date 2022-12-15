@@ -27,7 +27,7 @@ UserAddCommand::UserAddCommand(QObject *parent)
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
     setObjectName(u"add");
 #else
-    setObjectName(QStringLiteral("add"))
+    setObjectName(QStringLiteral("add"));
 #endif
 }
 

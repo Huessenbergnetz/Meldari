@@ -15,7 +15,7 @@ UserCommand::UserCommand(QObject *parent)
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
     setObjectName(u"user");
 #else
-    setObjectName(QStringLiteral("user"))
+    setObjectName(QStringLiteral("user"));
 #endif
 }
 

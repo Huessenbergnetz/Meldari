@@ -17,7 +17,7 @@ DatabaseRefreshCommand::DatabaseRefreshCommand(QObject *parent)
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
     setObjectName(u"refresh");
 #else
-    setObjectName(QStringLiteral("refresh"))
+    setObjectName(QStringLiteral("refresh"));
 #endif
 }
 

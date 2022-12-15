@@ -25,7 +25,7 @@ DatabaseCommand::DatabaseCommand(QObject *parent)
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
     setObjectName(u"database");
 #else
-    setObjectName(QStringLiteral("database"))
+    setObjectName(QStringLiteral("database"));
 #endif
 }
 
