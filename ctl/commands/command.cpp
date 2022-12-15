@@ -98,7 +98,6 @@ void Command::showSubCommands(QTextStream *out) const
         //% "Commands:"
         *out << qtTrId("melctl-help-header-commands") << '\n';
 
-        const QList<Command*> coms = findChildren<Command *>(QString(), Qt::FindDirectChildrenOnly);
         int maxCommandNameLength = 0;
         for (const auto com : coms) {
             maxCommandNameLength = std::max(maxCommandNameLength, static_cast<int>(com->objectName().length()));

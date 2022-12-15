@@ -219,7 +219,7 @@ QString CLI::readString(const QString &name, const QString &defaultValue, const 
 
 int CLI::readInt(const QString &name, int min, int max) const
 {
-    int val;
+    int val = 0;
 
     bool ok = false;
     while (!ok) {

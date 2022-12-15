@@ -39,7 +39,7 @@ MeldariTmpl.Users.addTableRow = function(user, prepend) {
     idTd.textContent = user.id;
 
     if (prepend) {
-        MeldariTmpl.Users.tableBody.prepend(row)
+        MeldariTmpl.Users.tableBody.prepend(row);
     } else {
         MeldariTmpl.Users.tableBody.append(row);
     }

@@ -25,7 +25,7 @@ MeldariTmpl.UserSettings.exec = function() {
               MeldariTmpl.tz = json.data.settings.timezone;
               document.documentElement.dataset.timezone = MeldariTmpl.tz;
 
-              const localeDtOptions = {dateStyle: "long", timeStyle: "medium", timeZone: MeldariTmpl.tz}
+              const localeDtOptions = {dateStyle: "long", timeStyle: "medium", timeZone: MeldariTmpl.tz};
 
               const created = new Date(json.data.created);
               f.elements['created'].value = created.toLocaleString(MeldariTmpl.lang, localeDtOptions);
