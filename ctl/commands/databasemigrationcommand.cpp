@@ -13,7 +13,11 @@
 DatabaseMigrationCommand::DatabaseMigrationCommand(QObject *parent)
     : DatabaseCommand{parent}
 {
-    setObjectName(QStringLiteral("migrate"));
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
+    setObjectName(u"migrate");
+#else
+    setObjectName(QStringLiteral("migrate"))
+#endif
 }
 
 CLI::RC DatabaseMigrationCommand::exec(QCommandLineParser *parser)

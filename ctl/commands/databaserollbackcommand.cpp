@@ -14,7 +14,11 @@
 DatabaseRollbackCommand::DatabaseRollbackCommand(QObject *parent)
     : DatabaseCommand{parent}
 {
-    setObjectName(QStringLiteral("rollback"));
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
+    setObjectName(u"rollback");
+#else
+    setObjectName(QStringLiteral("rollback"))
+#endif
 }
 
 DatabaseRollbackCommand::~DatabaseRollbackCommand() = default;

@@ -12,7 +12,11 @@
 DatabaseResetCommand::DatabaseResetCommand(QObject *parent)
     : DatabaseCommand{parent}
 {
-    setObjectName(QStringLiteral("reset"));
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
+    setObjectName(u"reset");
+#else
+    setObjectName(QStringLiteral("reset"))
+#endif
 }
 
 DatabaseResetCommand::~DatabaseResetCommand() = default;
