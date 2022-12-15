@@ -16,7 +16,11 @@
 Controller::Controller(QObject *parent)
     : QObject{parent}
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
     setObjectName(u"controller");
+#else
+    setObjectName(QStringLiteral("controller"))
+#endif
 }
 
 CLI::RC Controller::exec()
