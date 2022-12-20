@@ -84,4 +84,7 @@ private:
     QSharedDataPointer<BaseDomainData> data;
 };
 
+Q_DECLARE_METATYPE(BaseDomain)
+Q_DECLARE_TYPEINFO(BaseDomain, Q_MOVABLE_TYPE);
+
 #endif // MELDARICOMMON_BASEDOMAIN_H
