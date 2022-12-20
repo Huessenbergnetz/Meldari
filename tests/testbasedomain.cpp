@@ -19,6 +19,8 @@ public:
 private slots:
     void testDefaultConstructor();
     void testConstructorWithArgs();
+    void testCopy();
+    void testMove();
 };
 
 void BaseDomainTest::testDefaultConstructor()
@@ -68,6 +70,57 @@ void BaseDomainTest::testConstructorWithArgs()
     QCOMPARE(dom.lockedAt(), lockedAt);
     QCOMPARE(dom.lockedById(), lockedById);
     QCOMPARE(dom.lockedByName(), lockedByName);
+}
+
+void BaseDomainTest::testCopy()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+
+    // test copy constructor
+    {
+        BaseDomain d1(1, QStringLiteral("example.net"), BaseDomain::Enabled, 1, QStringLiteral("user"), now, now, QDateTime(), now, 2, QStringLiteral("user2"));
+        BaseDomain d2(d1);
+
+        QCOMPARE(d1.id(), d2.id());
+        QCOMPARE(d1.name(), d2.name());
+        QCOMPARE(d1.status(), d2.status());
+    }
+
+    // test copy assignment
+    {
+        BaseDomain d1(1, QStringLiteral("example.net"), BaseDomain::Enabled, 1, QStringLiteral("user"), now, now, QDateTime(), now, 2, QStringLiteral("user2"));
+        BaseDomain d2 = d1;
+
+        QCOMPARE(d1.id(), d2.id());
+        QCOMPARE(d1.name(), d2.name());
+        QCOMPARE(d1.status(), d2.status());
+    }
+}
+
+void BaseDomainTest::testMove()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+
+    // test move constructor
+    {
+        BaseDomain d1(1, QStringLiteral("example.net"), BaseDomain::Enabled, 1, QStringLiteral("user"), now, now, QDateTime(), now, 2, QStringLiteral("user2"));
+        BaseDomain d2(std::move(d1));
+
+        QCOMPARE(d2.id(), 1);
+        QCOMPARE(d2.name(), QStringLiteral("example.net"));
+        QCOMPARE(d2.status(), BaseDomain::Enabled);
+    }
+
+    // test move assignment
+    {
+        BaseDomain d1(1, QStringLiteral("example.net"), BaseDomain::Enabled, 1, QStringLiteral("user"), now, now, QDateTime(), now, 2, QStringLiteral("user2"));
+        BaseDomain d2(2, QStringLiteral("example.com"), BaseDomain::Disabled, 1, QStringLiteral("user"), now, now, QDateTime(), now, 2, QStringLiteral("user2"));
+        d2 = std::move(d1);
+
+        QCOMPARE(d2.id(), 1);
+        QCOMPARE(d2.name(), QStringLiteral("example.net"));
+        QCOMPARE(d2.status(), BaseDomain::Enabled);
+    }
 }
 
 QTEST_MAIN(BaseDomainTest)
