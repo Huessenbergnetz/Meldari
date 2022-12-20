@@ -122,6 +122,59 @@ QJsonObject BaseDomain::toJson() const
     return data->toJson();
 }
 
+bool BaseDomain::operator==(const BaseDomain &other) const noexcept
+{
+    if (data == other.data) {
+        return true;
+    }
+
+    if (id() != other.id()) {
+        return false;
+    }
+
+    if (name() != other.name()) {
+        return false;
+    }
+
+    if (status() != other.status()) {
+        return false;
+    }
+
+    if (ownerId() != other.ownerId()) {
+        return false;
+    }
+
+    if (ownerName() != other.ownerName()) {
+        return false;
+    }
+
+    if (created() != other.created()) {
+        return false;
+    }
+
+    if (updated() != other.updated()) {
+        return false;
+    }
+
+    if (validUntil() != other.validUntil()) {
+        return false;
+    }
+
+    if (lockedAt() != other.lockedAt()) {
+        return false;
+    }
+
+    if (lockedById() != other.lockedById()) {
+        return false;
+    }
+
+    if (lockedByName() != other.lockedByName()) {
+        return false;
+    }
+
+    return true;
+}
+
 QJsonObject BaseDomainData::toJson() const
 {
     QJsonObject o;

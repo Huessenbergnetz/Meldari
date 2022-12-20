@@ -21,6 +21,7 @@ private slots:
     void testConstructorWithArgs();
     void testCopy();
     void testMove();
+    void testComparison();
 };
 
 void BaseDomainTest::testDefaultConstructor()
@@ -121,6 +122,25 @@ void BaseDomainTest::testMove()
         QCOMPARE(d2.name(), QStringLiteral("example.net"));
         QCOMPARE(d2.status(), BaseDomain::Enabled);
     }
+}
+
+void BaseDomainTest::testComparison()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+
+    BaseDomain d1(1, QStringLiteral("example.net"), BaseDomain::Enabled, 1, QStringLiteral("user"), now, now, QDateTime(), now, 2, QStringLiteral("user2"));
+    BaseDomain d2(2, QStringLiteral("example.com"), BaseDomain::Disabled, 1, QStringLiteral("user"), now, now, QDateTime(), now, 2, QStringLiteral("user2"));
+    BaseDomain d3(1, QStringLiteral("example.net"), BaseDomain::Enabled, 1, QStringLiteral("user"), now, now, QDateTime(), now, 2, QStringLiteral("user2"));
+    BaseDomain d4;
+    BaseDomain d5(0, QString(), BaseDomain::Invalid, 0, QString(), QDateTime(), QDateTime(), QDateTime(), QDateTime(), 0, QString());
+    BaseDomain d6 = d1;
+
+    QVERIFY(d1 != d2);
+    QVERIFY(d1 == d3);
+    QVERIFY(d1 != d4);
+    QVERIFY(d1 != d5);
+    QVERIFY(d1 == d6);
+    QVERIFY(d4 == d5);
 }
 
 QTEST_MAIN(BaseDomainTest)

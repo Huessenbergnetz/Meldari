@@ -75,6 +75,11 @@ public:
 
     QJsonObject toJson() const;
 
+    bool operator==(const BaseDomain &other) const noexcept;
+
+    bool operator!=(const BaseDomain &other) const noexcept
+    { return !(*this == other); }
+
 private:
     QSharedDataPointer<BaseDomainData> data;
 };
