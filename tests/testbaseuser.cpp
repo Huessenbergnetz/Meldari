@@ -202,6 +202,10 @@ void BaseUserTest::testToJson()
     QCOMPARE(json.value(u"validUntil"), QJsonValue());
     QCOMPARE(json.value(u"lastSeen"), QJsonValue());
     QCOMPARE(json.value(u"lockedAt"), QJsonValue());
+
+    BaseUser u3;
+    json = u3.toJson();
+    QVERIFY(json.isEmpty());
 }
 
 void BaseUserTest::testTypeStringToEnum()
