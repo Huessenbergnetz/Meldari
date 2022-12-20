@@ -282,6 +282,40 @@ QStringList BaseUser::supportedTypes()
     return lst;
 }
 
+QStringList BaseUser::typeValues()
+{
+    QStringList list;
+
+    const QMetaObject mo = BaseUser::staticMetaObject;
+    const QMetaEnum   me = mo.enumerator(mo.indexOfEnumerator("Type"));
+    list.reserve(me.keyCount() - 1);
+    for (int i = 1; i < me.keyCount(); ++i) {
+        list << QString::number(me.value(i));
+    }
+
+    return list;
+}
+
+QStringList BaseUser::typeValues(BaseUser::Type below)
+{
+    QStringList list;
+
+    if (below == BaseUser::SuperUser) {
+        list = BaseUser::typeValues();
+    } else {
+        const QMetaObject mo = BaseUser::staticMetaObject;
+        const QMetaEnum   me = mo.enumerator(mo.indexOfEnumerator("Type"));
+        for (int i = 1; i < me.keyCount(); ++i) {
+            const int val = me.value(i);
+            if (val < static_cast<int>(below)) {
+                list << QString::number(val); //clazy:exclude=reserve-candidates
+            }
+        }
+    }
+
+    return list;
+}
+
 QDebug operator<<(QDebug dbg, const BaseUser &user)
 {
     QDebugStateSaver saver(dbg);

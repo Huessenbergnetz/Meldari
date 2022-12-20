@@ -102,6 +102,10 @@ public:
 
     static QStringList supportedTypes();
 
+    static QStringList typeValues();
+
+    static QStringList typeValues(Type below);
+
 protected:
     QSharedDataPointer<BaseUserData> data;
 

@@ -31,6 +31,7 @@ private slots:
     void testTypeStringToEnum();
     void testTypeEnumToString();
     void testSupportedType();
+    void testTypeValues();
 
     void cleanupTestCase() {}
 };
@@ -224,6 +225,20 @@ void BaseUserTest::testSupportedType()
     QVERIFY(!supportedTypes.empty());
     QVERIFY(supportedTypes.contains(u"Administrator"));
     QVERIFY(!supportedTypes.contains(u"Invalid"));
+}
+
+void BaseUserTest::testTypeValues()
+{
+    const QStringList expected({QStringLiteral("0"), QStringLiteral("32"), QStringLiteral("64"), QStringLiteral("127")});
+    const QStringList actual = BaseUser::typeValues();
+    QCOMPARE(actual, expected);
+
+    const QStringList belowSuperUesr = BaseUser::typeValues(BaseUser::SuperUser);
+    QCOMPARE(belowSuperUesr, expected);
+
+    const QStringList expectedAdministrator({QStringLiteral("0"), QStringLiteral("32")});
+    const QStringList belowAdministrator = BaseUser::typeValues(BaseUser::Administrator);
+    QCOMPARE(belowAdministrator, expectedAdministrator);
 }
 
 QTEST_MAIN(BaseUserTest)

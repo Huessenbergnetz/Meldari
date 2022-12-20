@@ -566,40 +566,6 @@ std::vector<OptionItem> User::typeOptions(Context *c, Type selected, Type below)
     return opts;
 }
 
-QStringList User::typeValues()
-{
-    QStringList list;
-
-    const QMetaObject mo = User::staticMetaObject;
-    const QMetaEnum   me = mo.enumerator(mo.indexOfEnumerator("Type"));
-    list.reserve(me.keyCount() - 1);
-    for (int i = 1; i < me.keyCount(); ++i) {
-        list << QString::number(me.value(i));
-    }
-
-    return list;
-}
-
-QStringList User::typeValues(User::Type below)
-{
-    QStringList list;
-
-    if (below == User::SuperUser) {
-        list = User::typeValues();
-    } else {
-        const QMetaObject mo = User::staticMetaObject;
-        const QMetaEnum   me = mo.enumerator(mo.indexOfEnumerator("Type"));
-        for (int i = 1; i < me.keyCount(); ++i) {
-            const int val = me.value(i);
-            if (val < static_cast<int>(below)) {
-                list << QString::number(val); //clazy:exclude=reserve-candidates
-            }
-        }
-    }
-
-    return list;
-}
-
 User::dbid_t User::stringToDbId(const QString &str, bool *ok, Cutelyst::Context *c, bool detach)
 {
     Q_ASSERT(ok);

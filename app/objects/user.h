@@ -67,10 +67,6 @@ public:
 
     static std::vector<OptionItem> typeOptions(Cutelyst::Context *c, Type selected, Type below);
 
-    static QStringList typeValues();
-
-    static QStringList typeValues(Type below);
-
     static dbid_t stringToDbId(const QString &str, bool *ok, Cutelyst::Context *c, bool detach = false);
 
 private:
