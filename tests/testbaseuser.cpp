@@ -27,6 +27,10 @@ private slots:
     void testMove();
     void testComparison();
     void testDatastream();
+    void testToJson();
+    void testTypeStringToEnum();
+    void testTypeEnumToString();
+    void testSupportedType();
 
     void cleanupTestCase() {}
 };
@@ -162,6 +166,64 @@ void BaseUserTest::testDatastream()
     QCOMPARE(u2.lockedById(), 2);
     QCOMPARE(u2.lockedByName(), QStringLiteral("user2"));
     QCOMPARE(u2.settings(), settings);
+}
+
+void BaseUserTest::testToJson()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+    const QDateTime created = now.addDays(-1);
+    const QDateTime updated = now;
+    const QDateTime validUntil = now.addMonths(12);
+    const QDateTime lastSeen = now.addSecs(600);
+    const QDateTime lockedAt = now;
+    const QVariantMap settings = {
+        {QStringLiteral("option"), QStringLiteral("value")}
+    };
+    BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), created, updated, validUntil, lastSeen, lockedAt, 2, QStringLiteral("user2"), settings);
+
+    QJsonObject json = u1.toJson();
+    QCOMPARE(json.value(u"id"), QJsonValue(1));
+    QCOMPARE(json.value(u"type"), QJsonValue(static_cast<int>(BaseUser::Registered)));
+    QCOMPARE(json.value(u"username"), QJsonValue(QStringLiteral("user1")));
+    QCOMPARE(json.value(u"email"), QJsonValue(QStringLiteral("user1@example.net")));
+    QCOMPARE(json.value(u"created"), QJsonValue(created.toMSecsSinceEpoch()));
+    QCOMPARE(json.value(u"updated"), QJsonValue(updated.toMSecsSinceEpoch()));
+    QCOMPARE(json.value(u"validUntil"), QJsonValue(validUntil.toMSecsSinceEpoch()));
+    QCOMPARE(json.value(u"lastSeen"), QJsonValue(lastSeen.toMSecsSinceEpoch()));
+    QCOMPARE(json.value(u"lockedAt"), QJsonValue(lockedAt.toMSecsSinceEpoch()));
+    QCOMPARE(json.value(u"lockedById"), QJsonValue(2));
+    QCOMPARE(json.value(u"lockedByName"), QJsonValue(QStringLiteral("user2")));
+    QCOMPARE(json.value(u"settings"), QJsonValue(QJsonObject::fromVariantMap(settings)));
+
+    BaseUser u2(2, BaseUser::Administrator, QStringLiteral("user2"), QStringLiteral("user2@example.net"), created, updated, QDateTime(), QDateTime(), QDateTime(), 0, QString(), QVariantMap());
+
+    json = u2.toJson();
+    QCOMPARE(json.value(u"validUntil"), QJsonValue());
+    QCOMPARE(json.value(u"lastSeen"), QJsonValue());
+    QCOMPARE(json.value(u"lockedAt"), QJsonValue());
+}
+
+void BaseUserTest::testTypeStringToEnum()
+{
+    QCOMPARE(BaseUser::typeStringToEnum(QStringLiteral("DiSabled")), BaseUser::Disabled);
+    QCOMPARE(BaseUser::typeStringToEnum(QStringLiteral("reGIstered")), BaseUser::Registered);
+    QCOMPARE(BaseUser::typeStringToEnum(QStringLiteral("adminiStrator")), BaseUser::Administrator);
+    QCOMPARE(BaseUser::typeStringToEnum(QStringLiteral("Superuser")), BaseUser::SuperUser);
+    QCOMPARE(BaseUser::typeStringToEnum(QStringLiteral("invalid")), BaseUser::Invalid);
+    QCOMPARE(BaseUser::typeStringToEnum(QStringLiteral("kackMIST")), BaseUser::Invalid);
+}
+
+void BaseUserTest::testTypeEnumToString()
+{
+    QCOMPARE(BaseUser::typeEnumToString(BaseUser::Disabled), QStringLiteral("Disabled"));
+}
+
+void BaseUserTest::testSupportedType()
+{
+    const QStringList supportedTypes = BaseUser::supportedTypes();
+    QVERIFY(!supportedTypes.empty());
+    QVERIFY(supportedTypes.contains(u"Administrator"));
+    QVERIFY(!supportedTypes.contains(u"Invalid"));
 }
 
 QTEST_MAIN(BaseUserTest)
