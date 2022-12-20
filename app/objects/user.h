@@ -68,19 +68,11 @@ public:
     static std::vector<OptionItem> typeOptions(Cutelyst::Context *c, Type selected, Type below);
 
     static dbid_t stringToDbId(const QString &str, bool *ok, Cutelyst::Context *c, bool detach = false);
-
-private:
-    friend QDataStream &operator<<(QDataStream &stream, const User &user);
-    friend QDataStream &operator>>(QDataStream &stream, User &user);
 };
 
 Q_DECLARE_METATYPE(User)
 Q_DECLARE_TYPEINFO(User, Q_MOVABLE_TYPE);
 
 QDebug operator<<(QDebug dbg, const User &user);
-
-QDataStream &operator<<(QDataStream &stream, const User &user);
-
-QDataStream &operator>>(QDataStream &stream, User &user);
 
 #endif // MELDARI_USER_H

@@ -598,46 +598,4 @@ QDebug operator<<(QDebug dbg, const User &user)
     return dbg.maybeSpace();
 }
 
-QDataStream &operator<<(QDataStream &stream, const User &user)
-{
-    stream << user.data->id
-           << static_cast<qint32>(user.data->type)
-           << user.data->username
-           << user.data->email
-           << user.data->created
-           << user.data->updated
-           << user.data->validUntil
-           << user.data->lastSeen
-           << user.data->lockedAt
-           << user.data->lockedById
-           << user.data->lockedByName
-           << user.data->settings;
-
-    return stream;
-}
-
-QDataStream &operator>>(QDataStream &stream, User &user)
-{
-    if (user.data == nullptr) {
-        user.data = new BaseUserData;
-    }
-
-    stream >> user.data->id;
-    qint32 typeInt = -1;
-    stream >> typeInt;
-    user.data->type = static_cast<BaseUser::Type>(typeInt);
-    stream >> user.data->username;
-    stream >> user.data->email;
-    stream >> user.data->created;
-    stream >> user.data->updated;
-    stream >> user.data->validUntil;
-    stream >> user.data->lastSeen;
-    stream >> user.data->lockedAt;
-    stream >> user.data->lockedById;
-    stream >> user.data->lockedByName;
-    stream >> user.data->settings;
-
-    return stream;
-}
-
 #include "moc_user.cpp"
