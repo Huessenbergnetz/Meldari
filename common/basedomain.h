@@ -82,11 +82,18 @@ public:
 
 private:
     QSharedDataPointer<BaseDomainData> data;
+
+    friend QDataStream &operator<<(QDataStream &stream, const BaseDomain &domain);
+    friend QDataStream &operator>>(QDataStream &stream, BaseDomain &domain);
 };
 
 Q_DECLARE_METATYPE(BaseDomain)
 Q_DECLARE_TYPEINFO(BaseDomain, Q_MOVABLE_TYPE);
 
 QDebug operator<<(QDebug dbg, const BaseDomain &domain);
+
+QDataStream &operator<<(QDataStream &stream, const BaseDomain &domain);
+
+QDataStream &operator>>(QDataStream &stream, BaseDomain &domain);
 
 #endif // MELDARICOMMON_BASEDOMAIN_H

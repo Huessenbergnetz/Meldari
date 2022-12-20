@@ -22,6 +22,7 @@ private slots:
     void testCopy();
     void testMove();
     void testComparison();
+    void testDatastream();
 };
 
 void BaseDomainTest::testDefaultConstructor()
@@ -141,6 +142,28 @@ void BaseDomainTest::testComparison()
     QVERIFY(d1 != d5);
     QVERIFY(d1 == d6);
     QVERIFY(d4 == d5);
+}
+
+void BaseDomainTest::testDatastream()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+    const QDateTime created = now.addDays(-1);
+    const QDateTime updated = now;
+    const QDateTime validUntil = now.addMonths(12);
+    const QDateTime lockedAt = now;
+
+    BaseDomain d1(123, QStringLiteral("example.net"), BaseDomain::Enabled, 456, QStringLiteral("superuser"), created, updated, validUntil, lockedAt, 456, QStringLiteral("superduper"));
+
+    QByteArray outBa;
+    QDataStream out(&outBa, QIODeviceBase::WriteOnly);
+    out << d1;
+
+    const QByteArray inBa = outBa;
+    QDataStream in(inBa);
+    BaseDomain d2;
+    in >> d2;
+
+    QCOMPARE(d1, d2);
 }
 
 QTEST_MAIN(BaseDomainTest)

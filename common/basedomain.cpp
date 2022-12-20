@@ -205,3 +205,45 @@ QDebug operator<<(QDebug dbg, const BaseDomain &domain)
     dbg << ')';
     return dbg.maybeSpace();
 }
+
+QDataStream &operator<<(QDataStream &stream, const BaseDomain &domain)
+{
+    stream << domain.data->id
+           << domain.data->name
+           << static_cast<qint32>(domain.data->status)
+           << domain.data->ownerId
+           << domain.data->ownerName
+           << domain.data->created
+           << domain.data->updated
+           << domain.data->validUntil
+           << domain.data->lockedAt
+           << domain.data->lockedById
+           << domain.data->lockedByName;
+
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, BaseDomain &domain)
+{
+    if (domain.data == nullptr) {
+        domain.data = new BaseDomainData;
+    }
+
+    stream >> domain.data->id;
+    stream >> domain.data->name;
+    qint32 statusInt = -127;
+    stream >> statusInt;
+    domain.data->status = static_cast<BaseDomain::Status>(statusInt);
+    stream >> domain.data->ownerId;
+    stream >> domain.data->ownerName;
+    stream >> domain.data->created;
+    stream >> domain.data->updated;
+    stream >> domain.data->validUntil;
+    stream >> domain.data->lockedAt;
+    stream >> domain.data->lockedById;
+    stream >> domain.data->lockedByName;
+
+    return stream;
+}
+
+#include "moc_basedomain.cpp"
