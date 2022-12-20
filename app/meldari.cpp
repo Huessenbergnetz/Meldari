@@ -123,7 +123,7 @@ bool Meldari::init()
         }
     }
 
-    qCDebug(MEL_CORE) << "Registering LangSelect plugin";
+    qCDebug(MEL_CORE) << "Registering LangSelect plugin"; // NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks): sess might be used by MemcachedSessionStore
     auto lsp = new LangSelect(this, LangSelect::Session);
     lsp->setFallbackLocale(QLocale(QLocale::English));
     lsp->setSupportedLocales(supportedLocales);

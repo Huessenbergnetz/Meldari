@@ -18,7 +18,7 @@ public:
     Cutelee::Node *getNode(const QString &tagContent, Cutelee::Parser *p) const final;
 };
 
-class DateFormat final : public Cutelee::Node
+class DateFormat final : public Cutelee::Node // clazy:exclude=ctor-missing-parent-argument
 {
     Q_OBJECT
 public:
@@ -43,7 +43,7 @@ public:
     Cutelee::Node *getNode(const QString &tagContent, Cutelee::Parser *p) const final;
 };
 
-class DateFormatVar final : public Cutelee::Node
+class DateFormatVar final : public Cutelee::Node // clazy:exclude=ctor-missing-parent-argument
 {
     Q_OBJECT
 public:
