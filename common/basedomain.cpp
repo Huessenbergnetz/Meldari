@@ -193,3 +193,15 @@ QJsonObject BaseDomainData::toJson() const
 
     return o;
 }
+
+QDebug operator<<(QDebug dbg, const BaseDomain &domain)
+{
+    QDebugStateSaver saver(dbg);
+    Q_UNUSED(saver)
+    dbg.nospace() << "BaseDomain(";
+    dbg << "ID: " << domain.id();
+    dbg << ", Name: " << domain.name();
+    dbg << ", Status: " << domain.status();
+    dbg << ')';
+    return dbg.maybeSpace();
+}

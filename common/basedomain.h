@@ -87,4 +87,6 @@ private:
 Q_DECLARE_METATYPE(BaseDomain)
 Q_DECLARE_TYPEINFO(BaseDomain, Q_MOVABLE_TYPE);
 
+QDebug operator<<(QDebug dbg, const BaseDomain &domain);
+
 #endif // MELDARICOMMON_BASEDOMAIN_H
