@@ -23,6 +23,7 @@ private slots:
     void testMove();
     void testComparison();
     void testDatastream();
+    void testToJson();
 };
 
 void BaseDomainTest::testDefaultConstructor()
@@ -164,6 +165,40 @@ void BaseDomainTest::testDatastream()
     in >> d2;
 
     QCOMPARE(d1, d2);
+}
+
+void BaseDomainTest::testToJson()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+    const QDateTime created = now.addDays(-1);
+    const QDateTime updated = now;
+    const QDateTime validUntil = now.addMonths(12);
+    const QDateTime lockedAt = now;
+
+    BaseDomain d1(123, QStringLiteral("example.net"), BaseDomain::Enabled, 456, QStringLiteral("superuser"), created, updated, validUntil, lockedAt, 456, QStringLiteral("superduper"));
+
+    QJsonObject json = d1.toJson();
+    QCOMPARE(json.value(u"id"), QJsonValue(123));
+    QCOMPARE(json.value(u"name"), QJsonValue(QStringLiteral("example.net")));
+    QCOMPARE(json.value(u"status"), QJsonValue(static_cast<int>(BaseDomain::Enabled)));
+    QCOMPARE(json.value(u"ownerId"), QJsonValue(456));
+    QCOMPARE(json.value(u"ownerName"), QJsonValue(QStringLiteral("superuser")));
+    QCOMPARE(json.value(u"created"), QJsonValue(created.toMSecsSinceEpoch()));
+    QCOMPARE(json.value(u"updated"), QJsonValue(updated.toMSecsSinceEpoch()));
+    QCOMPARE(json.value(u"validUntil"), QJsonValue(validUntil.toMSecsSinceEpoch()));
+    QCOMPARE(json.value(u"lockedAt"), QJsonValue(lockedAt.toMSecsSinceEpoch()));
+    QCOMPARE(json.value(u"lockedById"), QJsonValue(456));
+    QCOMPARE(json.value(u"lockedByName"), QJsonValue(QStringLiteral("superduper")));
+
+    BaseDomain d2(123, QStringLiteral("example.net"), BaseDomain::Enabled, 456, QStringLiteral("superuser"), created, updated, QDateTime(), QDateTime(), 0, QString());
+
+    json = d2.toJson();
+    QCOMPARE(json.value(u"validUntil"), QJsonValue());
+    QCOMPARE(json.value(u"lockedAt"), QJsonValue());
+
+    BaseDomain d3;
+    json = d3.toJson();
+    QVERIFY(json.isEmpty());
 }
 
 QTEST_MAIN(BaseDomainTest)
