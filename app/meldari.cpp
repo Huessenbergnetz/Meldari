@@ -57,8 +57,10 @@ Meldari::Meldari(QObject *parent) : Application(parent)
 
 bool Meldari::init()
 {
-    MeldariConfig::load(engine()->config(QStringLiteral(MELDARI_CONF_MEL)),
-                        engine()->config(QStringLiteral(MELDARI_CONF_MAIL)));
+    if (Q_UNLIKELY(!MeldariConfig::load(engine()->config(QStringLiteral(MELDARI_CONF_MEL)),
+                                        engine()->config(QStringLiteral(MELDARI_CONF_MAIL))))) {
+        return false;
+    }
 
     const auto supportedLocales = loadTranslationsFromDir(QStringLiteral("meldari"), QStringLiteral(MELDARI_TRANSLATIONSDIR));
 

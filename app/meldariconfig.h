@@ -25,7 +25,7 @@ public:
         StaticCompressed
     };
 
-    static void load(const QVariantMap &meldari, const QVariantMap &email);
+    static bool load(const QVariantMap &meldari, const QVariantMap &email);
     static void loadSupportedLocales(const QVector<QLocale> &locales);
     static bool loaded();
 

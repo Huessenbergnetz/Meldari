@@ -58,12 +58,12 @@ struct ConfigValues {
 
 Q_GLOBAL_STATIC(ConfigValues, cfg)
 
-void MeldariConfig::load(const QVariantMap &meldari, const QVariantMap &email)
+bool MeldariConfig::load(const QVariantMap &meldari, const QVariantMap &email)
 {
     QWriteLocker locker(&cfg->lock);
 
     if (cfg->loaded) {
-        return;
+        return true;
     }
 
     qCDebug(MEL_CONF) << "Loading configuration";
@@ -122,33 +122,39 @@ void MeldariConfig::load(const QVariantMap &meldari, const QVariantMap &email)
     // Start load template meta data
     qCDebug(MEL_CONF) << "Reading template meta data";
     QFile tmplMetaData(cfg->tmplDir + QLatin1Char('/') + cfg->tmpl + QLatin1String("/metadata.json"));
-    if (Q_LIKELY(tmplMetaData.exists())) {
-        qCDebug(MEL_CONF) << "Found template meta data file at" << tmplMetaData.fileName();
-        if (Q_LIKELY(tmplMetaData.open(QIODeviceBase::ReadOnly|QIODeviceBase::Text))) {
-            QJsonParseError jpe;
-            const QJsonDocument json = QJsonDocument::fromJson(tmplMetaData.readAll(), &jpe);
-            if (Q_LIKELY(jpe.error == QJsonParseError::NoError)) {
-                const QJsonObject mdo = json.object();
-                if (Q_LIKELY(!mdo.empty())) {
-                    const QJsonObject icons = mdo.value(u"icons").toObject();
-                    cfg->tmplIcons.reserve(icons.size());
-                    for (auto i = icons.constBegin(); i != icons.constEnd(); ++i) {
-                        cfg->tmplIcons.insert(i.key(), i.value().toString());
-                    }
-                } else {
-                    qCWarning(MEL_CONF) << "Template meta data file is empty";
-                }
-            } else {
-                qCWarning(MEL_CONF) << "Failed to parse template meta data JSON file:" << jpe.errorString();
-            }
-        } else {
-            qCWarning(MEL_CONF) << "Failed to open template meta data file:" << tmplMetaData.errorString();
-        }
-    } else {
-        qCWarning(MEL_CONF) << "Can not find template meta data file at" << tmplMetaData.fileName();
+    if (Q_UNLIKELY(!tmplMetaData.exists())) {
+        qCCritical(MEL_CONF) << "Can not find template meta data file at" << tmplMetaData.fileName();
+        return false;
+    }
+
+    if (Q_UNLIKELY(!tmplMetaData.open(QIODeviceBase::ReadOnly|QIODeviceBase::Text))) {
+        qCCritical(MEL_CONF) << "Failed to open template meta data file:" << tmplMetaData.errorString();
+        return false;
+    }
+
+    QJsonParseError jpe;
+    const QJsonDocument json = QJsonDocument::fromJson(tmplMetaData.readAll(), &jpe);
+
+    if (Q_UNLIKELY(jpe.error != QJsonParseError::NoError)) {
+        qCCritical(MEL_CONF) << "Failed to parse template meta data JSON file:" << jpe.errorString();
+        return false;
+    }
+
+    const QJsonObject mdo = json.object();
+    if (Q_UNLIKELY(mdo.empty())) {
+        qCCritical(MEL_CONF) << "Template meta data file is empty";
+        return false;
+    }
+
+    const QJsonObject icons = mdo.value(u"icons").toObject();
+    cfg->tmplIcons.reserve(icons.size());
+    for (auto i = icons.constBegin(); i != icons.constEnd(); ++i) {
+        cfg->tmplIcons.insert(i.key(), i.value().toString());
     }
 
     cfg->loaded = true;
+
+    return true;
 }
 
 void MeldariConfig::loadSupportedLocales(const QVector<QLocale> &locales)
