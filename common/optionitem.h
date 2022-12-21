@@ -6,14 +6,14 @@
 #ifndef MELDARI_OPTIONITEM_H
 #define MELDARI_OPTIONITEM_H
 
-#include "meldaricommon_global.h"
+#include "meldaricommon_export.h"
 #include <QSharedDataPointer>
 #include <QObject>
 #include <QCollator>
 
 class OptionItemData;
 
-class MELDARICOMMON_LIBRARY OptionItem
+class MELDARICOMMON_EXPORT OptionItem
 {
     Q_GADGET
     Q_PROPERTY(QString name READ name CONSTANT)

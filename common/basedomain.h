@@ -6,6 +6,7 @@
 #ifndef MELDARICOMMON_BASEDOMAIN_H
 #define MELDARICOMMON_BASEDOMAIN_H
 
+#include "meldaricommon_export.h"
 #include "baseuser.h"
 
 #include <QObject>
@@ -15,7 +16,7 @@
 
 class BaseDomainData;
 
-class BaseDomain
+class MELDARICOMMON_EXPORT BaseDomain
 {
     Q_GADGET
     Q_PROPERTY(BaseDomain::dbid_t id READ id CONSTANT)

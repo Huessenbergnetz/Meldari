@@ -7,11 +7,11 @@ add_library(meldaricommon SHARED)
 
 target_sources(meldaricommon
     PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}/meldaricommon_export.h
         confignames.h.in
         baseuser.cpp
         baseuser.h
         baseuser_p.h
-        meldaricommon_global.h
         credentialbotan.cpp
         credentialbotan.h
         credentialbotan_p.h
@@ -25,6 +25,11 @@ target_sources(meldaricommon
 )
 
 configure_file(confignames.h.in confignames.h)
+
+include(GenerateExportHeader)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+generate_export_header(meldaricommon)
 
 target_compile_features(meldaricommon PRIVATE cxx_std_17)
 

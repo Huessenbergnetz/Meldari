@@ -6,13 +6,13 @@
 #ifndef MELDARICOMMON_CREDENTIALBOTAN_H
 #define MELDARICOMMON_CREDENTIALBOTAN_H
 
-#include "meldaricommon_global.h"
+#include "meldaricommon_export.h"
 #include <Cutelyst/Plugins/Authentication/authentication.h>
 
 using namespace Cutelyst;
 
 class CredentialBotanPrivate;
-class MELDARICOMMON_LIBRARY CredentialBotan final : public AuthenticationCredential
+class MELDARICOMMON_EXPORT CredentialBotan final : public AuthenticationCredential
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(CredentialBotan)

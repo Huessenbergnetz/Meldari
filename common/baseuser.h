@@ -6,7 +6,7 @@
 #ifndef MELDARICOMMON_BASEUSER_H
 #define MELDARICOMMON_BASEUSER_H
 
-#include "meldaricommon_global.h"
+#include "meldaricommon_export.h"
 #include <QObject>
 #include <QSharedDataPointer>
 #include <QString>
@@ -15,7 +15,7 @@
 
 class BaseUserData;
 
-class MELDARICOMMON_LIBRARY BaseUser
+class MELDARICOMMON_EXPORT BaseUser
 {
     Q_GADGET
     Q_PROPERTY(BaseUser::dbid_t id READ id CONSTANT)
