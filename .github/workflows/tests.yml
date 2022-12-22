@@ -3,8 +3,20 @@ name: Tests
 on:
   push:
     branches: [ "master" ]
+    paths-ignore:
+      - '**/*.ts'
+      - '**/*.md'
+      - '**/*.dox'
+      - 'LICENSES/**'
+      - '.github/workflows/codeql.yml'
   pull_request:
     branches: [ "master" ]
+    paths-ignore:
+      - '**/*.ts'
+      - '**/*.md'
+      - '**/*.dox'
+      - 'LICENSES/**'
+      - '.github/workflows/codeql.yml'
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -19,7 +31,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Install Dependencies
       if: matrix.language != 'javascript'
       run: |
