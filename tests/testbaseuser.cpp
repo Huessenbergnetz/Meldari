@@ -25,6 +25,8 @@ private slots:
     void testConstructorWithArgs();
     void testCopy();
     void testMove();
+    void testSwap();
+    void testClear();
     void testComparison();
     void testDatastream();
     void testToJson();
@@ -114,6 +116,29 @@ void BaseUserTest::testMove()
     }
 }
 
+void BaseUserTest::testSwap()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+    BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
+    BaseUser u2(2, BaseUser::Registered, QStringLiteral("user2"), QStringLiteral("user2@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
+    BaseUser u3;
+
+    swap(u1, u3);
+    QVERIFY(u1.isNull());
+    QCOMPARE(u3.id(), 1);
+    u3.swap(u2);
+    QCOMPARE(u3.id(), 2);
+    QCOMPARE(u2.id(), 1);
+}
+
+void BaseUserTest::testClear()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+    BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
+    u1.clear();
+    QVERIFY(u1.isNull());
+}
+
 void BaseUserTest::testComparison()
 {
     const QDateTime now = QDateTime::currentDateTimeUtc();
@@ -144,29 +169,92 @@ void BaseUserTest::testDatastream()
     const QVariantMap settings = {
         {QStringLiteral("option"), QStringLiteral("value")}
     };
-    BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), created, updated, validUntil, lastSeen, lockedAt, 2, QStringLiteral("user2"), settings);
 
-    QByteArray outBa;
-    QDataStream out(&outBa, QIODeviceBase::WriteOnly);
-    out << u1;
+    // test valid into null
+    {
+        BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), created, updated, validUntil, lastSeen, lockedAt, 2, QStringLiteral("user2"), settings);
 
-    const QByteArray inBa = outBa;
-    QDataStream in(inBa);
-    BaseUser u2;
-    in >> u2;
+        QByteArray outBa;
+        QDataStream out(&outBa, QIODeviceBase::WriteOnly);
+        out << u1;
 
-    QCOMPARE(u1, u2);
-    QCOMPARE(u2.id(), 1);
-    QCOMPARE(u2.username(), QStringLiteral("user1"));
-    QCOMPARE(u2.email(), QStringLiteral("user1@example.net"));
-    QCOMPARE(u2.created(), created);
-    QCOMPARE(u2.updated(), updated);
-    QCOMPARE(u2.validUntil(), validUntil);
-    QCOMPARE(u2.lastSeen(), lastSeen);
-    QCOMPARE(u2.lockedAt(), lockedAt);
-    QCOMPARE(u2.lockedById(), 2);
-    QCOMPARE(u2.lockedByName(), QStringLiteral("user2"));
-    QCOMPARE(u2.settings(), settings);
+        const QByteArray inBa = outBa;
+        QDataStream in(inBa);
+        BaseUser u2;
+        in >> u2;
+
+        QCOMPARE(u1, u2);
+        QCOMPARE(u2.id(), 1);
+        QCOMPARE(u2.username(), QStringLiteral("user1"));
+        QCOMPARE(u2.email(), QStringLiteral("user1@example.net"));
+        QCOMPARE(u2.created(), created);
+        QCOMPARE(u2.updated(), updated);
+        QCOMPARE(u2.validUntil(), validUntil);
+        QCOMPARE(u2.lastSeen(), lastSeen);
+        QCOMPARE(u2.lockedAt(), lockedAt);
+        QCOMPARE(u2.lockedById(), 2);
+        QCOMPARE(u2.lockedByName(), QStringLiteral("user2"));
+        QCOMPARE(u2.settings(), settings);
+    }
+
+    // test valid into valid
+    {
+        BaseUser u1(1, BaseUser::Registered, QStringLiteral("user1"), QStringLiteral("user1@example.net"), created, updated, validUntil, lastSeen, lockedAt, 2, QStringLiteral("user2"), settings);
+        BaseUser u2(2, BaseUser::Administrator, QStringLiteral("user2"), QStringLiteral("user2@example.net"), created, updated, QDateTime(), QDateTime(), QDateTime(), 0, QString(), {});
+
+        QByteArray outBa;
+        QDataStream out(&outBa, QIODeviceBase::WriteOnly);
+        out << u1;
+
+        const QByteArray inBa = outBa;
+        QDataStream in(inBa);
+        in >> u2;
+
+        QCOMPARE(u1, u2);
+        QCOMPARE(u2.id(), 1);
+        QCOMPARE(u2.username(), QStringLiteral("user1"));
+        QCOMPARE(u2.email(), QStringLiteral("user1@example.net"));
+        QCOMPARE(u2.created(), created);
+        QCOMPARE(u2.updated(), updated);
+        QCOMPARE(u2.validUntil(), validUntil);
+        QCOMPARE(u2.lastSeen(), lastSeen);
+        QCOMPARE(u2.lockedAt(), lockedAt);
+        QCOMPARE(u2.lockedById(), 2);
+        QCOMPARE(u2.lockedByName(), QStringLiteral("user2"));
+        QCOMPARE(u2.settings(), settings);
+    }
+
+    // test null into valid
+    {
+        BaseUser u1;
+        BaseUser u2(2, BaseUser::Administrator, QStringLiteral("user2"), QStringLiteral("user2@example.net"), created, updated, QDateTime(), QDateTime(), QDateTime(), 0, QString(), {});
+
+        QByteArray outBa;
+        QDataStream out(&outBa, QIODeviceBase::WriteOnly);
+        out << u1;
+
+        const QByteArray inBa = outBa;
+        QDataStream in(inBa);
+        in >> u2;
+
+        QVERIFY(u2.isNull());
+    }
+
+    // test null into null
+    {
+        BaseUser u1;
+        BaseUser u2;
+
+        QByteArray outBa;
+        QDataStream out(&outBa, QIODeviceBase::WriteOnly);
+        out << u1;
+
+        const QByteArray inBa = outBa;
+        QDataStream in(inBa);
+        in >> u2;
+
+        QVERIFY(u2.isNull());
+    }
 }
 
 void BaseUserTest::testToJson()
