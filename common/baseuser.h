@@ -51,7 +51,7 @@ public:
     BaseUser(BaseUser &&other) noexcept;
     BaseUser &operator=(const BaseUser &other);
     BaseUser &operator=(BaseUser &&other) noexcept;
-    ~BaseUser();
+    virtual ~BaseUser();
 
     dbid_t id() const;
 

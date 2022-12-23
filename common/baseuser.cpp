@@ -62,20 +62,11 @@ BaseUser::BaseUser(BaseUser::dbid_t id, BaseUser::Type type, const QString &user
     data->settings = settings;
 }
 
-BaseUser::BaseUser(const BaseUser &other)
-    : data{other.data}
-{
-
-}
+BaseUser::BaseUser(const BaseUser &other) = default;
 
 BaseUser::BaseUser(BaseUser &&other) noexcept = default;
 
-BaseUser &BaseUser::operator=(const BaseUser &other)
-{
-    if (this != &other)
-        data.operator=(other.data);
-    return *this;
-}
+BaseUser &BaseUser::operator=(const BaseUser &other) = default;
 
 BaseUser &BaseUser::operator=(BaseUser &&other) noexcept = default;
 
