@@ -246,4 +246,9 @@ QDataStream &operator>>(QDataStream &stream, BaseDomain &domain)
     return stream;
 }
 
+void swap(BaseDomain &a, BaseDomain &b) noexcept
+{
+    a.swap(b);
+}
+
 #include "moc_basedomain.cpp"
