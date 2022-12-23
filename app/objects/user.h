@@ -27,17 +27,11 @@ public:
     User();
     User(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedById, const QString &lockedByName);
     User(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedById, const QString &lockedByName, const QVariantMap &settings);
-    User(const Cutelyst::AuthenticationUser &user);
     User(const User &other);
     User(User &&other) noexcept;
     User &operator=(const User &other);
     User &operator=(User &&other) noexcept;
     ~User();
-
-    bool operator==(const User &other) const noexcept;
-
-    bool operator!=(const User &other) const noexcept
-    { return !(*this == other); }
 
     void toStash(Cutelyst::Context *c);
 

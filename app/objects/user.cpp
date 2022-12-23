@@ -47,33 +47,6 @@ User::User(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, co
 
 }
 
-User::User(const Cutelyst::AuthenticationUser &user) : BaseUser()
-{
-    data = new BaseUserData;
-    data->id = user.id().toUInt();
-    data->type = static_cast<BaseUser::Type>(user.value(QStringLiteral("type")).toInt());
-    data->username = user.value(QStringLiteral("username")).toString();
-    data->email = user.value(QStringLiteral("email")).toString();
-    data->created = user.value(QStringLiteral("created_at")).toDateTime();
-    data->created.setTimeSpec(Qt::UTC);
-    data->updated = user.value(QStringLiteral("updated_at")).toDateTime();
-    data->updated.setTimeSpec(Qt::UTC);
-    data->validUntil = user.value(QStringLiteral("valid_until")).toDateTime();
-    if (data->validUntil.isValid()) {
-        data->validUntil.setTimeSpec(Qt::UTC);
-    }
-    data->lastSeen = user.value(QStringLiteral("last_seen")).toDateTime();
-    if (data->lastSeen.isValid()) {
-        data->lastSeen.setTimeSpec(Qt::UTC);
-    }
-    data->lockedAt = user.value(QStringLiteral("locked_at")).toDateTime();
-    if (data->lockedAt.isValid()) {
-        data->lockedAt.setTimeSpec(Qt::UTC);
-    }
-    data->lockedById = user.value(QStringLiteral("locked_by")).toUInt();
-    data->settings = user.value(QStringLiteral("settings")).toMap();
-}
-
 User::User(const User &other) = default;
 
 User::User(User &&other) noexcept = default;
@@ -83,59 +56,6 @@ User &User::operator=(const User &other) = default;
 User &User::operator=(User &&other) noexcept = default;
 
 User::~User() = default;
-
-bool User::operator==(const User &other) const noexcept
-{
-    if (data == other.data) {
-        return true;
-    }
-
-    if (id() != other.id()) {
-        return false;
-    }
-
-    if (type() != other.type()) {
-        return false;
-    }
-
-    if (username() != other.username()) {
-        return false;
-    }
-
-    if (email() != other.email()) {
-        return false;
-    }
-
-    if (created() != other.created()) {
-        return false;
-    }
-
-    if (updated() != other.updated()) {
-        return false;
-    }
-
-    if (validUntil() != other.validUntil()) {
-        return false;
-    }
-
-    if (lastSeen() != other.lastSeen()) {
-        return false;
-    }
-
-    if (lockedAt() != other.lockedAt()) {
-        return false;
-    }
-
-    if (lockedById() != other.lockedById()) {
-        return false;
-    }
-
-    if (settings() != other.settings()) {
-        return false;
-    }
-
-    return true;
-}
 
 void User::toStash(Cutelyst::Context *c)
 {
@@ -308,7 +228,7 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
         const QString newPwEnc = CredentialBotan::createArgon2Password(newPassword);
         if (newPwEnc.isEmpty()) {
             e = Error(Cutelyst::Response::InternalServerError, c->translate("User", "Failed to encrypt new password."));
-            qCCritical(MEL_CORE, "Failed to encrypt new password for user '%s' (ID: %i)", qUtf8Printable(data->username), data->id);
+            qCCritical(MEL_CORE) << "Failed to encrypt new password for" << *this;
             return false;
         }
 
@@ -321,7 +241,7 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
     q.bindValue(QStringLiteral(":email"), email);
     q.bindValue(QStringLiteral(":valid_until"), validUntil);
     q.bindValue(QStringLiteral(":type"), static_cast<int>(type));
-    q.bindValue(QStringLiteral(":id"), data->id);
+    q.bindValue(QStringLiteral(":id"), id());
 
     if (Q_UNLIKELY(!q.exec())) {
         e = Error(q, c->translate("User", "Failed to update user data in the database."));
@@ -335,7 +255,7 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
                                                    "VALUES (:user_id, :name, :value) "
                                                    "ON DUPLICATE KEY UPDATE "
                                                    "value = :value"));
-        q.bindValue(QStringLiteral(":user_id"), data->id);
+        q.bindValue(QStringLiteral(":user_id"), id());
         q.bindValue(QStringLiteral(":name"), key);
         q.bindValue(QStringLiteral(":value"), values.value(key).toString());
 
@@ -350,17 +270,19 @@ bool User::update(Cutelyst::Context *c, Error &e, const QVariantHash &values)
         return false;
     }
 
+    QVariantMap newSettings;
     for (const QString &key : settingsKeys) {
-        data->settings.insert(key, values.value(key));
+        newSettings.insert(key, values.value(key));
     }
+    setSettings(newSettings);
 
-    data->updated = now;
-    data->email = email;
-    data->type = type;
-    data->validUntil = validUntil;
+    setUpdated(now);
+    setEmail(email);
+    setType(type);
+    setValidUntil(validUntil);
 
     if (MeldariConfig::useMemcached()) {
-        Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), *this, MEMC_USERS_STORAGE_DURATION);
+        Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(id()), *this, MEMC_USERS_STORAGE_DURATION);
     }
 
     return true;
@@ -372,18 +294,18 @@ bool User::updateLastSeen(Cutelyst::Context *c, Error &e)
 
     QSqlQuery q = CPreparedSqlQueryThread(QStringLiteral("UPDATE users SET last_seen = :last_seen WHERE id = :id"));
     q.bindValue(QStringLiteral(":last_seen"), now);
-    q.bindValue(QStringLiteral(":id"), data->id);
+    q.bindValue(QStringLiteral(":id"), id());
 
     if (Q_UNLIKELY(!q.exec())) {
-        e = Error(q, c->translate("User", "Failed to update last seen state for user “%1”.").arg(data->username));
-        qCWarning(MEL_CORE) << "Failed to update last seen state for user" << data->username << "(ID:" << data->id << ')';
+        e = Error(q, c->translate("User", "Failed to update last seen state for user “%1”.").arg(username()));
+        qCWarning(MEL_CORE) << "Failed to update last seen state for" << *this;
         return false;
     }
 
-    data->lastSeen = now;
+    setLastSeen(now);
 
     if (MeldariConfig::useMemcached()) {
-        Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), *this, MEMC_USERS_STORAGE_DURATION);
+        Cutelyst::Memcached::setByKey<User>(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(id()), *this, MEMC_USERS_STORAGE_DURATION);
     }
 
     return true;
@@ -393,17 +315,17 @@ bool User::remove(Cutelyst::Context *c, Error &e) const
 {
     if (MeldariConfig::useMemcached()) {
         Cutelyst::Memcached::MemcachedReturnType rt;
-        if (Q_UNLIKELY(!Cutelyst::Memcached::removeByKey(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(data->id), &rt))) {
-            e = Error(Cutelyst::Response::InternalServerError, c->translate("User", "Failed to remove user %1 (ID: %2) from the memcache: %3").arg(data->username, QString::number(data->id), Cutelyst::Memcached::errorString(c, rt)));
+        if (Q_UNLIKELY(!Cutelyst::Memcached::removeByKey(QStringLiteral(MEMC_USERS_GROUP_KEY), QString::number(id()), &rt))) {
+            e = Error(Cutelyst::Response::InternalServerError, c->translate("User", "Failed to remove user %1 (ID: %2) from the memcache: %3").arg(username(), QString::number(id()), Cutelyst::Memcached::errorString(c, rt)));
             return false;
         }
     }
 
     QSqlQuery q = CPreparedSqlQueryThread(QStringLiteral("DELETE FROM users WHERE id = :id"));
-    q.bindValue(QStringLiteral(":id"), data->id);
+    q.bindValue(QStringLiteral(":id"), id());
 
     if (Q_UNLIKELY(!q.exec())) {
-        e = Error(q, c->translate("User", "Failed to remove user %1 (ID: %2) from the database.").arg(data->username, QString::number(data->id)));
+        e = Error(q, c->translate("User", "Failed to remove user %1 (ID: %2) from the database.").arg(username(), QString::number(id())));
         qCCritical(MEL_CORE) << "Failed to remove" << *this << "from the database:" << q.lastError().text();
         return false;
     }
