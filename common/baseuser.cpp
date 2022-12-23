@@ -402,42 +402,53 @@ QDebug operator<<(QDebug dbg, const BaseUser &user)
 
 QDataStream &operator<<(QDataStream &stream, const BaseUser &user)
 {
-    stream << user.data->id
-           << static_cast<qint32>(user.data->type)
-           << user.data->username
-           << user.data->email
-           << user.data->created
-           << user.data->updated
-           << user.data->validUntil
-           << user.data->lastSeen
-           << user.data->lockedAt
-           << user.data->lockedById
-           << user.data->lockedByName
-           << user.data->settings;
+    if (!user.isNull()) {
+        stream << user.data->id
+               << static_cast<qint32>(user.data->type)
+               << user.data->username
+               << user.data->email
+               << user.data->created
+               << user.data->updated
+               << user.data->validUntil
+               << user.data->lastSeen
+               << user.data->lockedAt
+               << user.data->lockedById
+               << user.data->lockedByName
+               << user.data->settings;
+    } else {
+        stream << static_cast<BaseUser::dbid_t>(0);
+    }
 
     return stream;
 }
 
 QDataStream &operator>>(QDataStream &stream, BaseUser &user)
 {
-    if (user.data == nullptr) {
-        user.data = new BaseUserData;
-    }
+    BaseUser::dbid_t id = 0;
+    stream >> id;
 
-    stream >> user.data->id;
-    qint32 typeInt = -1;
-    stream >> typeInt;
-    user.data->type = static_cast<BaseUser::Type>(typeInt);
-    stream >> user.data->username;
-    stream >> user.data->email;
-    stream >> user.data->created;
-    stream >> user.data->updated;
-    stream >> user.data->validUntil;
-    stream >> user.data->lastSeen;
-    stream >> user.data->lockedAt;
-    stream >> user.data->lockedById;
-    stream >> user.data->lockedByName;
-    stream >> user.data->settings;
+    if (id == 0) {
+        user.clear();
+    } else {
+        if (user.data == nullptr) {
+            user.data = new BaseUserData;
+        }
+
+        user.data->id = id;
+        qint32 typeInt = -1;
+        stream >> typeInt;
+        user.data->type = static_cast<BaseUser::Type>(typeInt);
+        stream >> user.data->username;
+        stream >> user.data->email;
+        stream >> user.data->created;
+        stream >> user.data->updated;
+        stream >> user.data->validUntil;
+        stream >> user.data->lastSeen;
+        stream >> user.data->lockedAt;
+        stream >> user.data->lockedById;
+        stream >> user.data->lockedByName;
+        stream >> user.data->settings;
+    }
 
     return stream;
 }

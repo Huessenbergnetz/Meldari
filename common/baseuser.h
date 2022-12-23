@@ -87,6 +87,8 @@ public:
 
     bool isNull() const;
 
+    void clear();
+
     QString logInfo() const;
 
     QJsonObject toJson() const;
@@ -126,6 +128,9 @@ private:
 
 Q_DECLARE_METATYPE(BaseUser)
 Q_DECLARE_TYPEINFO(BaseUser, Q_MOVABLE_TYPE);
+
+inline void BaseUser::clear()
+{ if (!isNull()) *this = BaseUser(); }
 
 QDebug operator<<(QDebug dbg, const BaseUser &user);
 
