@@ -91,6 +91,14 @@ BaseUser::Type BaseUser::type() const
     return data ? data->type : BaseUser::Invalid;
 }
 
+void BaseUser::setType(BaseUser::Type type)
+{
+    if (!data) {
+        data = new BaseUserData;
+    }
+    data->type = type;
+}
+
 QString BaseUser::username() const
 {
     return data ? data->username : QString();
@@ -99,6 +107,14 @@ QString BaseUser::username() const
 QString BaseUser::email() const
 {
     return data ? data->email : QString();
+}
+
+void BaseUser::setEmail(const QString &email)
+{
+    if (!data) {
+        data = new BaseUserData;
+    }
+    data->email = email;
 }
 
 QDateTime BaseUser::created() const
@@ -111,9 +127,25 @@ QDateTime BaseUser::updated() const
     return data ? data->updated : QDateTime();
 }
 
+void BaseUser::setUpdated(const QDateTime &updated)
+{
+    if (!data) {
+        data = new BaseUserData;
+    }
+    data->updated = updated;
+}
+
 QDateTime BaseUser::validUntil() const
 {
     return data ? data->validUntil : QDateTime();
+}
+
+void BaseUser::setValidUntil(const QDateTime &validUntil)
+{
+    if (!data) {
+        data = new BaseUserData;
+    }
+    data->validUntil = validUntil;
 }
 
 QDateTime BaseUser::lastSeen() const
@@ -121,9 +153,25 @@ QDateTime BaseUser::lastSeen() const
     return data ? data->lastSeen : QDateTime();
 }
 
+void BaseUser::setLastSeen(const QDateTime &lastSeen)
+{
+    if (!data) {
+        data = new BaseUserData;
+    }
+    data->lastSeen;
+}
+
 QDateTime BaseUser::lockedAt() const
 {
     return data ? data->lockedAt : QDateTime();
+}
+
+void BaseUser::setLockedAt(const QDateTime &lockedAt)
+{
+    if (!data) {
+        data = new BaseUserData;
+    }
+    data->lockedAt = lockedAt;
 }
 
 BaseUser::dbid_t BaseUser::lockedById() const
@@ -131,14 +179,38 @@ BaseUser::dbid_t BaseUser::lockedById() const
     return data ? data->lockedById : 0;
 }
 
+void BaseUser::setLockedById(dbid_t id)
+{
+    if (!data) {
+        data = new BaseUserData;
+    }
+    data->lockedById = id;
+}
+
 QString BaseUser::lockedByName() const
 {
     return data ? data->lockedByName : QString();
 }
 
+void BaseUser::setLockedByName(const QString &username)
+{
+    if (!data) {
+        data = new BaseUserData;
+    }
+    data->lockedByName = username;
+}
+
 QVariantMap BaseUser::settings() const
 {
     return data ? data->settings : QVariantMap();
+}
+
+void BaseUser::setSettings(const QVariantMap &settings)
+{
+    if (!data) {
+        data = new BaseUserData;
+    }
+    data->settings = settings;
 }
 
 QString BaseUser::tz() const

@@ -107,9 +107,19 @@ public:
     static QStringList typeValues(Type below);
 
 protected:
-    QSharedDataPointer<BaseUserData> data;
+    void setType(Type type);
+    void setEmail(const QString &email);
+    void setUpdated(const QDateTime &updated);
+    void setValidUntil(const QDateTime &validUntil);
+    void setLastSeen(const QDateTime &lastSeen);
+    void setLockedAt(const QDateTime &lockedAt);
+    void setLockedById(dbid_t id);
+    void setLockedByName(const QString &username);
+    void setSettings(const QVariantMap &settings);
 
 private:
+    QSharedDataPointer<BaseUserData> data;
+
     friend QDataStream &operator<<(QDataStream &stream, const BaseUser &user);
     friend QDataStream &operator>>(QDataStream &stream, BaseUser &user);
 };
