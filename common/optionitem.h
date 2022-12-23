@@ -28,6 +28,8 @@ public:
     OptionItem &operator=(const OptionItem &other);
     OptionItem &operator=(OptionItem &&other) noexcept;
     ~OptionItem();
+    void swap(OptionItem &other) noexcept
+    { data.swap(other.data); }
 
     QString name() const;
     QString value() const;
@@ -37,7 +39,7 @@ private:
     QSharedDataPointer<OptionItemData> data;
 };
 
-class OptionItemCollator : public QCollator
+class MELDARICOMMON_EXPORT OptionItemCollator : public QCollator
 {
 public:
     explicit OptionItemCollator(const QLocale &locale) : QCollator(locale) {}
@@ -48,5 +50,6 @@ public:
 Q_DECLARE_METATYPE(OptionItem)
 Q_DECLARE_TYPEINFO(OptionItem, Q_MOVABLE_TYPE);
 
+MELDARICOMMON_EXPORT void swap(OptionItem &a, OptionItem &b) noexcept;
 
 #endif // MELDARI_OPTIONITEM_H

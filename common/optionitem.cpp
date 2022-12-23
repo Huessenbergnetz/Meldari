@@ -68,4 +68,9 @@ bool OptionItem::selected() const
     return data->selected;
 }
 
+void swap(OptionItem &a, OptionItem &b) noexcept
+{
+    a.swap(b);
+}
+
 #include "moc_optionitem.cpp"
