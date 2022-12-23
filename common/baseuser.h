@@ -132,10 +132,10 @@ Q_DECLARE_TYPEINFO(BaseUser, Q_MOVABLE_TYPE);
 inline void BaseUser::clear()
 { if (!isNull()) *this = BaseUser(); }
 
-QDebug operator<<(QDebug dbg, const BaseUser &user);
+MELDARICOMMON_EXPORT QDebug operator<<(QDebug dbg, const BaseUser &user);
 
-QDataStream &operator<<(QDataStream &stream, const BaseUser &user);
+MELDARICOMMON_EXPORT QDataStream &operator<<(QDataStream &stream, const BaseUser &user);
 
-QDataStream &operator>>(QDataStream &stream, BaseUser &user);
+MELDARICOMMON_EXPORT QDataStream &operator>>(QDataStream &stream, BaseUser &user);
 
 #endif // MELDARICOMMON_BASEUSER_H
