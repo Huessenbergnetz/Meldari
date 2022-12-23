@@ -444,4 +444,9 @@ QDataStream &operator>>(QDataStream &stream, BaseUser &user)
     return stream;
 }
 
+void swap(BaseUser &a, BaseUser &b) noexcept
+{
+    a.swap(b);
+}
+
 #include "moc_baseuser.cpp"

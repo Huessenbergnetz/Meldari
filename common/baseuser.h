@@ -53,6 +53,9 @@ public:
     BaseUser &operator=(BaseUser &&other) noexcept;
     ~BaseUser();
 
+    void swap(BaseUser &other) noexcept
+    { data.swap(other.data); }
+
     dbid_t id() const;
 
     Type type() const;
@@ -137,5 +140,7 @@ MELDARICOMMON_EXPORT QDebug operator<<(QDebug dbg, const BaseUser &user);
 MELDARICOMMON_EXPORT QDataStream &operator<<(QDataStream &stream, const BaseUser &user);
 
 MELDARICOMMON_EXPORT QDataStream &operator>>(QDataStream &stream, BaseUser &user);
+
+MELDARICOMMON_EXPORT void swap(BaseUser &a, BaseUser &b) noexcept;
 
 #endif // MELDARICOMMON_BASEUSER_H
