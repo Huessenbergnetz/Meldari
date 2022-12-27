@@ -73,4 +73,25 @@ void swap(OptionItem &a, OptionItem &b) noexcept
     a.swap(b);
 }
 
+bool OptionItem::operator==(const OptionItem &other) const noexcept
+{
+    if (data == other.data) {
+        return true;
+    }
+
+    if (name() != other.name()) {
+        return false;
+    }
+
+    if (value() != other.value()) {
+        return false;
+    }
+
+    if (selected() != other.selected()) {
+        return false;
+    }
+
+    return true;
+}
+
 #include "moc_optionitem.cpp"

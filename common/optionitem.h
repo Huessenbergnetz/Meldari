@@ -31,6 +31,11 @@ public:
     void swap(OptionItem &other) noexcept
     { data.swap(other.data); }
 
+    bool operator==(const OptionItem &other) const noexcept;
+
+    bool operator!=(const OptionItem &other) const noexcept
+    { return !(*this == other); }
+
     QString name() const;
     QString value() const;
     bool selected() const;
