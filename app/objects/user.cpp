@@ -57,7 +57,7 @@ User &User::operator=(User &&other) noexcept = default;
 
 User::~User() = default;
 
-void User::toStash(Cutelyst::Context *c)
+void User::toStash(Cutelyst::Context *c) const
 {
     Q_ASSERT(c);
     c->setStash(QStringLiteral(USER_STASH_KEY), QVariant::fromValue<User>(*this));

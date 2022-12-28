@@ -15,7 +15,6 @@
 
 namespace Cutelyst {
 class Context;
-class AuthenticationUser;
 }
 
 class Error;
