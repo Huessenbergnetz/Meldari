@@ -54,6 +54,7 @@ MenuItem::MenuItem(const QString &name, const QString &title, const QString &url
     data->title = title;
     data->icon = MeldariConfig::tmplIcon(name);
     data->url.setUrl(url);
+    data->isActive = isActive;
 }
 
 MenuItem::MenuItem(const MenuItem &other)
