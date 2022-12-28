@@ -34,6 +34,9 @@ public:
     Error &operator=(Error && other) noexcept;
     ~Error();
 
+    void swap(Error &other) noexcept
+    { data.swap(other.data); }
+
     Cutelyst::Response::HttpStatus status() const;
 
     QString text() const;
@@ -56,11 +59,18 @@ public:
 
     QJsonObject toJson(Cutelyst::Context *c) const;
 
+    bool operator==(const Error &other) const noexcept;
+
+    bool operator!=(const Error &other) const noexcept
+    { return !(*this == other); }
+
 private:
     QSharedDataPointer<ErrorData> data;
 };
 
 Q_DECLARE_METATYPE(Error)
 Q_DECLARE_TYPEINFO(Error, Q_MOVABLE_TYPE);
+
+void swap(Error &a, Error &b) noexcept;
 
 #endif // MELDARI_ERROR_H

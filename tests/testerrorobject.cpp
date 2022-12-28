@@ -24,6 +24,8 @@ private slots:
     void testSqlErrorConstructor();
     void testCopy();
     void testMove();
+    void testSwap();
+    void testComparison();
 };
 
 void ErrorObjectTest::testDefaultConstructor()
@@ -90,6 +92,38 @@ void ErrorObjectTest::testMove()
         QCOMPARE(e2.status(), Cutelyst::Response::NotFound);
         QCOMPARE(e2.text(), QStringLiteral("Page not found"));
     }
+}
+
+void ErrorObjectTest::testSwap()
+{
+    Error e1(Cutelyst::Response::NotFound, QStringLiteral("Page not found"));
+    Error e2(Cutelyst::Response::InternalServerError, QStringLiteral("Invalid config value"));
+    Error e3;
+
+    swap(e1, e3);
+    QCOMPARE(e1.status(), Cutelyst::Response::OK);
+    QCOMPARE(e3.status(), Cutelyst::Response::NotFound);
+    e3.swap(e2);
+    QCOMPARE(e3.status(), Cutelyst::Response::InternalServerError);
+    QCOMPARE(e2.status(), Cutelyst::Response::NotFound);
+}
+
+void ErrorObjectTest::testComparison()
+{
+    Error e1(Cutelyst::Response::NotFound, QStringLiteral("Page not found"));
+    Error e2(Cutelyst::Response::InternalServerError, QStringLiteral("Invalid config value"));
+    Error e3(Cutelyst::Response::NotFound, QStringLiteral("Page not found"));
+    Error e4;
+    Error e5(Cutelyst::Response::OK, QString());
+    Error e6 = e1;
+
+    QVERIFY(e1 != e2);
+    QVERIFY(e1 == e3);
+    QVERIFY(e1 != e4);
+    QVERIFY(e1 != e5);
+    QVERIFY(e1 == e6);
+
+    QVERIFY(e4 == e5);
 }
 
 QTEST_MAIN(ErrorObjectTest)

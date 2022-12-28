@@ -164,4 +164,30 @@ QJsonObject Error::toJson(Cutelyst::Context *c) const
     return o;
 }
 
+bool Error::operator==(const Error &other) const noexcept
+{
+    if (data == other.data) {
+        return true;
+    }
+
+    if (status() != other.status()) {
+        return false;
+    }
+
+    if (text() != other.text()) {
+        return false;
+    }
+
+    if (sqlErrorText() != other.sqlErrorText()) {
+        return false;
+    }
+
+    return true;
+}
+
+void swap(Error &a, Error &b) noexcept
+{
+    a.swap(b);
+}
+
 #include "moc_error.cpp"
