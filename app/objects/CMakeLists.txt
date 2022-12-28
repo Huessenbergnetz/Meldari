@@ -11,4 +11,6 @@ target_sources(meldari
         error.h
         simpleuser.cpp
         simpleuser.h
+        domain.cpp
+        domain.h
 )
