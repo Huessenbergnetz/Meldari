@@ -41,6 +41,9 @@ public:
     MenuItem &operator=(MenuItem &&other) noexcept;
     ~MenuItem();
 
+    void swap(MenuItem &other) noexcept
+    { data.swap(other.data); }
+
     std::vector<MenuItem> children() const;
 
     QString name() const;
@@ -59,11 +62,18 @@ public:
 
     void addChildItem(const MenuItem &child);
 
+    bool operator==(const MenuItem &other) const noexcept;
+
+    bool operator!=(const MenuItem &other) const noexcept
+    { return !(*this == other); }
+
 private:
     QSharedDataPointer<MenuItemData> data;
 };
 
 Q_DECLARE_METATYPE(MenuItem)
 Q_DECLARE_TYPEINFO(MenuItem, Q_MOVABLE_TYPE);
+
+void swap(MenuItem &a, MenuItem &b) noexcept;
 
 #endif // MELDARI_MENUITEM_H

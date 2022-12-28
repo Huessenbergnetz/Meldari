@@ -121,4 +121,50 @@ void MenuItem::addChildItem(const MenuItem &child)
     data->isExpanded = child.isActive();
 }
 
+bool MenuItem::operator==(const MenuItem &other) const noexcept
+{
+    if (data == other.data) {
+        return true;
+    }
+
+    if (name() != other.name()) {
+        return false;
+    }
+
+    if (title() != other.title()) {
+        return false;
+    }
+
+    if (icon() != other.icon()) {
+        return false;
+    }
+
+    if (url() != other.url()) {
+        return false;
+    }
+
+    if (isActive() != other.isActive()) {
+        return false;
+    }
+
+    if (hasChildren() != other.hasChildren()) {
+        return false;
+    }
+
+    if (isExpanded() != other.isExpanded()) {
+        return false;
+    }
+
+    if (children() != other.children()) {
+        return false;
+    }
+
+    return true;
+}
+
+void swap(MenuItem &a, MenuItem &b) noexcept
+{
+    a.swap(b);
+}
+
 #include "moc_menuitem.cpp"
