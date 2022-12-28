@@ -22,6 +22,7 @@ private slots:
     void testCopy();
     void testMove();
     void testSwap();
+    void testClear();
     void testComparison();
     void testDatastream();
     void testToJson();
@@ -141,6 +142,14 @@ void BaseDomainTest::testSwap()
     d3.swap(d2);
     QCOMPARE(d3.id(), 2);
     QCOMPARE(d2.id(), 1);
+}
+
+void BaseDomainTest::testClear()
+{
+    const QDateTime now = QDateTime::currentDateTimeUtc();
+    BaseDomain d1(1, QStringLiteral("example.net"), BaseDomain::Enabled, 1, QStringLiteral("user"), now, now, QDateTime(), now, 2, QStringLiteral("user2"));
+    d1.clear();
+    QVERIFY(d1.isNull());
 }
 
 void BaseDomainTest::testComparison()

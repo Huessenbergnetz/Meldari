@@ -77,6 +77,8 @@ public:
     void swap(BaseDomain &other) noexcept
     { data.swap(other.data); }
 
+    void clear();
+
     QJsonObject toJson() const;
 
     bool operator==(const BaseDomain &other) const noexcept;
@@ -93,6 +95,9 @@ private:
 
 Q_DECLARE_METATYPE(BaseDomain)
 Q_DECLARE_TYPEINFO(BaseDomain, Q_MOVABLE_TYPE);
+
+inline void BaseDomain::clear()
+{ if (!isNull()) *this = BaseDomain(); }
 
 MELDARICOMMON_EXPORT QDebug operator<<(QDebug dbg, const BaseDomain &domain);
 
