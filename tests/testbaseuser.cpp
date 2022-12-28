@@ -83,7 +83,8 @@ void BaseUserTest::testCopy()
     // test copy assignment
     {
         BaseUser user1(1, BaseUser::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
-        BaseUser user2 = user1;
+        BaseUser user2;
+        user2 = user1;
 
         QCOMPARE(user1.id(), user2.id());
         QCOMPARE(user1.type(), user2.type());

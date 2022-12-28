@@ -65,7 +65,8 @@ void ErrorObjectTest::testCopy()
     // test copy assignment
     {
         Error e1(Cutelyst::Response::NotFound, QStringLiteral("Page not found"));
-        Error e2 = e1;
+        Error e2;
+        e2 = e1;
 
         QCOMPARE(e1.status(), e2.status());
         QCOMPARE(e1.text(), e2.text());

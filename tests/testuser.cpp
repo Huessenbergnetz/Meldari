@@ -39,10 +39,29 @@ void UserTest::testDefaulConstructor()
 void UserTest::testConstructorWithArgs()
 {
     const QDateTime now = QDateTime::currentDateTimeUtc();
+    const QDateTime created = now.addDays(-5);
+    const QDateTime updated = now.addSecs(-99);
+    const QDateTime validUntil = now.addYears(2);
+    const QDateTime lastSeen = now.addSecs(-500);
+    const QDateTime lockedAt = now;
+
     const QVariantMap settings = QVariantMap({
                                                  {QStringLiteral("option"), QStringLiteral("value")}
                                              });
-    User user(1, User::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), settings);
+    User user(1, User::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), created, updated, validUntil, lastSeen, lockedAt, 2, QStringLiteral("admin"), settings);
+
+    QCOMPARE(user.id(), 1);
+    QCOMPARE(user.type(), User::Registered);
+    QCOMPARE(user.username(), QStringLiteral("user"));
+    QCOMPARE(user.email(), QStringLiteral("user@example.net"));
+    QCOMPARE(user.created(), created);
+    QCOMPARE(user.updated(), updated);
+    QCOMPARE(user.validUntil(), validUntil);
+    QCOMPARE(user.lastSeen(), lastSeen);
+    QCOMPARE(user.lockedAt(), lockedAt);
+    QCOMPARE(user.lockedById(), 2);
+    QCOMPARE(user.lockedByName(), QStringLiteral("admin"));
+    QCOMPARE(user.settings(), settings);
 }
 
 void UserTest::testCopy()
@@ -62,7 +81,8 @@ void UserTest::testCopy()
     // test copy assignment
     {
         User user1(1, User::Registered, QStringLiteral("user"), QStringLiteral("user@example.net"), now, now, QDateTime(), now, QDateTime(), 0, QString(), QVariantMap());
-        User user2 = user1;
+        User user2;
+        user2 = user1;
 
         QCOMPARE(user1.id(), user2.id());
         QCOMPARE(user1.type(), user2.type());

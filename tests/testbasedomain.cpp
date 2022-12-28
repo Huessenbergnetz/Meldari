@@ -94,7 +94,8 @@ void BaseDomainTest::testCopy()
     // test copy assignment
     {
         BaseDomain d1(1, QStringLiteral("example.net"), BaseDomain::Enabled, 1, QStringLiteral("user"), now, now, QDateTime(), now, 2, QStringLiteral("user2"));
-        BaseDomain d2 = d1;
+        BaseDomain d2;
+        d2 = d1;
 
         QCOMPARE(d1.id(), d2.id());
         QCOMPARE(d1.name(), d2.name());
