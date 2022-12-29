@@ -44,3 +44,6 @@ CMakeLists.txt.user*
 
 # Directory info file
 .directory
+
+# Visual Studio Code files
+.vscode/
