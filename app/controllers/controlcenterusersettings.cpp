@@ -85,7 +85,7 @@ void ControlCenterUsersettings::update(Context *c)
 
             u.toStash(c);
 
-            Utils::setJsonResponse(c, u.toJson(), c->translate("ControlCenterUsersettings", "Settings saved"));
+            MeldariUtils::setJsonResponse(c, u.toJson(), c->translate("ControlCenterUsersettings", "Settings saved"));
         } else {
             e.toStash(c, true);
         }

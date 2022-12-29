@@ -101,7 +101,7 @@ void ControlCenterUsers::add(Context *c)
         Error e;
         const User u = User::add(c, e, vr.values());
         if (!e) {
-            Utils::setJsonResponse(c, u.toJson(), c->translate("ControlCenterUsers", "User created"), c->translate("ControlCenterUsers", "Successfully created new user “%1” (ID: %2).").arg(u.username(), QString::number(u.id())));
+            MeldariUtils::setJsonResponse(c, u.toJson(), c->translate("ControlCenterUsers", "User created"), c->translate("ControlCenterUsers", "Successfully created new user “%1” (ID: %2).").arg(u.username(), QString::number(u.id())));
         } else {
             e.toStash(c, true);
         }
@@ -166,7 +166,7 @@ void ControlCenterUsers::remove(Context *c, const QString &id)
             return;
         }
 
-        Utils::setJsonResponse(c, user.toJson(), c->translate("ControlCenterUsers", "User removed"), c->translate("ControlCenterUsers", "Successfully removed user “%1” (ID: %2).").arg(user.username(), QString::number(user.id())));
+        MeldariUtils::setJsonResponse(c, user.toJson(), c->translate("ControlCenterUsers", "User removed"), c->translate("ControlCenterUsers", "Successfully removed user “%1” (ID: %2).").arg(user.username(), QString::number(user.id())));
     } else {
         c->res()->setStatus(400);
         c->res()->setJsonObjectBody(QJsonObject({{QStringLiteral("fielderrors"), vr.errorsJsonObject()}}));
@@ -214,7 +214,7 @@ void ControlCenterUsers::edit(Context *c, const QString &id)
     if (vr) {
         Error e;
         if (user.update(c, e, vr.values())) {
-            Utils::setJsonResponse(c, user.toJson(), c->translate("ControlCenterUsers", "User updated"), c->translate("ControlCenterUsers", "Successfully updated the data for user “%1” (ID: %2).").arg(user.username(), QString::number(user.id())));
+            MeldariUtils::setJsonResponse(c, user.toJson(), c->translate("ControlCenterUsers", "User updated"), c->translate("ControlCenterUsers", "Successfully updated the data for user “%1” (ID: %2).").arg(user.username(), QString::number(user.id())));
         } else {
             e.toStash(c, true);
         }

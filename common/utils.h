@@ -11,9 +11,6 @@
 #include <QStringList>
 #include <vector>
 
-class QJsonObject;
-class QJsonArray;
-class QJsonDocument;
 namespace Cutelyst {
 class Context;
 }
@@ -24,8 +21,6 @@ public:
     static QStringList getTimezoneList();
     static std::vector<OptionItem> getTimezoneOptionsList(const QString &selected = QString());
     inline static std::vector<OptionItem> getTimezoneOptionsList(const QByteArray &selected = QByteArray());
-    static void setJsonResponse(Cutelyst::Context *c, const QJsonObject &data, const QString &messageTitle = QString(), const QString &messageText = QString(), int status = 200);
-    static void setJsonResponse(Cutelyst::Context *c, const QJsonArray &data, const QString &messageTitle = QString(), const QString &messageText = QString(), int status = 200);
 };
 
 inline std::vector<OptionItem> Utils::getTimezoneOptionsList(const QByteArray &selected)

@@ -7,6 +7,10 @@
 #define MELDARIUTILS_H
 
 #include <QStringView>
+#include <QString>
+
+class QJsonObject;
+class QJsonArray;
 
 namespace Cutelyst {
 class Context;
@@ -16,6 +20,8 @@ class MeldariUtils
 {
 public:
     static bool checkAllowedMethod(Cutelyst::Context *c, QStringView allowedMethod, bool detachOnError = true);
+    static void setJsonResponse(Cutelyst::Context *c, const QJsonObject &data, const QString &messageTitle = QString(), const QString &messageText = QString(), int status = 200);
+    static void setJsonResponse(Cutelyst::Context *c, const QJsonArray &data, const QString &messageTitle = QString(), const QString &messageText = QString(), int status = 200);
 };
 
 #endif // MELDARIUTILS_H
