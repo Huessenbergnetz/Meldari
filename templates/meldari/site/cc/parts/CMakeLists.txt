@@ -13,6 +13,7 @@ set(parts_FILES
     validUntilInputWithLabel.html
     roPlaintextInputWithLabel.html
     roInputWithLabel.html
+    domainInputWithLabel.html
 )
 
 target_sources(meldaritemplate

@@ -1,0 +1,5 @@
+{% extends "parts/inputWithLabel.html" %}
+{% block divclass %}domain-with-label{% endblock divclass %}
+{% block type %}type="text"{% endblock %}
+{% block class %}form-control{% endblock %}
+{% block options %} minlength="4" maxlength="255" pattern="[\p{L}\p{Nd}\.-_]+\.\p{L}{2,63}$"{% endblock %}
