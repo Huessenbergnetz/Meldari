@@ -13,18 +13,11 @@ mix.options({
 
 mix.sass('assets/sass/style.scss', 'static/css/');
 
-mix.scripts([
-    'assets/js/licenseheader.js',
-    'node_modules/@popperjs/core/dist/umd/popper.js',
-    'node_modules/bootstrap/dist/js/bootstrap.js',
-    'assets/js/general.js',
-    'assets/js/validUntilInput.js',
-    'assets/js/users.js',
-    'assets/js/usersList.js',
-    'assets/js/usersAdd.js',
-    'assets/js/usersRemove.js',
-    'assets/js/usersEdit.js',
-    'assets/js/usersettings.js'
-], 'static/js/scripts.js');
+mix.copy('node_modules/bootstrap/dist/js/bootstrap.bundle.*', 'static/js');
+
+mix.copy('assets/js/index.js', 'static/js').minify('static/js/index.js');
+mix.copy('assets/js/users.js', 'static/js').minify('static/js/users.js');
+mix.copy('assets/js/usersettings.js', 'static/js').minify('static/js/usersettings.js');
+mix.copy('assets/js/utils.js', 'static/js').minify('static/js/utils.js');
 
 mix.copy('node_modules/bootstrap-icons/font/fonts', 'static/fonts');

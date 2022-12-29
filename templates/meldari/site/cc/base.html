@@ -4,8 +4,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link href="/css/style.css" rel="stylesheet">
         <title>{% if site_subtitle %}{{ site_subtitle }} – {% endif %}{{ site_title }} – {{ site_name }}</title>
+
+        <link href="/css/style.css" rel="stylesheet">
+        <script src="/common/js/es-module-shims.min.js" async></script>
+        <script src="/js/bootstrap.bundle.min.js" defer></script>
+        <script type="module" src="/js/index.min.js"></script>
     </head>
 
     <body>
@@ -41,8 +45,5 @@
 
         <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3">
         </div>
-
-        <script src="/common/js/meldari.js" defer></script>
-        <script src="/js/scripts.js" defer></script>
     </body>
 </html>

@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-var Meldari = Meldari || {};
+import * as MeldariUtils from './utils.min.js';
 
-Meldari.Users = Meldari.Users || {}
-
-Meldari.Users.get = async (userId) => {
-    const hdrs = Meldari.newXhrHeaders();
+async function get(userId) {
+    const hdrs = MeldariUtils.newXhrHeaders();
 
     const res = await fetch('/cc/users/get/' + userId, {
         method: 'GET',
@@ -20,10 +18,10 @@ Meldari.Users.get = async (userId) => {
     } else {
         return Promise.reject(res);
     }
-};
+}
 
-Meldari.Users.list = async (options = {}) => {
-    const hdrs = Meldari.newXhrHeaders();
+async function list(options = {}) {
+    const hdrs = MeldariUtils.newXhrHeaders();
 
     const docUrl = new URL(document.URL);
     const url = new URL('/cc/users/list', docUrl.origin);
@@ -42,8 +40,8 @@ Meldari.Users.list = async (options = {}) => {
     }
 };
 
-Meldari.Users.remove = async (userId, formData) => {
-    const hdrs = Meldari.newXhrHeaders();
+async function remove (userId, formData) {
+    const hdrs = MeldariUtils.newXhrHeaders();
 
     const res = await fetch('/cc/users/remove/' + userId, {
         method: 'POST',
@@ -58,8 +56,8 @@ Meldari.Users.remove = async (userId, formData) => {
     }
 };
 
-Meldari.Users.add = async (formData) => {
-    const hdrs = Meldari.newXhrHeaders();
+async function add(formData) {
+    const hdrs = MeldariUtils.newXhrHeaders();
 
     const res = await fetch('/cc/users/add', {
         method: 'POST',
@@ -74,8 +72,8 @@ Meldari.Users.add = async (formData) => {
     }
 };
 
-Meldari.Users.edit = async (userId, formData) => {
-    const hdrs = Meldari.newXhrHeaders();
+async function edit(userId, formData) {
+    const hdrs = MeldariUtils.newXhrHeaders();
 
     const res = await fetch('/cc/users/edit/' + userId, {
         method: 'POST',
@@ -89,3 +87,5 @@ Meldari.Users.edit = async (userId, formData) => {
         return Promise.reject(res);
     }
 };
+
+export { get, list, remove, add, edit };

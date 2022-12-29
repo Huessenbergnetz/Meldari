@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-var Meldari = Meldari || {};
+import * as Utils from './utils.min.js';
 
-Meldari.Usersettings = Meldari.Usersettings || {};
-
-Meldari.Usersettings.update = async (formData) => {
-    const hdrs = Meldari.newXhrHeaders();
+async function update(formData) {
+    const hdrs = Utils.newXhrHeaders();
 
     const res = await fetch('/cc/usersettings/update', {
         method: 'POST',
@@ -22,3 +20,5 @@ Meldari.Usersettings.update = async (formData) => {
         return Promise.reject(res);
     }
 };
+
+export { update };

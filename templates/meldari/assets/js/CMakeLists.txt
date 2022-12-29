@@ -3,13 +3,8 @@
 
 target_sources(meldaritemplate
     PRIVATE
-        licenseheader.js
-        general.js
-        validUntilInput.js
+        index.js
         users.js
-        usersList.js
-        usersAdd.js
-        usersRemove.js
-        usersEdit.js
         usersettings.js
+        utils.js
 )

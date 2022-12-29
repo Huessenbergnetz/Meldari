@@ -10,6 +10,7 @@
     "production": "npx mix --production"
   },
   "devDependencies": {
+    "es-module-shims": "^1.6.2",
     "laravel-mix": "^6.0.49",
     "sass": "^1.56.1",
     "sass-loader": "^12.6.0"

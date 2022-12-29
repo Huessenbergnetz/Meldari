@@ -3,71 +3,60 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-var MeldariTmpl = MeldariTmpl || {}
+import * as MeldariUsersettings from '/common/js/usersettings.min.js';
+import * as Utils from './utils.min.js';
 
-MeldariTmpl.UserSettings = MeldariTmpl.UserSettings || {}
+const form = document.forms['usersettingsForm'];
+const button = form.elements['userSettingsFormSubmit'];
 
-MeldariTmpl.UserSettings.form = null;
+function update() {
+    Utils.switchButton(button);
+    Utils.resetFormFieldErrors(form);
+    const fd = new FormData(form);
 
-MeldariTmpl.UserSettings.button = null;
-
-MeldariTmpl.UserSettings.exec = function() {
-    MeldariTmpl.switchButton(MeldariTmpl.UserSettings.button);
-    MeldariTmpl.resetFormFieldErrors(MeldariTmpl.UserSettings.form);
-    const fd = new FormData(MeldariTmpl.UserSettings.form);
-
-    Meldari.Usersettings.update(fd)
+    MeldariUsersettings.update(fd)
     .then(json => {
-              MeldariTmpl.setLang(json.data.settings.language);
+        Utils.setLang(json.data.settings.language);
+        const lang = Utils.getLang();
+        
+        const tz = json.data.settings.timezone;
+        Utils.setTz(tz);
+        
+        const localeDtOptions = {dateStyle: "long", timeStyle: "medium", timeZone: tz};
+        
+        const created = new Date(json.data.created);
+        form.elements['created'].value = created.toLocaleString(lang, localeDtOptions);
 
-              const f = MeldariTmpl.UserSettings.form;
+        const updated = new Date(json.data.updated);
+        form.elements['updated'].value = updated.toLocaleString(lang, localeDtOptions);
 
-              MeldariTmpl.tz = json.data.settings.timezone;
-              document.documentElement.dataset.timezone = MeldariTmpl.tz;
+        if (json.data.lastSeen) {
+            const lastSeen = new Date(json.data.lastSeen);
+            form.elements['lastSeen'].value = lastSeen.toLocaleString(lang, localeDtOptions);
+        } else {
+            form.elements['lastSeen'].value = '';
+        }
 
-              const localeDtOptions = {dateStyle: "long", timeStyle: "medium", timeZone: MeldariTmpl.tz};
+        if (json.data.validUntil) {
+            const validUntil = new Date(json.data.validUntil);
+            form.elements['validUntil'].value = validUntil.toLocaleString(lang, localeDtOptions);
+        } else {
+            form.elements['validUntil'].value = '';
+        }
 
-              const created = new Date(json.data.created);
-              f.elements['created'].value = created.toLocaleString(MeldariTmpl.lang, localeDtOptions);
+        form.elements['password'].value = '';
+        form.elements['newpassword'].value = '';
+        form.elements['newpassword_confirmation'].value = '';
 
-              const updated = new Date(json.data.updated);
-              f.elements['updated'].value = updated.toLocaleString(MeldariTmpl.lang, localeDtOptions);
-
-              if (json.data.lastSeen) {
-                  const lastSeen = new Date(json.data.lastSeen);
-                  f.elements['lastSeen'].value = lastSeen.toLocaleString(MeldariTmpl.lang, localeDtOptions);
-              } else {
-                  f.elements['lastSeen'].value = '';
-              }
-
-              if (json.data.validUntil) {
-                  const validUntil = new Date(json.data.validUntil);
-                  f.elements['validUntil'].value = validUntil.toLocaleString(MeldariTmpl.lang, localeDtOptions);
-              } else {
-                  f.elements['validUntil'].value = '';
-              }
-
-              f.elements['password'].value = '';
-              f.elements['newpassword'].value = '';
-              f.elements['newpassword_confirmation'].value = '';
-
-              MeldariTmpl.createSuccess(json.message);
-          })
+        Utils.createSuccess(json.message);
+    })
     .catch(error => {
         console.log(error);
-        MeldariTmpl.handleError(error, MeldariTmpl.UserSettings.form);
+        Utils.handleError(error, form);
     })
     .finally(() => {
-                 MeldariTmpl.switchButton(MeldariTmpl.UserSettings.button);
-             });
+        Utils.switchButton(button);
+    });
 }
 
-MeldariTmpl.UserSettings.init = function() {
-    MeldariTmpl.UserSettings.form = document.forms['usersettingsForm'];
-    if (MeldariTmpl.UserSettings.form) {
-        MeldariTmpl.UserSettings.form.addEventListener('submit', (e) => { e.preventDefault(); MeldariTmpl.UserSettings.exec(); });
-        MeldariTmpl.UserSettings.button = MeldariTmpl.UserSettings.form.elements['userSettingsFormSubmit'];
-    }
-}
-
-MeldariTmpl.UserSettings.init();
+form.addEventListener('submit', (e) => { e.preventDefault(); update(); });

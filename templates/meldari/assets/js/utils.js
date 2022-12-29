@@ -3,21 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-var MeldariTmpl = MeldariTmpl || {};
+const toastContainer = document.getElementById('toastContainer');
+var currentToastId = 0;
 
-MeldariTmpl.currentToastId = 0;
-
-MeldariTmpl.toastContainer = null;
-
-MeldariTmpl.lang = null;
-
-MeldariTmpl.tz = null;
-
-MeldariTmpl.newXhrHeaders = function() {
-    return new Headers({'X-Requested-With': 'XMLHttpRequest'});
-}
-
-MeldariTmpl.switchButton = function(button) {
+function switchButton(button) {
     if (button.disabled) {
         button.disabled = false;
         const spinner = button.getElementsByTagName('span')[0];
@@ -35,7 +24,7 @@ MeldariTmpl.switchButton = function(button) {
     }
 }
 
-MeldariTmpl.togglePageSpinner = function() {
+function togglePageSpinner() {
     const spinner = document.getElementById('mel-page-spinner');
     if (spinner.classList.contains('d-flex')) {
         spinner.classList.replace('d-flex', 'd-none');
@@ -44,7 +33,7 @@ MeldariTmpl.togglePageSpinner = function() {
     }
 }
 
-MeldariTmpl.setFormFieldErrors = function(form, errors) {
+function setFormFieldErrors(form, errors) {
     for (const field in errors) {
         if (errors.hasOwnProperty(field)) {
             const formField = form.elements.namedItem(field);
@@ -55,15 +44,15 @@ MeldariTmpl.setFormFieldErrors = function(form, errors) {
     }
 }
 
-MeldariTmpl.resetFormFieldErrors = function(form) {
+function resetFormFieldErrors(form) {
     for (let i = 0; i < form.elements.length; ++i) {
         form.elements[i].classList.remove('is-invalid');
     }
 }
 
-MeldariTmpl.createToastFull = function(icon, iconColor, header, body) {
+function createToastFull(icon, iconColor, header, body) {
     const toast = document.createElement('div');
-    toast.id = 'toast-' + MeldariTmpl.currentToastId;
+    toast.id = 'toast-' + currentToastId;
     toast.className = 'toast align-items-center';
     toast.setAttribute('role', 'alert');
     toast.ariaLive = 'assertive';
@@ -85,20 +74,20 @@ MeldariTmpl.createToastFull = function(icon, iconColor, header, body) {
     toastBody.appendChild(document.createTextNode(body));
 
     toast.addEventListener('hidden.bs.toast', () => {
-                               MeldariTmpl.toastContainer.removeChild(toast);
+                               toastContainer.removeChild(toast);
                            });
 
-    MeldariTmpl.toastContainer.appendChild(toast);
+    toastContainer.appendChild(toast);
 
     const bsToast = new bootstrap.Toast(toast);
     bsToast.show();
 
-    MeldariTmpl.currentToastId++;
+    currentToastId++;
 }
 
-MeldariTmpl.createToastSmall = function(icon, iconColor, body) {
+function createToastSmall(icon, iconColor, body) {
     const toast = document.createElement('div');
-    toast.id = 'toast-' + MeldariTmpl.currentToastId;
+    toast.id = 'toast-' + currentToastId;
     toast.className = 'toast align-items-center';
     toast.setAttribute('role', 'alert');
     toast.ariaLive = 'assertive';
@@ -118,77 +107,82 @@ MeldariTmpl.createToastSmall = function(icon, iconColor, body) {
     button.dataset.bsDismiss = 'toast';
 
     toast.addEventListener('hidden.bs.toast', () => {
-                               MeldariTmpl.toastContainer.removeChild(toast);
+                               toastContainer.removeChild(toast);
                            });
 
-    MeldariTmpl.toastContainer.appendChild(toast);
+    toastContainer.appendChild(toast);
 
     const bsToast = new bootstrap.Toast(toast);
     bsToast.show();
 
-    MeldariTmpl.currentToastId++;
+    currentToastId++;
 }
 
-MeldariTmpl.createErrorFull = function(header, body) {
-    MeldariTmpl.createToastFull('exclamation-diamond', 'danger', header, body);
+function createErrorFull(header, body) {
+    createToastFull('exclamation-diamond', 'danger', header, body);
 }
 
-MeldariTmpl.createErrorSmall = function(body) {
-    MeldariTmpl.createToastSmall('exclamation-diamond', 'danger', body);
+function createErrorSmall(body) {
+    createToastSmall('exclamation-diamond', 'danger', body);
 }
 
-MeldariTmpl.createError = function(message) {
+function createError(message) {
     if (message.title && message.text) {
-        MeldariTmpl.createErrorFull(message.title, message.text);
+        createErrorFull(message.title, message.text);
     } else {
-        MeldariTmpl.createErrorSmall(message.title);
+        createErrorSmall(message.title);
     }
 }
 
-MeldariTmpl.handleError = function(error, form = null) {
+function handleError(error, form = null) {
     if (error instanceof Response) {
         error.json().then(json => {
             if (json.error) {
-                MeldariTmpl.createError(json.error);
+                createError(json.error);
             } else if (json.fielderrors) {
                 if (form) {
-                    MeldariTmpl.setFormFieldErrors(form, json.fielderrors);
+                    setFormFieldErrors(form, json.fielderrors);
                 } else {
                     console.error("Can not set field errors to a null form!");
                 }
             }
         });
     } else {
-        MeldariTmpl.createErrorFull(error.name, error.message);
+        createErrorFull(error.name, error.message);
     }
 }
 
-MeldariTmpl.createSuccessFull = function(header, body) {
-    MeldariTmpl.createToastFull('check-square', 'success', header, body);
+function createSuccessFull(header, body) {
+    createToastFull('check-square', 'success', header, body);
 }
 
-MeldariTmpl.createSuccessSmall = function(body) {
-    MeldariTmpl.createToastSmall('check-square', 'success', body);
+function createSuccessSmall(body) {
+    createToastSmall('check-square', 'success', body);
 }
 
-MeldariTmpl.createSuccess = function(message) {
+function createSuccess(message) {
     if (message.title && message.text) {
-        MeldariTmpl.createSuccessFull(message.title, message.text);
+        createSuccessFull(message.title, message.text);
     } else {
-        MeldariTmpl.createSuccessSmall(message.title);
+        createSuccessSmall(message.title);
     }
 }
 
-MeldariTmpl.setLang = function(lang) {
+function setLang(lang) {
     const bcp47 = lang.replace('_', '-');
-    MeldariTmpl.lang = bcp47;
     document.documentElement.lang = bcp47;
 }
 
-MeldariTmpl.init = function() {
-    MeldariTmpl.toastContainer = document.getElementById('toastContainer');
-    MeldariTmpl.lang = document.documentElement.lang;
-    MeldariTmpl.tz = document.documentElement.dataset.timezone;
+function getLang() {
+    return document.documentElement.lang;
 }
 
-MeldariTmpl.init();
+function setTz(tz) {
+    document.documentElement.dataset.timezone = tz;
+}
+
+function getTz() {
+    return document.documentElement.dataset.timezone;
+}
+
+export { switchButton, togglePageSpinner, setFormFieldErrors, resetFormFieldErrors, createErrorSmall, createErrorFull, createError, handleError, createSuccess, setLang, getLang, setTz, getTz };

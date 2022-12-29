@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-var MeldariTmpl = MeldariTmpl || {};
+import * as MeldariGeneral from '/common/js/general.js';
 
-MeldariTmpl.validUntilInput = MeldariTmpl.validUntilInput || {};
+MeldariGeneral.init();
 
-MeldariTmpl.validUntilInput.init = function() {
+function initValidUntilInputs() {
     const inputs = document.getElementsByClassName('valid-until-input');
     for (let i = 0; i < inputs.length; ++i) {
         const input = inputs[i].getElementsByTagName('input')[0];
@@ -33,5 +33,12 @@ MeldariTmpl.validUntilInput.init = function() {
         }
     }
 }
+initValidUntilInputs();
 
-MeldariTmpl.validUntilInput.init();
+if (document.getElementById('usersTable')) {
+    import('./users.min.js');
+}
+
+if (document.forms['usersettingsForm']) {
+    import('./usersettings.min.js');
+}
