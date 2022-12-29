@@ -7,4 +7,5 @@ target_sources(meldaritemplate
         users.js
         usersettings.js
         utils.js
+        domains.js
 )

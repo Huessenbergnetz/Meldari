@@ -5,11 +5,16 @@
 
 #include "domain.h"
 #include "error.h"
+#include "logging.h"
+#include "user.h"
 
 #include <Cutelyst/Context>
+#include <Cutelyst/Plugins/Utils/Sql>
 
 #include <QMetaObject>
 #include <QMetaEnum>
+#include <QSqlQuery>
+#include <QSqlError>
 
 #include <limits>
 
@@ -48,6 +53,41 @@ Domain Domain::fromStash(Cutelyst::Context *c)
 {
     Q_ASSERT(c);
     return c->stash(QStringLiteral(DOMAIN_STASH_KEY)).value<Domain>();
+}
+
+Domain Domain::add(Cutelyst::Context *c, Error &e, const QVariantHash &values)
+{
+    Domain dom;
+
+    const QString   name    = values.value(QStringLiteral("name")).toString();
+    const Status    status  = static_cast<Status>(values.value(QStringLiteral("status")).toInt());
+    const QDateTime now     = QDateTime::currentDateTimeUtc();
+
+    qCDebug(MEL_CORE) << "Adding new domain" << name;
+
+    const User u = User::fromStash(c);
+
+    QSqlQuery q = CPreparedSqlQueryThread(QStringLiteral("INSERT INTO domains (owner_id, name, status, created_at, updated_at) "
+                                                         "VALUES (:owner_id, :name, :status, :created_at, :updated_at)"));
+    q.bindValue(QStringLiteral(":owner_id"), u.id());
+    q.bindValue(QStringLiteral(":name"), name);
+    q.bindValue(QStringLiteral(":status"), static_cast<int>(status));
+    q.bindValue(QStringLiteral(":created_at"), now);
+    q.bindValue(QStringLiteral(":updated_at"), now);
+
+    if (Q_UNLIKELY(!q.exec())) {
+        e = Error(q, c->translate("Domain", "Failed to insert new domain “%1” into database.").arg(name));
+        qCCritical(MEL_CORE) << "Failed to insert new domain" << name << "into databse:" << q.lastError().text();
+        return dom;
+    }
+
+    const dbid_t id = q.lastInsertId().toUInt();
+
+    dom = Domain(id, name, status, u.id(), u.username(), now, now, QDateTime(), QDateTime(), 0, QString());
+
+    qCInfo(MEL_CORE) << u << "created new" << dom;
+
+    return dom;
 }
 
 QString Domain::statusTranslated(Cutelyst::Context *c, Status status)

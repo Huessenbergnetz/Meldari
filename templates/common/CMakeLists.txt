@@ -9,6 +9,7 @@ add_custom_target(tmplcommon
         users.js
         usersettings.js
         utils.js
+        domains.js
 )
 
 install(DIRECTORY js

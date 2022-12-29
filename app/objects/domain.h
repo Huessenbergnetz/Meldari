@@ -18,6 +18,8 @@ namespace Cutelyst {
 class Context;
 }
 
+class Error;
+
 class Domain : public BaseDomain
 {
     Q_GADGET
@@ -33,6 +35,8 @@ public:
     void toStash(Cutelyst::Context *c) const;
 
     static Domain fromStash(Cutelyst::Context *c);
+
+    static Domain add(Cutelyst::Context *c, Error &e, const QVariantHash &values);
 
     static QString statusTranslated(Cutelyst::Context *c, Status status);
 

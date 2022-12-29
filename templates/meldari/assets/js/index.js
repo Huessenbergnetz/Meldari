@@ -14,3 +14,7 @@ if (document.getElementById('usersTable')) {
 if (document.forms['usersettingsForm']) {
     import('./usersettings.min.js');
 }
+
+if (document.getElementById('domainsTable')) {
+    import('./domains.min.js');
+}

@@ -6,6 +6,14 @@
 #include "controlcenterdomains.h"
 #include "meldariutils.h"
 #include "objects/domain.h"
+#include "objects/error.h"
+
+#include <Cutelyst/Plugins/Utils/Validator>
+#include <Cutelyst/Plugins/Utils/ValidatorResult>
+#include <Cutelyst/Plugins/Utils/validatorrequired.h>
+#include <Cutelyst/Plugins/Utils/validatordomain.h>
+#include <Cutelyst/Plugins/Utils/validatorin.h>
+#include <Cutelyst/Plugins/Utils/validatorinteger.h>
 
 ControlCenterDomains::ControlCenterDomains(QObject *parent)
     : Controller{parent}
@@ -37,6 +45,29 @@ void ControlCenterDomains::add(Context *c)
 {
     if (!MeldariUtils::checkAllowedMethod(c, u"POST")) {
         return;
+    }
+
+    static Validator v({
+                           new ValidatorRequired(QStringLiteral("name")),
+                           new ValidatorDomain(QStringLiteral("name"), true),
+                           new ValidatorRequired(QStringLiteral("status")),
+                           new ValidatorIn(QStringLiteral("status"), Domain::statusValues()),
+                           new ValidatorInteger(QStringLiteral("status"), QMetaType::Int)
+                       });
+
+    const ValidatorResult vr = v.validate(c, Validator::BodyParamsOnly);
+
+    if (vr) {
+        Error e;
+        const Domain dom = Domain::add(c, e, vr.values());
+        if (!e) {
+            MeldariUtils::setJsonResponse(c, dom.toJson(), c->translate("ControlCenterDomains", "Domain created"), c->translate("ControlCenterDomains", "Successfully created new domain “%1” (ID: %2).").arg(dom.name(), QString::number(dom.id())));
+        } else {
+            e.toStash(c, true);
+        }
+    } else {
+        c->res()->setStatus(400);
+        c->res()->setJsonObjectBody(QJsonObject({{QStringLiteral("fielderrors"), vr.errorsJsonObject()}}));
     }
 }
 
