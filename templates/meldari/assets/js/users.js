@@ -5,6 +5,9 @@
 
 import * as MeldariUsers from '/common/js/users.min.js';
 import * as Utils from './utils.min.js';
+import initValidUntilInputs from './validuntilinputs.min.js';
+
+initValidUntilInputs();
 
 const rowTemplate = document.getElementById('user-row-template');
 const typeTranslations = JSON.parse(document.getElementById('user-types-translated').textContent);

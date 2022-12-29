@@ -19,5 +19,6 @@ mix.copy('assets/js/index.js', 'static/js').minify('static/js/index.js');
 mix.copy('assets/js/users.js', 'static/js').minify('static/js/users.js');
 mix.copy('assets/js/usersettings.js', 'static/js').minify('static/js/usersettings.js');
 mix.copy('assets/js/utils.js', 'static/js').minify('static/js/utils.js');
+mix.copy('assets/js/validuntilinputs.js', 'static/js').minify('static/js/validuntilinputs.js');
 
 mix.copy('node_modules/bootstrap-icons/font/fonts', 'static/fonts');
