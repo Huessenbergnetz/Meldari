@@ -4,6 +4,7 @@
  */
 
 #include "basedomain_p.h"
+#include <QMetaEnum>
 
 BaseDomain::BaseDomain()
 {
@@ -192,6 +193,63 @@ QJsonObject BaseDomainData::toJson() const
     o.insert(u"lockedByName", lockedByName);
 
     return o;
+}
+
+BaseDomain::Status BaseDomain::statusStringToEnum(const QString &str)
+{
+    if (str.compare(u"disabled", Qt::CaseInsensitive) == 0) {
+        return BaseDomain::Disabled;
+    } else if (str.compare(u"enabled", Qt::CaseInsensitive) == 0) {
+        return BaseDomain::Enabled;
+    } else {
+        return BaseDomain::Invalid;
+    }
+}
+
+QString BaseDomain::statusEnumToString(Status status)
+{
+    QString str;
+
+    if (status != BaseDomain::Invalid) {
+        const QMetaObject mo = BaseDomain::staticMetaObject;
+        const QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Status"));
+
+        str = QString::fromLatin1(me.valueToKey(static_cast<int>(status)));
+    }
+
+    return str;
+}
+
+QStringList BaseDomain::supportedStati()
+{
+    QStringList lst;
+
+    const QMetaObject mo = BaseDomain::staticMetaObject;
+    const QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Status"));
+
+    lst.reserve(me.keyCount() - 1);
+
+    for (int i = 1; i < me.keyCount(); ++i) {
+        lst.append(QString::fromLatin1(me.key(i)));
+    }
+
+    return lst;
+}
+
+QStringList BaseDomain::statusValues()
+{
+    QStringList lst;
+
+    const QMetaObject mo = BaseDomain::staticMetaObject;
+    const QMetaEnum me = mo.enumerator(mo.indexOfEnumerator("Status"));
+
+    lst.reserve(me.keyCount() - 1);
+
+    for (int i = 1; i < me.keyCount(); ++i) {
+        lst.append(QString::number(me.value(i)));
+    }
+
+    return lst;
 }
 
 QDebug operator<<(QDebug dbg, const BaseDomain &domain)

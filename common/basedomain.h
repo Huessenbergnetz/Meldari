@@ -86,6 +86,14 @@ public:
     bool operator!=(const BaseDomain &other) const noexcept
     { return !(*this == other); }
 
+    static Status statusStringToEnum(const QString &str);
+
+    static QString statusEnumToString(Status status);
+
+    static QStringList supportedStati();
+
+    static QStringList statusValues();
+
 private:
     QSharedDataPointer<BaseDomainData> data;
 
