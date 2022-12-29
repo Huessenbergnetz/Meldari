@@ -1,0 +1,43 @@
+{% with site_title as pageHeader %}
+{% with "diagram-3-fill" as pageHeaderIcon %}
+{% include "domains/indexPageHeader.html" %}
+{% endwith %}
+{% endwith %}
+
+<table id="domainsTable" class="table">
+    <thead>
+        <tr>
+            <th scope="col" class="text-capitalize">{{ _("actions") }}</th>
+            <th scope="col" class="text-capitalize">{{ _("name") }}</th>
+            <th scope="col" class="text-capitalize">{{ _("status") }}</th>
+            <th scope="col" class="text-capitalize text-end">{{ _("ID") }}</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+    </tbody>
+</table>
+
+<div id="mel-page-spinner" class="d-none justify-content-center">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">{{ _("Loading...") }}</span>
+    </div>
+</div>
+
+<!-- start domain row template -->
+<template id="domain-row-template">
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="text-end"></td>
+    </tr>
+</template>
+<!-- end domain row template -->
+
+<!-- start add domain modal -->
+{% with "addDomain" as modalId %}
+{% include "domains/addDomainModal.html" %}
+{% endwith %}
+<!-- end add domain moadl -->
+
+{{ domain_stati_translated|json_script:"domain-stati-translated" }}

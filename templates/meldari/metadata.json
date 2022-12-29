@@ -38,6 +38,7 @@
     ],
     "icons": {
         "mainMenuDashboard": "speedometer2",
+        "mainMenuDomains": "diagram-3-fill",
         "mainMenuUsers": "people",
         "userMenuSettings": "person-gear",
         "userMenuLogout": "box-arrow-right"

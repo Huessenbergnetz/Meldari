@@ -1,0 +1,39 @@
+{% extends "parts/modal.html" %}
+{% block label %}{% i18n "Add domain" %}{% endblock %}
+
+{% block content %}
+<form id="addDomainForm" action="/cc/domains/add" method="POST">
+    {% c_csrf_token %}
+    <div class="row">
+        <div class="col-12">
+            {% with "addDomainName" as inputId %}
+            {% with "name" as inputName %}
+            {% with _("Name") as inputLabel %}
+            {% with 1 as inputRequired %}
+            {% with "example.com" as inputPlaceholder %}
+            {% include "parts/domainInputWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="col-12">
+            {% with "addDomainStatus" as selectId %}
+            {% with "status" as selectName %}
+            {% with _("Status") as selectLabel %}
+            {% with domain_status_options as selectOptions %}
+            {% include "parts/selectWithLabel.html" %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block footer %}
+<button id="addDomainFormSubmit" type="submit" form="addDomainForm" class="btn btn-primary text-capitalize"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span><i class="bi bi-plus-circle"></i> {{ _("add domain") }}</button>
+{% endblock %}

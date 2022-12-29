@@ -11,6 +11,7 @@ set(cc_FILES
 add_subdirectory(parts)
 add_subdirectory(users)
 add_subdirectory(usersettings)
+add_subdirectory(domains)
 
 target_sources(meldaritemplate
     PRIVATE
