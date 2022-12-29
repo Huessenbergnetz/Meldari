@@ -154,6 +154,7 @@ void ControlCenter::buildMainMenu(Context *c)
     std::vector<MenuItem> mainMenu;
 
     mainMenu.emplace_back(c, QStringLiteral("mainMenuDashboard"), c->translate("ControlCenter", "Dashboard"), QStringLiteral("index"), QStringLiteral("cc"));
+    mainMenu.emplace_back(c, QStringLiteral("mainMenuDomains"), c->translate("ControlCenter", "Domains"), QStringLiteral("index"), QStringLiteral("cc/domains"));
 
     if (User::fromStash(c).isAdmin()) {
         mainMenu.emplace_back(c, QStringLiteral("mainMenuUsers"), c->translate("ControlCenter", "Users"), QStringLiteral("index"), QStringLiteral("cc/users"));

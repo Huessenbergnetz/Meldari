@@ -11,4 +11,6 @@ target_sources(meldari
         controlcenterusers.cpp
         controlcenterusersettings.h
         controlcenterusersettings.cpp
+        controlcenterdomains.h
+        controlcenterdomains.cpp
 )

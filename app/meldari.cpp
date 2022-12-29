@@ -15,6 +15,7 @@
 #include "controllers/controlcenter.h"
 #include "controllers/controlcenterusersettings.h"
 #include "controllers/controlcenterusers.h"
+#include "controllers/controlcenterdomains.h"
 
 #include "cutelee/meldaricutelee.h"
 
@@ -96,7 +97,7 @@ bool Meldari::init()
     new ControlCenter(this);
     new ControlCenterUsersettings(this);
     new ControlCenterUsers(this);
-
+    new ControlCenterDomains(this);
 
     if (MeldariConfig::staticPlugin() == MeldariConfig::StaticSimple) {
         qCDebug(MEL_CORE) << "Registering StaticSimple plugin";
