@@ -39,6 +39,15 @@ void ControlCenterDomains::list(Context *c)
     if (!MeldariUtils::checkAllowedMethod(c, u"GET")) {
         return;
     }
+
+    Error e;
+    const QJsonArray doms = Domain::listJson(c, e);
+    if (e) {
+        e.toStash(c, true);
+        return;
+    }
+
+    c->res()->setJsonArrayBody(doms);
 }
 
 void ControlCenterDomains::add(Context *c)
