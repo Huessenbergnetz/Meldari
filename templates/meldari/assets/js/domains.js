@@ -40,6 +40,26 @@ function addTableRow(domain, prepend) {
     }
 }
 
+function list() {
+    Utils.togglePageSpinner();
+
+    MeldariDomains.list()
+    .then(domains => {
+        domains.forEach(domain => {
+            addTableRow(domain, false);
+        })
+    })
+    .catch(error => {
+        console.error(error);
+        Utils.handleError(error);
+    })
+    .finally(() => {
+        Utils.togglePageSpinner();
+    });
+}
+
+list();
+
 const addDomainModal = document.getElementById('addDomainModal');
 const addDomainForm = document.forms['addDomainForm'];
 const addDomainFormSubmit = addDomainForm.elements['addDomainFormSubmit'];
