@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: (C) 2022 Matthias Fehring <https://www.huessenbergnetz.de>
+ * SPDX-FileCopyrightText: (C) 2022-2023 Matthias Fehring <https://www.huessenbergnetz.de>
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
@@ -53,6 +53,63 @@ Domain Domain::fromStash(Cutelyst::Context *c)
 {
     Q_ASSERT(c);
     return c->stash(QStringLiteral(DOMAIN_STASH_KEY)).value<Domain>();
+}
+
+std::vector<Domain> Domain::list(Cutelyst::Context *c, Error &e)
+{
+    std::vector<Domain> doms;
+
+    const User currentUser = User::fromStash(c);
+
+    QSqlQuery q;
+
+    if (currentUser.type() >= User::Administrator) {
+        q = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT d.id, d.name, d.status, d.owner_id, u1.username AS owner_name, d.created_at, d.updated_at, d.valid_until, d.locked_at, d.locked_by, u2.username AS locked_by_name FROM domains d LEFT JOIN users u1 ON u1.id = d.owner_id LEFT JOIN users u2 ON u2.id = d.locked_by"));
+    } else {
+        q = CPreparedSqlQueryThreadFO(QStringLiteral("SELECT d.id, d.name, d.status, d.owner_id, u1.username AS owner_name, d.created_at, d.updated_at, d.valid_until, d.locked_at, d.locked_by, u2.username AS locked_by_name FROM domains d LEFT JOIN users u1 ON u1.id = d.owner_id LEFT JOIN users u2 ON u2.id = d.locked_by WHERE d.owner_id = :owner_id"));
+        q.bindValue(QStringLiteral(":owner_id"), currentUser.id());
+    }
+
+    if (Q_LIKELY(q.exec())) {
+        if (q.size() > 0) {
+            doms.reserve(q.size());
+        }
+        while(q.next()) {
+            doms.emplace_back(q.value(0).toUInt(),
+                              q.value(1).toString(),
+                              static_cast<Status>(q.value(2).toInt()),
+                              q.value(3).toUInt(),
+                              q.value(4).toString(),
+                              q.value(5).toDateTime(),
+                              q.value(6).toDateTime(),
+                              q.value(7).toDateTime(),
+                              q.value(8).toDateTime(),
+                              q.value(9).toUInt(),
+                              q.value(10).toString());
+        }
+    } else {
+        e = std::move(Error(q, c->translate("Domain", "Failed to query list of domains from database.")));
+        qCCritical(MEL_CORE) << "Failed to query list of domains from database:" << q.lastError().text();
+    }
+
+    return doms;
+}
+
+QJsonArray Domain::listJson(Cutelyst::Context *c, Error &e)
+{
+    QJsonArray json;
+
+    const std::vector<Domain> doms = Domain::list(c, e);
+
+    if (e.isError()) {
+        return json;
+    }
+
+    for (const Domain &dom : doms) {
+        json.append(dom.toJson());
+    }
+
+    return json;
 }
 
 Domain Domain::add(Cutelyst::Context *c, Error &e, const QVariantHash &values)

@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: (C) 2022 Matthias Fehring <https://www.huessenbergnetz.de>
+ * SPDX-FileCopyrightText: (C) 2022-2023 Matthias Fehring <https://www.huessenbergnetz.de>
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
@@ -41,13 +41,13 @@ void ControlCenterDomains::list(Context *c)
     }
 
     Error e;
-    const QJsonArray doms = Domain::listJson(c, e);
+    const QJsonArray domains = Domain::listJson(c, e);
     if (e) {
         e.toStash(c, true);
         return;
     }
 
-    c->res()->setJsonArrayBody(doms);
+    c->res()->setJsonArrayBody(domains);
 }
 
 void ControlCenterDomains::add(Context *c)

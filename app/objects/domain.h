@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: (C) 2022 Matthias Fehring <https://www.huessenbergnetz.de>
+ * SPDX-FileCopyrightText: (C) 2022-2023 Matthias Fehring <https://www.huessenbergnetz.de>
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
@@ -36,6 +36,10 @@ public:
     void toStash(Cutelyst::Context *c) const;
 
     static Domain fromStash(Cutelyst::Context *c);
+
+    static std::vector<Domain> list(Cutelyst::Context *c, Error &e);
+
+    static QJsonArray listJson(Cutelyst::Context *c, Error &e);
 
     static Domain add(Cutelyst::Context *c, Error &e, const QVariantHash &values);
 
