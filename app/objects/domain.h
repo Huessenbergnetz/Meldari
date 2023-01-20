@@ -43,10 +43,6 @@ public:
 
     static Domain add(Cutelyst::Context *c, Error &e, const QVariantHash &values);
 
-    static std::vector<Domain> list(Cutelyst::Context *c, Error &e);
-
-    static QJsonArray listJson(Cutelyst::Context *c, Error &e);
-
     static QString statusTranslated(Cutelyst::Context *c, Status status);
 
     static QJsonObject statiTranslated(Cutelyst::Context *c);
