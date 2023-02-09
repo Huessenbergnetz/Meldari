@@ -27,7 +27,7 @@ public:
     OptionItem(OptionItem &&other) noexcept;
     OptionItem &operator=(const OptionItem &other);
     OptionItem &operator=(OptionItem &&other) noexcept;
-    ~OptionItem();
+    ~OptionItem() noexcept;
     void swap(OptionItem &other) noexcept
     { data.swap(other.data); }
 

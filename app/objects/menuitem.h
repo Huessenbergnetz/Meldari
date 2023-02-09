@@ -39,7 +39,7 @@ public:
     MenuItem(MenuItem &&other) noexcept;
     MenuItem &operator=(const MenuItem &other);
     MenuItem &operator=(MenuItem &&other) noexcept;
-    ~MenuItem();
+    ~MenuItem() noexcept;
 
     void swap(MenuItem &other) noexcept
     { data.swap(other.data); }

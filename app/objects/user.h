@@ -30,7 +30,7 @@ public:
     User(User &&other) noexcept;
     User &operator=(const User &other);
     User &operator=(User &&other) noexcept;
-    ~User();
+    ~User() noexcept;
 
     void toStash(Cutelyst::Context *c) const;
 

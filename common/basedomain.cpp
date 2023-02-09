@@ -43,7 +43,7 @@ BaseDomain &BaseDomain::operator=(const BaseDomain &other) = default;
 
 BaseDomain &BaseDomain::operator=(BaseDomain &&other) noexcept = default;
 
-BaseDomain::~BaseDomain() = default;
+BaseDomain::~BaseDomain() noexcept = default;
 
 BaseDomain::dbid_t BaseDomain::id() const
 {

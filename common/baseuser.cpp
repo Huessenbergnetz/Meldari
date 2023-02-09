@@ -70,7 +70,7 @@ BaseUser &BaseUser::operator=(const BaseUser &other) = default;
 
 BaseUser &BaseUser::operator=(BaseUser &&other) noexcept = default;
 
-BaseUser::~BaseUser() = default;
+BaseUser::~BaseUser() noexcept = default;
 
 BaseUser::dbid_t BaseUser::id() const
 {

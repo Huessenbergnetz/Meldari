@@ -51,7 +51,7 @@ public:
     BaseUser(BaseUser &&other) noexcept;
     BaseUser &operator=(const BaseUser &other);
     BaseUser &operator=(BaseUser &&other) noexcept;
-    ~BaseUser();
+    ~BaseUser() noexcept;
 
     void swap(BaseUser &other) noexcept
     { data.swap(other.data); }

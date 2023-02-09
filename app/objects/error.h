@@ -32,7 +32,7 @@ public:
     Error(Error && other) noexcept;
     Error &operator=(const Error &other);
     Error &operator=(Error && other) noexcept;
-    ~Error();
+    ~Error() noexcept;
 
     void swap(Error &other) noexcept
     { data.swap(other.data); }

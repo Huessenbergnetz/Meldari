@@ -32,7 +32,7 @@ public:
     SimpleUser(SimpleUser &&other) noexcept;
     SimpleUser &operator=(const SimpleUser &other);
     SimpleUser &operator=(SimpleUser &&other) noexcept;
-    ~SimpleUser();
+    ~SimpleUser() noexcept;
 
     BaseUser::dbid_t id() const;
 

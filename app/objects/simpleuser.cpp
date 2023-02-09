@@ -49,7 +49,7 @@ SimpleUser &SimpleUser::operator=(const SimpleUser &other)
 
 SimpleUser &SimpleUser::operator=(SimpleUser &&other) noexcept = default;
 
-SimpleUser::~SimpleUser() = default;
+SimpleUser::~SimpleUser() noexcept = default;
 
 BaseUser::dbid_t SimpleUser::id() const
 {

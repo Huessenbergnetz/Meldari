@@ -46,7 +46,7 @@ public:
     BaseDomain(BaseDomain &&other) noexcept;
     BaseDomain &operator=(const BaseDomain &other);
     BaseDomain &operator=(BaseDomain &&other) noexcept;
-    ~BaseDomain();
+    ~BaseDomain() noexcept;
 
     dbid_t id() const;
 

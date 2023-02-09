@@ -41,7 +41,7 @@ Domain &Domain::operator=(const Domain &other) = default;
 
 Domain &Domain::operator=(Domain &&other) noexcept = default;
 
-Domain::~Domain() = default;
+Domain::~Domain() noexcept = default;
 
 void Domain::toStash(Cutelyst::Context *c) const
 {

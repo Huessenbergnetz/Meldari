@@ -31,7 +31,7 @@ public:
     Domain(Domain &&other) noexcept;
     Domain &operator=(const Domain &other);
     Domain &operator=(Domain &&other) noexcept;
-    ~Domain();
+    ~Domain() noexcept;
 
     void toStash(Cutelyst::Context *c) const;
 

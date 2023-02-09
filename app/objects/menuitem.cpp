@@ -74,7 +74,7 @@ MenuItem &MenuItem::operator=(const MenuItem &other)
 
 MenuItem &MenuItem::operator=(MenuItem &&other) noexcept = default;
 
-MenuItem::~MenuItem() = default;
+MenuItem::~MenuItem() noexcept = default;
 
 std::vector<MenuItem> MenuItem::children() const
 {

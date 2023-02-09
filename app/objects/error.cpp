@@ -75,7 +75,7 @@ Error &Error::operator=(const Error &other)
 
 Error &Error::operator=(Error &&other) noexcept = default;
 
-Error::~Error() = default;
+Error::~Error() noexcept = default;
 
 Cutelyst::Response::HttpStatus Error::status() const
 {

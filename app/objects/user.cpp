@@ -55,7 +55,7 @@ User &User::operator=(const User &other) = default;
 
 User &User::operator=(User &&other) noexcept = default;
 
-User::~User() = default;
+User::~User() noexcept = default;
 
 void User::toStash(Cutelyst::Context *c) const
 {

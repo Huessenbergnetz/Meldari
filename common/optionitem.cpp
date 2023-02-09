@@ -51,7 +51,7 @@ OptionItem &OptionItem::operator=(const OptionItem &other)
 
 OptionItem &OptionItem::operator=(OptionItem &&other) noexcept = default;
 
-OptionItem::~OptionItem() = default;
+OptionItem::~OptionItem() noexcept = default;
 
 QString OptionItem::name() const
 {
