@@ -29,37 +29,12 @@ QJsonObject BaseUserData::toJson() const
     return o;
 }
 
-BaseUser::BaseUser()
-{
-
-}
+BaseUser::BaseUser() = default;
 
 BaseUser::BaseUser(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedById, const QString &lockedByName, const QVariantMap &settings)
-    : data(new BaseUserData)
+    : data{new BaseUserData{id, type, username, email, created, updated, validUntil, lastSeen, lockedAt, lockedById, lockedByName, settings}}
 {
-    data->id = id;
-    data->type = type;
-    data->username = username;
-    data->email = email;
-    data->created = created;
-    data->created.setTimeSpec(Qt::UTC);
-    data->updated = updated;
-    data->updated.setTimeSpec(Qt::UTC);
-    data->validUntil = validUntil;
-    if (data->validUntil.isValid()) {
-        data->validUntil.setTimeSpec(Qt::UTC);
-    }
-    data->lastSeen = lastSeen;
-    if (data->lastSeen.isValid()) {
-        data->lastSeen.setTimeSpec(Qt::UTC);
-    }
-    data->lockedAt = lockedAt;
-    if (data->lockedAt.isValid()) {
-        data->lockedAt.setTimeSpec(Qt::UTC);
-    }
-    data->lockedById = lockedById;
-    data->lockedByName = lockedByName;
-    data->settings = settings;
+
 }
 
 BaseUser::BaseUser(const BaseUser &other) = default;

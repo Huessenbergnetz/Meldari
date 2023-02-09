@@ -8,9 +8,20 @@
 class OptionItemData : public QSharedData
 {
 public:
+    OptionItemData() noexcept = default;
+    OptionItemData(const QString &_name, const QString &_value, bool _selected) noexcept
+        : QSharedData(),
+          name{_name},
+          value{_value},
+          selected{_selected}
+    {}
+    OptionItemData(const OptionItemData &) noexcept = default;
+    ~OptionItemData() noexcept = default;
+    OptionItemData &operator=(const OptionItemData &) = delete;
+
     QString name;
     QString value;
-    bool selected = false;
+    bool selected {false};
 };
 
 OptionItem::OptionItem() : data(new OptionItemData)
@@ -19,35 +30,22 @@ OptionItem::OptionItem() : data(new OptionItemData)
 }
 
 OptionItem::OptionItem(const QString &name, const QString &value, bool selected)
-    : data{new OptionItemData}
+    : data{new OptionItemData{name, value, selected}}
 {
-    data->name = name;
-    data->value = value;
-    data->selected = selected;
+
 }
 
 OptionItem::OptionItem(const QString &name, int value, bool selected)
-    : data{new OptionItemData}
-{
-    data->name = name;
-    data->value = QString::number(value);
-    data->selected = selected;
-}
-
-OptionItem::OptionItem(const OptionItem &other)
-    : data{other.data}
+    : data{new OptionItemData{name, QString::number(value), selected}}
 {
 
 }
+
+OptionItem::OptionItem(const OptionItem &other) = default;
 
 OptionItem::OptionItem(OptionItem &&other) noexcept = default;
 
-OptionItem &OptionItem::operator=(const OptionItem &other)
-{
-    if (this != &other)
-        data.operator=(other.data);
-    return *this;
-}
+OptionItem &OptionItem::operator=(const OptionItem &other) = default;
 
 OptionItem &OptionItem::operator=(OptionItem &&other) noexcept = default;
 

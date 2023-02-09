@@ -14,7 +14,7 @@ public:
     bool checkPassword(const AuthenticationUser &user, const ParamsMultiMap &authinfo);
     static CredentialBotan::PasswordType checkPwType(const QByteArray &hashedPw);
 
-    QString passwordField = QStringLiteral("password");
+    QString passwordField {QStringLiteral("password")};
     QString passwordPreSalt;
     QString passwordPostSalt;
 };

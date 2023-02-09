@@ -18,10 +18,10 @@ public:
     QDateTime updated;
     QDateTime validUntil;
     QDateTime lockedAt;
-    BaseDomain::dbid_t id = 0;
-    BaseUser::dbid_t ownerId = 0;
-    BaseUser::dbid_t lockedById = 0;
-    BaseDomain::Status status = BaseDomain::Invalid;
+    BaseDomain::dbid_t id {0};
+    BaseUser::dbid_t ownerId {0};
+    BaseUser::dbid_t lockedById {0};
+    BaseDomain::Status status {BaseDomain::Invalid};
 
     QJsonObject toJson() const;
 };
