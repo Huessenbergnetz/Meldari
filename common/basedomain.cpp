@@ -6,33 +6,12 @@
 #include "basedomain_p.h"
 #include <QMetaEnum>
 
-BaseDomain::BaseDomain()
-{
-
-}
+BaseDomain::BaseDomain() = default;
 
 BaseDomain::BaseDomain(dbid_t id, const QString &name, Status status, BaseUser::dbid_t ownerId, const QString &ownerName, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lockedAt, BaseUser::dbid_t lockedById, const QString &lockedByName)
-    : data{new BaseDomainData}
+    : data{new BaseDomainData{id, name, status, ownerId, ownerName, created, updated, validUntil, lockedAt, lockedById, lockedByName}}
 {
-    data->name = name;
-    data->ownerName = ownerName;
-    data->lockedByName = lockedByName;
-    data->created = created;
-    data->created.setTimeSpec(Qt::UTC);
-    data->updated = updated;
-    data->updated.setTimeSpec(Qt::UTC);
-    data->validUntil = validUntil;
-    if (data->validUntil.isValid()) {
-        data->validUntil.setTimeSpec(Qt::UTC);
-    }
-    data->lockedAt = lockedAt;
-    if (data->lockedAt.isValid()) {
-        data->lockedAt.setTimeSpec(Qt::UTC);
-    }
-    data->id = id;
-    data->ownerId = ownerId;
-    data->lockedById = lockedById;
-    data->status = status;
+
 }
 
 BaseDomain::BaseDomain(const BaseDomain &other) = default;

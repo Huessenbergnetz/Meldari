@@ -22,10 +22,7 @@
 #define MEMC_DOMAINS_GROUP_KEY "domains"
 #define MEMC_DOMAINS_STORAGE_DURATION 7200
 
-Domain::Domain() : BaseDomain()
-{
-
-}
+Domain::Domain() = default;
 
 Domain::Domain(dbid_t id, const QString &name, BaseDomain::Status status, BaseUser::dbid_t ownerId, const QString &ownerName, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lockedAt, BaseUser::dbid_t lockedById, const QString &lockedByName)
     : BaseDomain{id, name, status, ownerId, ownerName, created, updated, validUntil, lockedAt, lockedById, lockedByName}
