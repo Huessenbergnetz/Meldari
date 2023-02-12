@@ -206,20 +206,13 @@ Domain::dbid_t Domain::stringToDbId(const QString &str, bool *ok, Cutelyst::Cont
 {
     Q_ASSERT(ok);
 
-    const qulonglong _id = str.toULongLong(ok);
-
-    if (*ok) {
-        if (_id > static_cast<qulonglong>(std::numeric_limits<Domain::dbid_t>::max())) {
-            *ok = false;
-            Error::toStash(c, Cutelyst::Response::BadRequest, c->translate("Domain", "Invalid domain ID."), detachOnError);
-            return 0;
-        }
-    } else {
+    const Domain::dbid_t id = BaseDomain::stringToDbId(str, ok);
+    if (!*ok) {
         Error::toStash(c, Cutelyst::Response::BadRequest, c->translate("Domain", "Invalid domain ID."), detachOnError);
         return 0;
     }
 
-    return static_cast<Domain::dbid_t>(_id);
+    return id;
 }
 
 QDebug operator<<(QDebug dbg, const Domain &domain)

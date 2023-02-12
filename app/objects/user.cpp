@@ -492,20 +492,13 @@ User::dbid_t User::stringToDbId(const QString &str, bool *ok, Cutelyst::Context 
 {
     Q_ASSERT(ok);
 
-    const qulonglong _id = str.toULongLong(ok);
-
-    if (*ok) {
-        if (_id > static_cast<qulonglong>(std::numeric_limits<User::dbid_t>::max())) {
-            *ok = false;
-            Error::toStash(c, Response::BadRequest, c->translate("User", "Invalid user ID."), detach);
-            return 0;
-        }
-    } else {
+    const User::dbid_t id = BaseUser::stringToDbId(str, ok);
+    if (!*ok) {
         Error::toStash(c, Response::BadRequest, c->translate("User", "Invalid user ID."), detach);
         return 0;
     }
 
-    return static_cast<User::dbid_t>(_id);
+    return id;
 }
 
 QDebug operator<<(QDebug dbg, const User &user)

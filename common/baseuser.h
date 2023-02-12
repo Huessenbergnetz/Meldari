@@ -96,6 +96,8 @@ public:
 
     static QStringList typeValues(Type below);
 
+    static dbid_t stringToDbId(const QString &str, bool *ok);
+
 protected:
     void setType(Type type);
     void setEmail(const QString &email);

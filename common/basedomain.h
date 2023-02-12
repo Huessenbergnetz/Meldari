@@ -83,6 +83,8 @@ public:
 
     static QStringList statusValues();
 
+    static dbid_t stringToDbId(const QString &str, bool *ok);
+
 private:
     QSharedDataPointer<BaseDomainData> data;
 

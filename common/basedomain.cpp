@@ -231,6 +231,24 @@ QStringList BaseDomain::statusValues()
     return lst;
 }
 
+BaseDomain::dbid_t BaseDomain::stringToDbId(const QString &str, bool *ok)
+{
+    Q_ASSERT(ok);
+
+    const qulonglong _id = str.toULongLong(ok);
+
+    if (*ok) {
+        if (_id > static_cast<qulonglong>(std::numeric_limits<BaseDomain::dbid_t>::max())) {
+            *ok = false;
+            return 0;
+        }
+    } else {
+        return 0;
+    }
+
+    return static_cast<BaseDomain::dbid_t>(_id);
+}
+
 QDebug operator<<(QDebug dbg, const BaseDomain &domain)
 {
     QDebugStateSaver saver(dbg);
