@@ -22,6 +22,21 @@ class Error;
 class User : public BaseUser
 {
     Q_GADGET
+    Q_PROPERTY(BaseUser::dbid_t id READ id CONSTANT)
+    Q_PROPERTY(BaseUser::Type type READ type CONSTANT)
+    Q_PROPERTY(QString username READ username CONSTANT)
+    Q_PROPERTY(QString email READ email CONSTANT)
+    Q_PROPERTY(QDateTime created READ created CONSTANT)
+    Q_PROPERTY(QDateTime updated READ updated CONSTANT)
+    Q_PROPERTY(QDateTime validUntil READ validUntil CONSTANT)
+    Q_PROPERTY(QDateTime lastSeen READ lastSeen CONSTANT)
+    Q_PROPERTY(QDateTime lockedAt READ lockedAt CONSTANT)
+    Q_PROPERTY(BaseUser::dbid_t lockedById READ lockedById CONSTANT)
+    Q_PROPERTY(QString lockedByName READ lockedByName CONSTANT)
+    Q_PROPERTY(QVariantMap settings READ settings CONSTANT)
+    Q_PROPERTY(QString tz READ tz CONSTANT)
+    Q_PROPERTY(QString lang READ lang CONSTANT)
+    Q_PROPERTY(bool isAdmin READ isAdmin CONSTANT)
 public:
     User();
     User(BaseUser::dbid_t id, BaseUser::Type type, const QString &username, const QString &email, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lastSeen, const QDateTime &lockedAt, BaseUser::dbid_t lockedById, const QString &lockedByName);

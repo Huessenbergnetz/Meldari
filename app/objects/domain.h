@@ -24,6 +24,17 @@ class Error;
 class Domain : public BaseDomain
 {
     Q_GADGET
+    Q_PROPERTY(BaseDomain::dbid_t id READ id CONSTANT)
+    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(BaseDomain::Status status READ status CONSTANT)
+    Q_PROPERTY(BaseUser::dbid_t ownerId READ ownerId CONSTANT)
+    Q_PROPERTY(QString ownerName READ ownerName CONSTANT)
+    Q_PROPERTY(QDateTime created READ created CONSTANT)
+    Q_PROPERTY(QDateTime updated READ updated CONSTANT)
+    Q_PROPERTY(QDateTime validUntil READ validUntil CONSTANT)
+    Q_PROPERTY(QDateTime lockedAt READ lockedAt CONSTANT)
+    Q_PROPERTY(BaseUser::dbid_t lockedById READ lockedById CONSTANT)
+    Q_PROPERTY(QString lockedByName READ lockedByName CONSTANT)
 public:
     Domain();
     Domain(dbid_t id, const QString &name, BaseDomain::Status status, BaseDomain::dbid_t ownerId, const QString &ownerName, const QDateTime &created, const QDateTime &updated, const QDateTime &validUntil, const QDateTime &lockedAt, BaseUser::dbid_t lockedById, const QString &lockedByName);
